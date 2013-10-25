@@ -1,0 +1,27 @@
+These are things that I plan to implement in the future:
+
+* partition code into library and frontend
+
+* graphical user interface
+
+* user-friendly installer for Windows version (InnoSetup)
+
+* use libaudiofile for audio file format support
+
+* make embedding data in audio cds possible (embed markers for synchronization)
+
+* rewrite memory management such that cover-/stego-file must no longer be kept in memory as a whole
+
+* support for other file formats (mp3, png, gif, avi)
+
+* user's guide (sgml?, docbook?, gnu texinfo?)
+
+* support for RLE-encoded bmps
+
+* matrix encoding
+
+? support for spreading one secret file into a set of >= 1 cover files
+
+? support for embedding more than one message into one cover file (different passphrases)
+
+? allow PGP encryption of embedded data (gpgme?)

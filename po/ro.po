@@ -1,0 +1,1156 @@
+# romanian translation of steghide 0.5.1 messages
+# Copyright (C) 2003 Stefan Hetzl
+# This file is distributed under the same license as the steghide package.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: steghide 0.5.1\n"
+"POT-Creation-Date: 2003-10-15 10:02+0200\n"
+"PO-Revision-Date: 2003-10-11 09:31+2\n"
+"Last-Translator: TRIMBITAS SORIN <lacroix-iv(NO SPAM)@go.ro>\n"
+"Language-Team: ROMANIAN <lacroix-iv(NO SPAM)@go.ro>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=ISO-8859-1\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+#: src/Arguments.cc:84
+#, c-format
+msgid "unknown argument \"%s\"."
+msgstr "argument necunoscut \"%s\"."
+
+#: src/Arguments.cc:90
+msgid "standard input cannot be used for cover data AND data to be embedded."
+msgstr ""
+"intrarea standard nu poate fi folosita pentru a ascunde date SI de a "
+"incorpora date."
+
+#: src/Arguments.cc:103 src/Arguments.cc:109
+msgid ""
+"if standard input is used, the passphrase must be specified on the command "
+"line."
+msgstr ""
+"daca se foloseste intrarea standard, parola trebuie introdusa la linia "
+"decomanda."
+
+#: src/Arguments.cc:138
+#, c-format
+msgid "you have to suppy a filename to the \"%s\" command."
+msgstr "trebuie sa precizati un nume de fisier acestei comenzi \"%s\"."
+
+#: src/Arguments.cc:159 src/Arguments.cc:166 src/Arguments.cc:173
+#: src/Arguments.cc:180
+#, c-format
+msgid "you cannot use arguments with the \"%s\" command."
+msgstr "nu puteti folosi argumente pentru comanda \"%s\" ."
+
+#: src/Arguments.cc:195
+#, c-format
+msgid "unknown command \"%s\"."
+msgstr "comanda necunoscuta \"%s\"."
+
+#: src/Arguments.cc:205 src/Arguments.cc:236 src/Arguments.cc:267
+#: src/Arguments.cc:351 src/Arguments.cc:396 src/Arguments.cc:440
+#: src/Arguments.cc:542 src/Arguments.cc:570
+#, c-format
+msgid "the argument \"%s\" can only be used with the \"%s\" command."
+msgstr "argumentul \"%s\" poate fi folosit doar cu comanda \"%s\"."
+
+#: src/Arguments.cc:209 src/Arguments.cc:240 src/Arguments.cc:302
+#, c-format
+msgid "the \"%s\" argument can be used only once."
+msgstr "argumentul \"%s\" poate fi folosit o singura data."
+
+#: src/Arguments.cc:213
+#, c-format
+msgid "the \"%s\" argument must be followed by the embed file name."
+msgstr ""
+"argumentul \"%s\" trebuie sa fie urmat de numele fisierului de incorporat."
+
+#: src/Arguments.cc:244
+#, c-format
+msgid "the \"%s\" argument must be followed by the extract file name."
+msgstr "argumentul \"%s\" trebuie sa fie urmat de numele fiserului de extras."
+
+#: src/Arguments.cc:271
+msgid "the cover file name argument can be used only once."
+msgstr ""
+"argumentul pentru specificarea numelui fisierului de acoperire poate fi "
+"folosit o singura data."
+
+#: src/Arguments.cc:275
+#, c-format
+msgid "the \"%s\" argument must be followed by the cover file name."
+msgstr ""
+"argumentul \"%s\" trebuie sa fie urmat de numele fisierului de acoperire."
+
+#: src/Arguments.cc:298 src/Arguments.cc:601 src/Arguments.cc:625
+#: src/Arguments.cc:639
+#, c-format
+msgid ""
+"the argument \"%s\" can only be used with the \"%s\" and \"%s\" commands."
+msgstr ""
+"argumentul \"%s\" poate fi folosit doar cu comanda \"%s\" si cu comanda \"%s"
+"\"."
+
+#: src/Arguments.cc:306
+#, c-format
+msgid "the \"%s\" argument must be followed by the stego file name."
+msgstr "argumentul \"%s\" trebuie sa fie urmat de numele fisierului stego."
+
+#: src/Arguments.cc:329
+msgid "the passphrase argument can be used only once."
+msgstr ""
+"argumentul pentru specificarea parolei poate fi folosit o singura data."
+
+#: src/Arguments.cc:333
+#, c-format
+msgid "the \"%s\" argument must be followed by the passphrase."
+msgstr "argumentul \"%s\" trebuie sa fie urmat de parola."
+
+#: src/Arguments.cc:355
+msgid "the checksum argument can be used only once."
+msgstr "argumentul checksum poate fi folosit o singura data."
+
+#: src/Arguments.cc:373 src/Arguments.cc:418
+#, c-format
+msgid "the argument \"%s\" can only be used with the \"embed\" command."
+msgstr "argumentul \"%s\" poate fi folosit doar cu comanda \"embed\"."
+
+#: src/Arguments.cc:377 src/Arguments.cc:400
+msgid "the compression argument can be used only once."
+msgstr "argumentul pentru compresie poate fi folosit o singura data."
+
+#: src/Arguments.cc:381
+#, c-format
+msgid "the \"%s\" argument must be followed by the compression level."
+msgstr "argumentul \"%s\" trebuie sa fie urmat de parametrii de compresie."
+
+#: src/Arguments.cc:387
+#, c-format
+msgid "\"%s\" is not a valid compression level."
+msgstr "\"%s\" nu este un nivel de compresie valid."
+
+#: src/Arguments.cc:422
+msgid "the file name embedding argument can be used only once."
+msgstr ""
+"argumentul pentru specificarea numelui fisierului de incorporat poate fi "
+"folosit o singura data."
+
+#: src/Arguments.cc:444
+msgid "the encryption argument can be used only once."
+msgstr "argumentul de encriptie poate fi folosit o singura data."
+
+#: src/Arguments.cc:448 src/Arguments.cc:453
+#, c-format
+msgid "the \"%s\" argument must be followed by encryption parameters."
+msgstr "argumentul \"%s\" trebuie sa fie urmat de parametrii de encriptie."
+
+#: src/Arguments.cc:485 src/Arguments.cc:494
+#, c-format
+msgid "\"%s\" is neither an algorithm nor a mode supported by libmcrypt."
+msgstr "\"%s\" nu este un algoritm sau un mod suportat de libmcrypt."
+
+#: src/Arguments.cc:499
+#, c-format
+msgid ""
+"\"%s\" and \"%s\" are both libmcrypt algorithms. please specify only one."
+msgstr ""
+"\"%s\" si \"%s\" sunt tot algoritmi libmcrypt. va rog sa specificati unul "
+"singur."
+
+#: src/Arguments.cc:502
+#, c-format
+msgid "\"%s\" and \"%s\" are both libmcrypt modes. please specify only one."
+msgstr ""
+"\"%s\" si \"%s\" sunt tot moduri libmcrypt. va rog sa specificati unul "
+"singur."
+
+#: src/Arguments.cc:519
+#, c-format
+msgid "the encryption algorithm \"%s\" can not be used with the mode \"%s\"."
+msgstr "algoritmul de encriptie \"%s\" nu poate fi folosit cu modul \"%s\"."
+
+#: src/Arguments.cc:525
+msgid "steghide has been compiled without support for encryption."
+msgstr "steghide a fost compilat fara suport pentru encriptie."
+
+#: src/Arguments.cc:546
+msgid "the radius argument can be used only once."
+msgstr "argumentul raza poate fi folosit o singura data."
+
+#: src/Arguments.cc:550
+#, c-format
+msgid "the \"%s\" argument must be followed by the neighbourhood radius."
+msgstr ""
+"argumentul \"%s\" trebuie sa fie urmat de raza vecinatatii(neighbourhood "
+"radius)."
+
+#: src/Arguments.cc:574
+msgid "the goal argument can be used only once."
+msgstr "argumentul goal poate fi folosit o singura data."
+
+#: src/Arguments.cc:578 src/Arguments.cc:584
+#, c-format
+msgid "the \"%s\" argument must be followed by a number between 0 and 100."
+msgstr ""
+"argumentul \"%s\" trebuie sa fie urmat de un numar cuprins intre 0 si 100."
+
+#: src/Arguments.cc:605
+msgid "the force argument can be used only once."
+msgstr "argumentul force poate fi folosit o singura data."
+
+#: src/Arguments.cc:629 src/Arguments.cc:643 src/Arguments.cc:701
+#, c-format
+msgid ""
+"the \"%s\" argument cannot be used here because the verbosity has already "
+"been set."
+msgstr ""
+"argumentul \"%s\" nu poate fi folosit aici pentru ca a fost deja setat."
+
+#: src/Arguments.cc:659 src/Arguments.cc:669 src/Arguments.cc:679
+#: src/Arguments.cc:697
+msgid "you cannot use more than one debug command at a time."
+msgstr "nu puteti folosi mai mult de o comanda de debug in acelasi timp."
+
+#: src/Arguments.cc:711
+msgid "the debug level argument can be used only once."
+msgstr ""
+"argumentul pentru specificarea nivelului de debug poate fi folosit o singura "
+"data."
+
+#: src/Arguments.cc:715
+#, c-format
+msgid "the \"%s\" argument must be followed by the debug level."
+msgstr "argumentul \"%s\" trebuie sa fie urmat de nivelul de debug."
+
+#: src/Arguments.cc:741
+msgid "unknown terminal. the passphrase you type now will be visible."
+msgstr "terminal necunoscut. parola pe care o veti introduce va fi vizibila."
+
+#: src/Arguments.cc:745
+msgid "Enter passphrase: "
+msgstr "Introduceti parola: "
+
+#: src/Arguments.cc:758
+msgid "Re-Enter passphrase: "
+msgstr "Reintroduceti parola: "
+
+#: src/Arguments.cc:770
+msgid "the passphrases do not match."
+msgstr "Parolele nu se potrivesc."
+
+#: src/AssertionFailed.cc:28
+msgid ""
+"This means that you have found a bug. Please let me (shetzl@chello.at)\n"
+"know this if you have a way to reproduce the error.\n"
+"Steghide has to exit now. Sorry.\n"
+msgstr ""
+"Acest lucru inseamna ca ati gasit un bug. Va rog sa-mi scrieti la "
+"shetzl@chello.at\n"
+"daca stiti cum sa reproduceti conditiile in care s-a generat eroarea.\n"
+"Steghide trebuie sa se inchida acum. Imi pare rau.\n"
+
+#: src/AssertionFailed.h:30
+#, c-format
+msgid "assertion failed in %s at line number %d."
+msgstr "declaratii nereusite in %s la linia %d."
+
+#: src/AuFile.cc:94
+#, c-format
+msgid "the au file on standard input uses the unkown encoding %d."
+msgstr "fisierul au de la intrarea standard foloseste un codec necunoscut %d."
+
+#: src/AuFile.cc:97
+#, c-format
+msgid "the au file \"%s\" uses the unknown encoding %d."
+msgstr "fisierul au \"%s\" foloseste un codec necunoscut %d."
+
+#: src/AuFile.cc:107
+#, c-format
+msgid "an error occured while reading the au headers from the file \"%s\"."
+msgstr ""
+"o eroare a fost generata in timp ce se citeau header-ele au din \"%s\"."
+
+#: src/AuFile.cc:113
+#, c-format
+msgid "premature end of file \"%s\" while reading au headers."
+msgstr "terminare prematura a \"%s\" in timpul citirii header-elor au."
+
+#: src/AuFile.cc:119
+msgid "an error occured while reading the au headers from standard input."
+msgstr ""
+"o eroare a fost generata in timp ce se citeau header-ele au de la intrarea "
+"standard."
+
+#: src/AuFile.cc:125
+msgid "premature end of data from standard input while reading au headers."
+msgstr ""
+"terminare prematura a datelor de la intrarea standard in timpul citirii "
+"header-elor au."
+
+#: src/AuFile.cc:165
+#, c-format
+msgid "an error occured while writing the au headers to the file \"%s\"."
+msgstr ""
+"o eroare a fost generata in timp ce se scria header-ul au in fisierul \"%s\"."
+
+#: src/AuFile.cc:171
+msgid "an error occured while writing the au headers to standard output."
+msgstr ""
+"o eroare a fost generata in timp ce se scriau header-ele au la iesirea "
+"standard."
+
+#: src/AuFile.cc:188
+msgid ", mu-law encoding"
+msgstr ", codare mu-law"
+
+#: src/AuFile.cc:193
+msgid ", PCM encoding"
+msgstr ", codare PCM"
+
+#: src/AuFile.cc:196 src/BmpFile.cc:87 src/JpegFile.cc:61 src/WavFile.cc:81
+msgid "format"
+msgstr "format"
+
+#: src/AudioData.h:94 src/WavFile.cc:249
+#, c-format
+msgid "an error occured while reading the audio data from the file \"%s\"."
+msgstr "o eroare a fost generata in timp ce se citeau datele audio din \"%s\"."
+
+#: src/AudioData.h:100 src/WavFile.cc:253
+#, c-format
+msgid "premature end of file \"%s\" while reading audio data."
+msgstr "terminare prematura a \"%s\" in timpul citirii datelor audio."
+
+#: src/AudioData.h:106 src/WavFile.cc:257
+msgid "an error occured while reading the audio data from standard input."
+msgstr ""
+"o eroare a fost generata in timp ce se citeau datele audio de la intrarea "
+"standard."
+
+#: src/AudioData.h:112 src/WavFile.cc:261
+msgid "premature end of data from standard input while reading audio data."
+msgstr ""
+"terminare prematura a datelor de la intrarea standard in timpul citirii "
+"datelor audio."
+
+#: src/AudioData.h:134 src/WavFile.cc:302
+#, c-format
+msgid "an error occured while writing the audio data to the file \"%s\"."
+msgstr ""
+"o eroare a fost generata in timp ce se scria datele audio in fisierul \"%s\"."
+
+#: src/AudioData.h:140 src/WavFile.cc:306
+msgid "an error occured while writing the audio data to standard output."
+msgstr ""
+"o eroare a fost generata in timpul scrierii datelor audio la iesirea "
+"standard."
+
+#: src/BinaryIO.cc:67
+#, c-format
+msgid "the file \"%s\" does already exist. overwrite ?"
+msgstr "fisierul \"%s\" exista deja. doriti sa-l rescrieti?"
+
+#: src/BinaryIO.cc:70
+#, c-format
+msgid "did not write to file \"%s\"."
+msgstr "nu am putut scrie in fisierul \"%s\"."
+
+#: src/BinaryIO.cc:113
+#, c-format
+msgid "could not open the file \"%s\"."
+msgstr "nu am putut deschide fisierul \"%s\"."
+
+#: src/BinaryIO.cc:137
+#, c-format
+msgid "could not close the file \"%s\"."
+msgstr "nu pot inchide fisierul \"%s\"."
+
+#: src/BitString.cc:299 src/BitString.cc:347 src/MCryptPP.cc:322
+#: src/MHashKeyGen.cc:115
+msgid "could not allocate memory."
+msgstr "nu pot aloca memoria RAM necesara."
+
+#: src/BitString.cc:303
+#, c-format
+msgid "error %d while calling zlib's compress2."
+msgstr ""
+"s-a generat o eroare %d in timp ce am apelat functia compress2 aflata in "
+"libraria zlib."
+
+#: src/BitString.cc:351
+msgid "can not uncompress data. compressed data is corrupted."
+msgstr "nu pot decompresa datele pentru ca datele compresate sunt corupte."
+
+#: src/BitString.cc:355
+#, c-format
+msgid "error %d while calling zlib's uncompress."
+msgstr ""
+"s-a generat o eroare %d in timp ce am apelat functia decompress aflata in "
+"libraria zlib."
+
+#: src/BmpFile.cc:80
+msgid "Windows 3.x bitmap"
+msgstr "Windows 3.x bitmap"
+
+#: src/BmpFile.cc:84
+msgid "OS/2 1.x bitmap"
+msgstr "OS/2 1.x bitmap"
+
+#: src/BmpFile.cc:428
+#, c-format
+msgid ""
+"the bmp data from standard input has a format that is not supported (biSize: "
+"%lu)."
+msgstr ""
+"datele bmp de la intrarea standardut au un format nesuportat de steghide "
+"(biSize: %lu)."
+
+#: src/BmpFile.cc:431
+#, c-format
+msgid "the bmp file \"%s\" has a format that is not supported (biSize: %lu)."
+msgstr ""
+"fisierul bitmap \"%s\" are un format nesuportat de steghide (biSize: %lu)."
+
+#: src/BmpFile.cc:439
+#, c-format
+msgid "an error occured while reading the bmp headers from the file \"%s\"."
+msgstr ""
+"o eroare a fost generata in timp ce se citeau header-ele bmp din \"%s\"."
+
+#: src/BmpFile.cc:443
+#, c-format
+msgid "premature end of file \"%s\" while reading bmp headers."
+msgstr "terminare prematura a \"%s\" in timpul citirii header-elor bmp."
+
+#: src/BmpFile.cc:447
+msgid "an error occured while reading the bmp headers from standard input."
+msgstr ""
+"o eroare a fost generata in timp ce se citeau header-ele bmp de la intrarea "
+"standard."
+
+#: src/BmpFile.cc:451
+msgid "premature end of data from standard input while reading bmp headers."
+msgstr ""
+"terminare prematura a datelor de la intrarea standard in timpul citirii "
+"header-elor bmp."
+
+#: src/BmpFile.cc:492
+#, c-format
+msgid ""
+"the bmp data from standard input has a format that is not supported "
+"(biBitCount: %d)."
+msgstr ""
+"datele bmp de la intrarea standardut au un format nesuportat de steghide "
+"(biBitCount: %d)."
+
+#: src/BmpFile.cc:495
+#, c-format
+msgid ""
+"the bmp file \"%s\" has a format that is not supported (biBitCount: %d)."
+msgstr ""
+"fisierul bmp \"%s\" are un format nesuportat de steghide (biBitCount: %d)."
+
+#: src/BmpFile.cc:502
+msgid ""
+"the bitmap data from standard input is compressed which is not supported."
+msgstr ""
+"datele bitmap de la intrarea standard sunt compresate, metoda nesuportata."
+
+#: src/BmpFile.cc:505
+#, c-format
+msgid "the bitmap data in \"%s\" is compressed which is not supported."
+msgstr "datele bitmap din \"%s\" sunt compresate, metoda nesuportata."
+
+#: src/BmpFile.cc:521 src/BmpFile.cc:610
+msgid "using a black/white bitmap as cover is very insecure!"
+msgstr ""
+"folosirea unui fisier bitmap in alb/negru ca acoperire este foarte nesigura!"
+
+#: src/BmpFile.cc:529 src/BmpFile.cc:618
+msgid "using a 16-color bitmap as cover is very insecure!"
+msgstr ""
+"folosirea unui fisier bitmap in 16 culori ca acoperire este foarte nesigura!"
+
+#: src/BmpFile.cc:552
+msgid "maybe corrupted windows bmp data (Reserved in RGBQUAD is non-zero)."
+msgstr ""
+"posibil date bmp windows corupte (byte-ul rezervat RGBQUAD este diferit de "
+"zero)."
+
+#: src/BmpFile.cc:595
+#, c-format
+msgid ""
+"the bmp data from standard input has a format that is not supported "
+"(bcBitCount: %d)."
+msgstr ""
+"datele bmp de la intrarea standardut au un format nesuportat de steghide "
+"(bcBitCount: %d)."
+
+#: src/BmpFile.cc:598
+#, c-format
+msgid ""
+"the bmp file \"%s\" has a format that is not supported (bcBitCount: %d)."
+msgstr ""
+"fisierul bmp \"%s\" are un format nesuportat de steghide (bcBitCount: %d)."
+
+#: src/BmpFile.cc:669
+#, c-format
+msgid "an error occured while writing the bmp headers to the file \"%s\"."
+msgstr ""
+"o eroare a fost generata in timpul scrierii header-elor bitmap in \"%s\"."
+
+#: src/BmpFile.cc:673
+msgid "an error occured while writing the bmp headers to standard output."
+msgstr ""
+"ao eroare a fost generata in timpul scrierii header-elor bitmap la iesirea "
+"standard."
+
+#: src/BmpFile.cc:776
+#, c-format
+msgid "maybe corrupted bmp data (padding byte at 0x%lx set to non-zero)."
+msgstr "posibil date bmp corupte (byte-ul 0x%lx este setat non-zero)."
+
+#: src/BmpFile.cc:790
+#, c-format
+msgid "an error occured while reading the bmp data from the file \"%s\"."
+msgstr "o eroare a fost generata in timp ce se citeau datele bmp din \"%s\"."
+
+#: src/BmpFile.cc:794
+#, c-format
+msgid "premature end of file \"%s\" while reading bmp data."
+msgstr "terminare prematura a \"%s\" in timpul citirii datelor bmp."
+
+#: src/BmpFile.cc:798
+msgid "an error occured while reading the bmp data from standard input."
+msgstr ""
+"o eroare a fost generata in timp ce se citeau datele bmp de la intrarea "
+"standard."
+
+#: src/BmpFile.cc:802
+msgid "premature end of bmp data from standard input."
+msgstr "terminare prematura a datelor bmp de la intrarea standard."
+
+#: src/BmpFile.cc:840
+#, c-format
+msgid "an error occured while writing the bitmap data to the file \"%s\"."
+msgstr ""
+"o eroare a fost generata in timpul scrierii datelor bitmap in fisierul \"%s"
+"\"."
+
+#: src/BmpFile.cc:844
+msgid "an error occured while writing the bitmap data to standard output."
+msgstr ""
+"o eroare a fost generata in timpul scrierii datelor bitmap la iesirea "
+"standard."
+
+#: src/CvrStgFile.cc:212
+msgid ""
+"can not read input file. steghide has been compiled without support for jpeg "
+"files."
+msgstr ""
+"nu pot citi fisierul de intrare. steghide a fost compilat fara suport pentru "
+"jpeg files."
+
+#: src/EmbData.cc:91
+msgid "could not extract any data with that passphrase!"
+msgstr "nu am putut extrage date cu parola introdusa!"
+
+#: src/EmbData.cc:107
+#, c-format
+msgid ""
+"attempting to read an embedding of version %d but steghide %s only supports "
+"embeddings of version %d."
+msgstr ""
+"ati incercat sa cititi date incorporate cu versiunea %d dar steghide %s "
+"suporta doar incorporari de date versiunea %d."
+
+#: src/EmbData.cc:137
+msgid ""
+"The embedded data is encrypted but steghide has been compiled without "
+"encryption\n"
+"support. To be able to read the embedded data, you have to install "
+"libmcrypt\n"
+"(http://mcrypt.sourceforge.net/) and recompile steghide."
+msgstr ""
+"Datele incorporate sunt encriptate dar steghide a fost compliat fara "
+"suportul de encriptie.\n"
+"Pentru a putea sa cititi datele incorporate trebuie sa instalati libmcrypt\n"
+"(http://mcrypt.sourceforge.net/) si sa recompilati steghide."
+
+#: src/EmbData.cc:226
+msgid "the embedded data has an invalid length."
+msgstr "datele incorporate au o lungime invalida."
+
+#: src/Embedder.cc:48
+msgid "reading secret data from standard input..."
+msgstr "citire date secrete de la intrarea standard..."
+
+#: src/Embedder.cc:51
+#, c-format
+msgid "reading secret file \"%s\"..."
+msgstr "citire fisier secret \"%s\"..."
+
+#: src/Embedder.cc:63 src/Extractor.cc:46 src/ProgressOutput.cc:71
+#: src/Session.cc:88
+msgid " done"
+msgstr " gata"
+
+#: src/Embedder.cc:84
+msgid "reading cover file from standard input..."
+msgstr "citire fisier de acoperire de la intrarea standard..."
+
+#: src/Embedder.cc:87
+#, c-format
+msgid "reading cover file \"%s\"..."
+msgstr "citire fisier de acoperire \"%s\"..."
+
+#: src/Embedder.cc:98
+msgid "the cover file is too short to embed the data."
+msgstr "fisierul de acoperire este prea mic pentru a incorpora date."
+
+#: src/Embedder.cc:104
+msgid "creating the graph..."
+msgstr "creare graf..."
+
+#: src/Embedder.cc:148 src/Embedder.cc:154
+msgid "standard input"
+msgstr "intrarea standard"
+
+#: src/Embedder.cc:160
+#, c-format
+msgid "embedding %s in %s..."
+msgstr "incorporare %s in %s..."
+
+#: src/Embedder.cc:189
+msgid "writing stego file to standard output... "
+msgstr "scriere fisier stego la iesirea standard... "
+
+#: src/Embedder.cc:194
+#, c-format
+msgid "writing stego file \"%s\"... "
+msgstr "scriere fisier stego \"%s\"... "
+
+#: src/Embedder.cc:204
+msgid "done"
+msgstr "gata"
+
+#: src/Embedder.cc:217
+#, c-format
+msgid "executing %s..."
+msgstr "execut %s..."
+
+#: src/Extractor.cc:36
+msgid "reading stego file from standard input..."
+msgstr "citire fisier stego de la intrarea standard..."
+
+#: src/Extractor.cc:39
+#, c-format
+msgid "reading stego file \"%s\"..."
+msgstr "citire fisier stego \"%s\"..."
+
+#: src/Extractor.cc:52
+msgid "extracting data..."
+msgstr "extractie date..."
+
+#: src/Extractor.cc:62
+msgid ""
+"the stego data from standard input is too short to contain the embedded data."
+msgstr ""
+"datele stego de la intrarea standard sunt prea mici pentru a contine date "
+"incorporate."
+
+#: src/Extractor.cc:65
+#, c-format
+msgid "the stego file \"%s\" is too short to contain the embedded data."
+msgstr "fisierul stego \"%s\" este prea mic pentru a putea incorpora date."
+
+#: src/Extractor.cc:82
+msgid "checking crc32 checksum..."
+msgstr "verificare crc32 checksum..."
+
+#: src/Extractor.cc:86
+msgid " ok"
+msgstr " ok"
+
+#: src/Extractor.cc:90
+msgid " FAILED!"
+msgstr " NEREUSIT!"
+
+#: src/Extractor.cc:93
+msgid "crc32 checksum failed! extracted data is probably corrupted."
+msgstr "checksum-ul crc32 e invalid! datele extrase sunt probabil corupte."
+
+#: src/Graph.cc:253
+#, c-format
+msgid " %lu sample values, %lu vertices, %lu edges"
+msgstr " %lu valori-exemplu, %lu varfuri, %lu muchii"
+
+#: src/JpegFile.cc:73
+msgid "can not use standard input as source for jpeg files with libjpeg."
+msgstr ""
+"nu pot folosi intrarea standard ca sursa pentru fisiere jpeg cu libjpeg."
+
+#: src/MCryptPP.cc:64 src/MCryptPP.cc:249
+#, c-format
+msgid "could not open libmcrypt module \"%s\",\"%s\"."
+msgstr "nu am putut deschide modulul libmcrypt \"%s\",\"%s\"."
+
+#: src/MCryptPP.cc:119
+msgid ""
+"could not initialize libmcrypt encryption. see above error messages if any."
+msgstr ""
+"nu am putut initializa encriptarea folosind libmcrypt. uitat-va deasupra "
+"dupa posibile mesaje de eroare."
+
+#: src/MCryptPP.cc:132
+msgid "could not encrypt data."
+msgstr "nu am putut encripta datele."
+
+#: src/MCryptPP.cc:154
+msgid "could not finish libmcrypt encryption."
+msgstr "nu am putut termina encriptia libmcrypt."
+
+#: src/MCryptPP.cc:185
+msgid ""
+"could not initialize libmcrypt decryption. see above error messages if any."
+msgstr ""
+"nu am putut initializa decriptarea folosind libmcrypt. uitat-va deasupra "
+"dupa posibile mesaje de eroare."
+
+#: src/MCryptPP.cc:198
+msgid "could not decrypt data."
+msgstr "ne am putut decripta datele."
+
+#: src/MCryptPP.cc:209
+msgid "could not finish libmcrypt decryption."
+msgstr "nu am putut termina decriptia libmcrypt."
+
+#: src/MHashKeyGen.cc:61
+msgid "could not generate key using libmhash."
+msgstr "nu am putut genera o cheie folosind libmhash."
+
+#: src/MHashPP.cc:45
+#, c-format
+msgid "could not initialize libmhash %s algorithm."
+msgstr "nu am putut initializa algoritmul libmhash %s."
+
+#: src/ProgressOutput.cc:79
+msgid " done\n"
+msgstr " gata\n"
+
+#: src/RandomSource.cc:38
+msgid ""
+"could not open /dev/urandom, using standard library random numbers instead."
+msgstr ""
+"nu am putut deschide /dev/urandom, voi folosi in loc libraria standard "
+"pentru numere aleatoare."
+
+#: src/RandomSource.cc:53
+msgid "could not close random input file."
+msgstr "nu pot inchide fisierul de intrare aleator."
+
+#: src/Session.cc:64
+msgid ""
+"please specify a file name for the extracted data (there is no name embedded "
+"in the stego file)."
+msgstr ""
+"va rog sa specificati un nume de fisier pentru datele extrase (nu este nici "
+"un nume incorporat in fisierul stego)."
+
+#: src/Session.cc:71
+msgid "writing extracted data to standard output..."
+msgstr "scriere date extrase la iesirea standard..."
+
+#: src/Session.cc:75
+#, c-format
+msgid "writing extracted data to \"%s\"..."
+msgstr "scriere date extrase in \"%s\"..."
+
+#: src/Session.cc:94
+#, c-format
+msgid "wrote extracted data to \"%s\"."
+msgstr "scrie data extrasa la \"%s\"."
+
+#: src/Session.cc:138
+msgid "data from standard input:\n"
+msgstr "date de la intrarea standard:\n"
+
+#: src/Session.cc:145
+msgid "capacity"
+msgstr "capacitatea"
+
+#: src/Session.cc:152
+msgid "Try to get information about embedded data ?"
+msgstr "Doriti sa incerc sa obtin informatii despre datele incorporate ?"
+
+#: src/Session.cc:171
+msgid "  embedded data:\n"
+msgstr "  data introduse:\n"
+
+#: src/Session.cc:174
+#, c-format
+msgid "  embedded file \"%s\":\n"
+msgstr "  fisier introdus \"%s\":\n"
+
+#: src/Session.cc:177
+#, c-format
+msgid "    size: %s\n"
+msgstr "    marimea: %s\n"
+
+#: src/Session.cc:180 src/Session.cc:186
+msgid "no"
+msgstr "nu"
+
+#: src/Session.cc:185
+#, c-format
+msgid "    encrypted: %s\n"
+msgstr "    encriptat: %s\n"
+
+#: src/Session.cc:186
+#, c-format
+msgid "    compressed: %s\n"
+msgstr "    compresat: %s\n"
+
+#: src/Session.cc:186
+msgid "yes"
+msgstr "da"
+
+#: src/Session.cc:191
+msgid "could not extract any data with that passphrase!\n"
+msgstr "nu am putut extrage date cu parola introdusa!\n"
+
+#: src/Session.cc:214
+msgid ""
+"encryption algorithms:\n"
+"<algorithm>: <supported modes>...\n"
+msgstr ""
+"algoritmi de encriptare:\n"
+"<algoritm>: <moduri suportate>...\n"
+
+#: src/Session.cc:231
+msgid ""
+"steghide has been compiled without support for encryption.\n"
+"If you want to encrypt your data before embedding it, use an external "
+"encryption\n"
+"program or install libmcrypt (http://mcrypt.sourceforge.net/) and recompile "
+"steghide.\n"
+msgstr ""
+"steghide a fost compilat fara suport pentru encriptie.\n"
+"Daca vreti sa encriptati datele inainte de a le incorpora, folositi un "
+"program extern de encriptie\n"
+"sau instalati libmcrypt (http://mcrypt.sourceforge.net/) si apoi recompilati "
+"steghide.\n"
+
+#: src/Session.cc:245
+msgid ""
+"\n"
+"the first argument must be one of the following:\n"
+" embed, --embed          embed data\n"
+" extract, --extract      extract data\n"
+" info, --info            display information about a cover- or stego-file\n"
+"   info <filename>       display information about <filename>\n"
+" encinfo, --encinfo      display a list of supported encryption algorithms\n"
+" version, --version      display version information\n"
+" license, --license      display steghide's license\n"
+" help, --help            display this usage information\n"
+"\n"
+"embedding options:\n"
+" -ef, --embedfile        select file to be embedded\n"
+"   -ef <filename>        embed the file <filename>\n"
+" -cf, --coverfile        select cover-file\n"
+"   -cf <filename>        embed into the file <filename>\n"
+" -p, --passphrase        specify passphrase\n"
+"   -p <passphrase>       use <passphrase> to embed data\n"
+" -sf, --stegofile        select stego file\n"
+"   -sf <filename>        write result to <filename> instead of cover-file\n"
+" -e, --encryption        select encryption parameters\n"
+"   -e <a>[<m>]|<m>[<a>]  specify an encryption algorithm and/or mode\n"
+"   -e none               do not encrypt data before embedding\n"
+" -z, --compress          compress data before embedding (default)\n"
+"   -z <l>                 using level <l> (1 best speed...9 best "
+"compression)\n"
+" -Z, --dontcompress      do not compress data before embedding\n"
+" -K, --nochecksum        do not embed crc32 checksum of embedded data\n"
+" -N, --dontembedname     do not embed the name of the original file\n"
+" -f, --force             overwrite existing files\n"
+" -q, --quiet             suppress information messages\n"
+" -v, --verbose           display detailed information\n"
+"\n"
+"extracting options:\n"
+" -sf, --stegofile        select stego file\n"
+"   -sf <filename>        extract data from <filename>\n"
+" -p, --passphrase        specify passphrase\n"
+"   -p <passphrase>       use <passphrase> to extract data\n"
+" -xf, --extractfile      select file name for extracted data\n"
+"   -xf <filename>        write the extracted data to <filename>\n"
+" -f, --force             overwrite existing files\n"
+" -q, --quiet             suppress information messages\n"
+" -v, --verbose           display detailed information\n"
+"\n"
+"options for the info command:\n"
+" -p, --passphrase        specify passphrase\n"
+"   -p <passphrase>       use <passphrase> to get info about embedded data\n"
+"\n"
+"To embed emb.txt in cvr.jpg: steghide embed -cf cvr.jpg -ef emb.txt\n"
+"To extract embedded data from stg.jpg: steghide extract -sf stg.jpg\n"
+msgstr ""
+"\n"
+"primul argument trebuie sa fie din cele de mai jos:\n"
+" embed, --embed          incorporeaza datele\n"
+" extract, --extract      extrage datele\n"
+" info, --info            afiseaza informatii despre acoperire- sau despre "
+"fisierul stego\n"
+"   info <filename>       afiseaza informatii despre <fisier>\n"
+" encinfo, --encinfo      afiseaza lista du algoritmii de encriptie "
+"suportati\n"
+" version, --version      afiseaza informatii despre versiunea curenta a "
+"programului\n"
+" license, --license      afiseaza licenta steghide\n"
+" help, --help            afiseaza informatiile despre folosire(cele de mai "
+"sus)\n"
+"\n"
+"optiuni pentru incorporarea de date:\n"
+" -ef, --embedfile        selecteaza fisierul dorit pentru a fi incorporat\n"
+"   -ef <filename>        incorporeaza fisierul <fisier>\n"
+" -cf, --coverfile        selecteaza fisierul sursa dorit pentru adaugarea de "
+"date\n"
+"   -cf <filename>        incorporeaza in fisierul <fisier>\n"
+" -p, --passphrase        specifica parola\n"
+"   -p <passphrase>       foloseste <parola> pentru a incorpora datele\n"
+" -sf, --stegofile        selecteaza fisierul stego\n"
+"   -sf <filename>        scriere rezultate in <fisier> in loc de fisierul "
+"sursa\n"
+" -e, --encryption        selecteaza parametrii de encriptie\n"
+"   -e <a>[<m>]|<m>[<a>]  specifica un algoritm de encriptie si/sau un mod\n"
+"   -e none               nu encripta datele inainte de incorporare\n"
+" -z, --compress          compreseaza datele inainte de incorporare "
+"(default)\n"
+"   -z <l>                 folosind unul din nivelele <nivel> (1 cel mai "
+"rapid...9 cea mai puternica compresie)\n"
+" -Z, --dontcompress      nu compresa datele inainte de incorporare\n"
+" -K, --nochecksum        nu incorpora datele crc32 ale datelor incorporate\n"
+" -N, --dontembedname     nu incorpora numele fisierului original\n"
+" -f, --force             rescrie fisierele existente\n"
+" -q, --quiet             nu afisa informatii despre proces\n"
+" -v, --verbose           afiseaza informatii detaliate despre proces\n"
+"\n"
+"optiuni pentru extragerea de date:\n"
+" -sf, --stegofile        selecteaza fisier stego\n"
+"   -sf <filename>        extrage datele din <fisier>\n"
+" -p, --passphrase        specifica parola\n"
+"   -p <passphrase>       foloseste <parola> pentru a extrage date\n"
+" -xf, --extractfile      selecteaza numele fisierului pentru datele extrase\n"
+"   -xf <filename>        scrie datele extrase in <fisier>\n"
+" -f, --force             rescrie fisierele existente\n"
+" -q, --quiet             nu afisa informatii despre proces\n"
+" -v, --verbose           afiseaza informatii detaliate despre proces\n"
+"\n"
+"optiuni pentru comanda info:\n"
+" -p, --passphrase        specificare parola\n"
+"   -p <passphrase>       foloseste <parola> pentru a obtine date despre "
+"embedded data\n"
+"\n"
+"Pentru a incorpora emb.txt in cvr.jpg: steghide embed -cf cvr.jpg -ef emb."
+"txt\n"
+"Pentru a extrage datele din stg.jpg: steghide extract -sf stg.jpg\n"
+
+#: src/SteghideError.cc:27
+msgid "error, exiting. (no error message defined)."
+msgstr ""
+"s-a generat o eroare, iesire din program. (nici un mesaj de eroare definit)."
+
+#: src/Terminal.cc:31 src/Terminal.cc:39 src/Terminal.cc:53
+msgid "could not get terminal attributes."
+msgstr "nu am putut determina atributele terminalului."
+
+#: src/Terminal.cc:45 src/Terminal.cc:61 src/Terminal.cc:68
+msgid "could not set terminal attributes."
+msgstr "nu am putut seta atributele terminalului."
+
+#: src/WavFile.cc:346
+#, c-format
+msgid "an error occured while reading the wav headers from the file \"%s\"."
+msgstr ""
+"o eroare a fost generata in timp ce se citeau header-ele wav din fisierul \"%"
+"s\"."
+
+#: src/WavFile.cc:352
+#, c-format
+msgid "premature end of file \"%s\" while reading wav headers."
+msgstr "terminare prematura a \"%s\" in timpul citirii header-elor wav."
+
+#: src/WavFile.cc:358
+msgid "an error occured while reading the wav headers from standard input."
+msgstr ""
+"o eroare a fost generata in timp ce se citeau header-ele wav de la intrarea "
+"standard."
+
+#: src/WavFile.cc:364
+msgid "premature end of data from standard input while reading wav headers."
+msgstr ""
+"terminare prematura a datelor de la intrarea standard in timpul citirii "
+"header-elor wav."
+
+#: src/WavFile.cc:394
+#, c-format
+msgid "an error occured while writing the wav headers to the file \"%s\"."
+msgstr "o eroare a fost generata in timpul scrierii header-elor wav in \"%s\"."
+
+#: src/WavFile.cc:400
+msgid "an error occured while writing the wav headers to standard output."
+msgstr ""
+"o eroare a fost generata in timpul scrierii header-elor wav la iesirea "
+"standard."
+
+#: src/WavFormatChunk.cc:31
+#, c-format
+msgid ""
+"the wav file from standard input has a format that is not supported "
+"(FormatTag: 0x%X)."
+msgstr ""
+"fisierul WAV de la intrarea standard este intr-un format care nu e suportat"
+"(FormatTag: 0x%X)."
+
+#: src/WavFormatChunk.cc:34
+#, c-format
+msgid ""
+"the wav file \"%s\" has a format that is not supported (FormatTag: 0x%X)."
+msgstr ""
+"fisierul WAV \"%s\" este intr-un format care nu este suportat (FormatTag: 0x%"
+"X)."
+
+#: src/WavFormatChunk.cc:49
+msgid ""
+"the wav file from standard input does not have pcm format (header too long)."
+msgstr ""
+"fisierul WAV de la intrarea standard nu este in format pcm (header-ul este "
+"prea lung)."
+
+#: src/WavFormatChunk.cc:52
+#, c-format
+msgid "the wav file \"%s\" does not have pcm format (header too long)."
+msgstr "fisierul WAV \"%s\" nu este in format pcm (header-ul este prea lung)."
+
+#: src/WavFormatChunk.cc:57
+msgid "the wav file from standard input is corrupted."
+msgstr "fisierul WAV de la intrarea standard este corupt."
+
+#: src/WavFormatChunk.cc:60
+#, c-format
+msgid "the wav file \"%s\" is corrupted."
+msgstr "fisierul WAV \"%s\" este corupt."
+
+#: src/error.cc:45
+msgid "type \"steghide --help\" for help."
+msgstr "tasteaza \"steghide --help\" pentru ajutor."
+
+#: src/error.cc:56
+msgid "premature end of data from standard input."
+msgstr "terminare prematura a datelor de la intrarea standard."
+
+#: src/error.cc:60
+#, c-format
+msgid "premature end of file \"%s\"."
+msgstr "terminare prematura a \"%s\"."
+
+#: src/error.cc:66
+msgid "an error occured while reading data from standard input."
+msgstr ""
+"o eroare a fost generata in timp ce se citea date de la intrarea standard."
+
+#: src/error.cc:70
+#, c-format
+msgid "an error occured while reading data from the file \"%s\"."
+msgstr "o eroare a fost generata in timp ce se citea date din fisierul \"%s\"."
+
+#: src/error.cc:93
+msgid "an error occured while writing data to standard output."
+msgstr "o eroare a fost generata in timp ce se scria date la iesirea standard."
+
+#: src/error.cc:97
+#, c-format
+msgid "an error occured while writing data to the file \"%s\"."
+msgstr "o eroare a fost generata in timp ce se scria fisierul \"%s\"."
+
+#: src/error.cc:119
+msgid "the file format of the data from standard input is not supported."
+msgstr "formatul fisierului de la intrarea standard nu este suportat."
+
+#: src/error.cc:122
+#, c-format
+msgid "the file format of the file \"%s\" is not supported."
+msgstr "formatul fisierului \"%s\" nu este suportat."
+
+#: src/error.cc:141
+msgid ""
+"This feature is not (yet) available. Please let me (shetzl@chello.at) know\n"
+"that you want to use this functionality to increase the chance that this "
+"will\n"
+"be implemented in the near future. Steghide has to exit now. Sorry.\n"
+msgstr ""
+"Aceasta optiune nu este (inca) disponibila. Va rog sa-mi spuneti la "
+"shetzl@chello.at \n"
+"daca vreti sa folositi aceasta optiune pentru a mari sansele ca aceasta sa "
+"fie \n"
+"implementata in viitorul apropiat. Steghide trebuie sa se inchida acum. Imi "
+"pare rau.\n"
+
+#: src/error.cc:161
+msgid ""
+"Other possible reasons for this error are that the passphrase is wrong\n"
+"or that there is no embedded data.\n"
+msgstr ""
+"Alte motive posibile pentru aceasta eroare ar putea fi : parola este "
+"gresita\n"
+"sau fisierul nu contine date incorporate.\n"
+
+#: src/msg.cc:35
+msgid "__no_message_defined__"
+msgstr "__nici_un_mesaj_definit__"
+
+#: src/msg.cc:135 src/msg.cc:153
+msgid "warning:"
+msgstr "atentie:"
+
+#: src/msg.cc:162 src/msg.cc:169 src/msg.cc:176
+msgid "y"
+msgstr "d"
+
+#: src/msg.cc:163 src/msg.cc:170 src/msg.cc:177
+msgid "n"
+msgstr "n"
+
+#: src/msg.cc:188
+msgid "unknown terminal. you might need to press <Enter> after answering."
+msgstr "terminal nerecunoscut. s-ar putea sa fiti nevoiti sa apasati <Enter>."
+
+#~ msgid "the \"%s\" argument must be followed by a number between 0 and %d."
+#~ msgstr ""
+#~ "argumentul \"%s\" trebuie sa fie urmat de un numar cuprins intre 0 si %d."
+
+#~ msgid ""
+#~ "the \"%s\" argument must be followed by the number of times the "
+#~ "construction heuristic should be run."
+#~ msgstr ""
+#~ "argumentul \"%s\" trebuie sa fie urmat de numarul dorit de executii a "
+#~ "constructiei euristice."
+
+#~ msgid "the \"%s\" argument must be followed by the priority queue range."
+#~ msgstr "argumentul \"%s\" trebuie sa fie urmat de prioritatea procesului."
+
+#~ msgid "the algorithm argument can be used only once."
+#~ msgstr ""
+#~ "argumentul pentru alegerea algoritmului poate fi folosit o singura data."
+
+#~ msgid "the file \"%s\" does already exist."
+#~ msgstr "fisierul \"%s\" exista deja."
+
+#~ msgid "the number construction heuristic argument can be used only once."
+#~ msgstr ""
+#~ "argumentul pentru numarul constructiilor euristice can be used only once."
+
+#~ msgid "the priority queue range argument can be used only once."
+#~ msgstr ""
+#~ "argumentul pentru specificarea prioritatii procesului poate fi folosit o "
+#~ "singura data."

@@ -1,0 +1,31 @@
+Name: steghide
+Summary: a steganography program
+Version: @VERSION@
+Release: 1
+Copyright: GPL
+Group: Applications/File
+Source: http://prdownloads.sourceforge.net/steghide/steghide-%{version}.tar.gz
+%description
+Steghide is a steganography program that is able to hide data in various kinds
+of image- and audio-files. The color- respectivly sample-frequencies are not
+changed thus making the embedding resistant against first-order statistical
+tests. Features of steghide include compression and encryption of embedded data,
+embedding of a checksum to verify the integrity of the extracted data and
+support for jpeg, bmp, wav and au files.
+
+%prep
+
+%setup
+./configure --prefix=/usr
+
+%build
+make
+
+%install
+make install
+
+%files
+%doc ABOUT-NLS BUGS COPYING CREDITS HISTORY INSTALL README TODO
+
+/usr/bin/steghide
+/usr/man/man1/steghide.1

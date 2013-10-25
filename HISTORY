@@ -1,0 +1,122 @@
+steghide 0.5.1 :
+================
+
+* new algorithm that maintains first-order statistics for all file formats
+
+* support for all types of jpeg files (using libjpeg)
+
+* compression of embedded data (using zlib)
+
+* use of permutation as distribution function
+
+* a 'info' command to display the information about a cover- or stego- file (including it's capacity)
+
+* random data can be taken from /dev/urandom
+
+* spanish translation
+
+* romanian translation
+
+
+steghide 0.4.6b :
+=================
+
+* bugfix (did not compile on some systems)
+
+
+steghide 0.4.6 :
+================
+
+* support for the jpeg file format
+
+* switched from C to C++ (partial rewrite)
+
+* bugfixes	
+
+
+steghide 0.4.5 :
+================
+
+* internationalization (GNU gettext)
+
+* german locale
+
+* french locale
+
+
+steghide 0.4.4 :
+================
+
+* performance rewrite of memory management code
+
+
+steghide 0.4.3 :
+================
+
+* support for crc32 checksum of the plain data
+
+* switch to enable/disable embedding of plain file name
+
+* rewrite of some parts
+
+
+steghide 0.4.2 :
+================
+
+* interval length defaults to the maximum possible
+
+* verbosity, quiet and force switches
+
+* prompt for passphrase if not given on command line
+
+
+steghide 0.4.1 :
+================
+
+* more secure embedding algorithm
+
+* libmcrypt is used for encryption
+
+* libmhash is used for hashing
+
+* command line syntax revision
+
+* reorganisation and partial rewrite
+
+* bugfixes
+
+
+steghide 0.3 :
+==============
+
+* blowfish encryption
+
+* md5 for generating 128 bit keys from passphrase
+
+* autconf and automake
+
+* rpm packages
+
+* support for au files
+
+* man page
+
+* interactive mode
+
+* command line syntax revision
+
+* fixed a bug that prevented the use of stdin as cover or stego data stream
+
+
+steghide 0.2 :
+==============
+
+* support for wav (pcm) files
+
+* support for bmp files that use color tables
+
+* support for OS/2 1.x bmp files
+
+* file format auto-detection
+
+* internal changes (better buffer-management)

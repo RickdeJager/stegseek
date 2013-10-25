@@ -1,0 +1,10 @@
+
+* .au mu-law audio data is treated as linear 8 bit unsigned value in the neighbourhood relation (with radius 1).
+  The neighbourhood relation should be defined with respect to the logarithmic nature of mu-law data.
+
+* steghide uses the classes hash_set and hash_map from sgi's implementation of
+  the standard template library. These two classes are not part of the official
+  C++ standard but part of the GNU's libstdc++. If you happen to be on a system
+  that does not include theses classes you won't be able to compile steghide.
+
+If you find a bug, please tell me (shetzl@chello.at) about it.
