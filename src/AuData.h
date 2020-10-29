@@ -26,22 +26,22 @@
 
 // AuMuLawAudioData
 typedef AudioDataImpl<AuMuLaw,BYTE> AuMuLawAudioData ;
-inline BYTE AuMuLawAudioData::readValue (BinaryIO* io) const { return (io->read8()) ; }
-inline void AuMuLawAudioData::writeValue (BinaryIO* io, BYTE v) const { io->write8(v) ; }
+template<> inline BYTE AuMuLawAudioData::readValue (BinaryIO* io) const { return (io->read8()) ; }
+template<> inline void AuMuLawAudioData::writeValue (BinaryIO* io, BYTE v) const { io->write8(v) ; }
 
 // AuPCM8AudioData
 typedef AudioDataImpl<AuPCM8,SBYTE> AuPCM8AudioData ;
-inline SBYTE AuPCM8AudioData::readValue (BinaryIO* io) const { return ((SBYTE) io->read8()) ; }
-inline void AuPCM8AudioData::writeValue (BinaryIO* io, SBYTE v) const { io->write8((BYTE) v) ; }
+template<> inline SBYTE AuPCM8AudioData::readValue (BinaryIO* io) const { return ((SBYTE) io->read8()) ; }
+template<> inline void AuPCM8AudioData::writeValue (BinaryIO* io, SBYTE v) const { io->write8((BYTE) v) ; }
 
 // AuPCM16AudioData
 typedef AudioDataImpl<AuPCM16,SWORD16> AuPCM16AudioData ;
-inline SWORD16 AuPCM16AudioData::readValue (BinaryIO* io) const { return ((SWORD16) io->read16_be()) ; }
-inline void AuPCM16AudioData::writeValue (BinaryIO* io, SWORD16 v) const { io->write16_be((UWORD16) v) ; }
+template<> inline SWORD16 AuPCM16AudioData::readValue (BinaryIO* io) const { return ((SWORD16) io->read16_be()) ; }
+template<> inline void AuPCM16AudioData::writeValue (BinaryIO* io, SWORD16 v) const { io->write16_be((UWORD16) v) ; }
 
 // AuPCM32AudioData
 typedef AudioDataImpl<AuPCM32,SWORD32> AuPCM32AudioData ;
-inline SWORD32 AuPCM32AudioData::readValue (BinaryIO* io) const { return ((SWORD32) io->read32_be()) ; }
-inline void AuPCM32AudioData::writeValue (BinaryIO* io, SWORD32 v) const { io->write32_be((UWORD32) v) ; }
+template<> inline SWORD32 AuPCM32AudioData::readValue (BinaryIO* io) const { return ((SWORD32) io->read32_be()) ; }
+template<> inline void AuPCM32AudioData::writeValue (BinaryIO* io, SWORD32 v) const { io->write32_be((UWORD32) v) ; }
 
 #endif // ndef SH_AUDATA_H

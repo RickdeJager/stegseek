@@ -100,7 +100,7 @@ class Arguments {
 	static const VERBOSITY	Default_Verbosity = NORMAL ;
 	static const unsigned long	Default_Radius = 0 ; // there is no default radius for all file formats
 	static const unsigned int	Max_Algorithm = 3 ;
-	static const float		Default_Goal = 100.0 ;
+	static constexpr float		Default_Goal = 100.0 ;
 	static const DEBUGCOMMAND	Default_DebugCommand = NONE ;
 	static const bool		Default_Check = false ;
 	static const unsigned int	Default_DebugLevel = 0 ;

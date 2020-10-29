@@ -64,7 +64,7 @@ class ProgressOutput {
 	 **/
 	void done (float rate, float avgweight = NoAvgWeight) const ;
 
-	static const float NoAvgWeight = -1.0 ;
+	static constexpr float NoAvgWeight = -1.0 ;
 
 	protected:
 	std::string vcompose (const char *msgfmt, va_list ap) const ;
