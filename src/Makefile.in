@@ -164,7 +164,7 @@ noinst_HEADERS = \
 AUtils.h Arg.h Arguments.h AssertionFailed.h AuData.h AuFile.h \
 AuSampleValues.h AudioData.h AudioSampleValue.h DFSAPHeuristic.h BFSAPHeuristic.h \
 BinaryIO.h BitString.h BmpFile.h BmpPaletteSampleValue.h BmpRGBSampleValue.h \
-BmpSampleValue.h ColorPalette.h WKSConstructionHeuristic.h CvrStgFile.h \
+BmpSampleValue.h ColorPalette.h Cracker.h WKSConstructionHeuristic.h CvrStgFile.h \
 CvrStgObject.h Edge.h EdgeIterator.h DMDConstructionHeuristic.h \
 EmbData.h Embedder.h EncryptionAlgorithm.h EncryptionMode.h Extractor.h \
 Globals.h Graph.h JpegFile.h JpegSampleValue.h MCryptPP.h MHashKeyGen.h \
@@ -179,7 +179,7 @@ steghide_SOURCES = \
 Arg.cc Arguments.cc AssertionFailed.cc AuFile.cc AuSampleValues.cc \
 DFSAPHeuristic.cc BFSAPHeuristic.cc BinaryIO.cc BitString.cc BmpFile.cc \
 BmpPaletteSampleValue.cc BmpRGBSampleValue.cc BmpSampleValue.cc \
-WKSConstructionHeuristic.cc DMDConstructionHeuristic.cc CvrStgFile.cc \
+WKSConstructionHeuristic.cc DMDConstructionHeuristic.cc Cracker.cc CvrStgFile.cc \
 Edge.cc EdgeIterator.cc EmbData.cc Embedder.cc \
 EncryptionAlgorithm.cc EncryptionMode.cc Extractor.cc Graph.cc JpegFile.cc \
 JpegSampleValue.cc MCryptPP.cc MHashKeyGen.cc MHashPP.cc Matching.cc \
@@ -206,7 +206,7 @@ am_steghide_OBJECTS = Arg.$(OBJEXT) Arguments.$(OBJEXT) \
 	BmpFile.$(OBJEXT) BmpPaletteSampleValue.$(OBJEXT) \
 	BmpRGBSampleValue.$(OBJEXT) BmpSampleValue.$(OBJEXT) \
 	WKSConstructionHeuristic.$(OBJEXT) \
-	DMDConstructionHeuristic.$(OBJEXT) CvrStgFile.$(OBJEXT) \
+	DMDConstructionHeuristic.$(OBJEXT) Cracker.$(OBJEXT) CvrStgFile.$(OBJEXT) \
 	Edge.$(OBJEXT) EdgeIterator.$(OBJEXT) EmbData.$(OBJEXT) \
 	Embedder.$(OBJEXT) EncryptionAlgorithm.$(OBJEXT) \
 	EncryptionMode.$(OBJEXT) Extractor.$(OBJEXT) Graph.$(OBJEXT) \
@@ -239,6 +239,7 @@ am__depfiles_maybe = depfiles
 @AMDEP_TRUE@	./$(DEPDIR)/BmpPaletteSampleValue.Po \
 @AMDEP_TRUE@	./$(DEPDIR)/BmpRGBSampleValue.Po \
 @AMDEP_TRUE@	./$(DEPDIR)/BmpSampleValue.Po \
+@AMDEP_TRUE@	./$(DEPDIR)/Cracker.Po \
 @AMDEP_TRUE@	./$(DEPDIR)/CvrStgFile.Po \
 @AMDEP_TRUE@	./$(DEPDIR)/DFSAPHeuristic.Po \
 @AMDEP_TRUE@	./$(DEPDIR)/DMDConstructionHeuristic.Po \
@@ -346,6 +347,7 @@ distclean-compile:
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/BmpPaletteSampleValue.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/BmpRGBSampleValue.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/BmpSampleValue.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/Cracker.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/CvrStgFile.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/DFSAPHeuristic.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/DMDConstructionHeuristic.Po@am__quote@

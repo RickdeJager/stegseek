@@ -24,6 +24,7 @@
 
 #include "EmbData.h"
 #include "Embedder.h"
+#include "Cracker.h"
 #include "Extractor.h"
 #include "CvrStgFile.h"
 #include "MCryptPP.h"
@@ -95,6 +96,11 @@ void Session::run ()
 					m.printMessage() ;
 				}
 			}
+		break ; }
+
+		case CRACK: {
+			Cracker cr ;
+			cr.crack() ;
 		break ; }
 
 		case INFO: {

@@ -70,6 +70,7 @@ void Arguments::parse ()
 		if (parse_ExtFn(curarg)) continue ;
 		if (parse_CvrFn(curarg)) continue ;
 		if (parse_StgFn(curarg)) continue ;
+		if (parse_WordlistFn(curarg)) continue ;
 		if (parse_Passphrase(curarg)) continue ;
 		if (parse_Checksum(curarg)) continue ;
 		if (parse_Compression(curarg)) continue ;
@@ -125,6 +126,11 @@ void Arguments::parse_Command (ArgIt& curarg)
 	}
 	else if (*curarg == "extract" || *curarg == "--extract") {
 		Command.setValue (EXTRACT) ;
+		setDefaults () ;
+		++curarg ;
+	}
+	else if (*curarg == "crack" || *curarg == "--crack") {
+		Command.setValue (CRACK) ;
 		setDefaults () ;
 		++curarg ;
 	}
@@ -294,8 +300,8 @@ bool Arguments::parse_StgFn (ArgIt& curarg)
 	bool found = false ;
 
 	if (*curarg == "-sf" || *curarg == "--stegofile") {
-		if (Command.getValue() != EMBED && Command.getValue() != EXTRACT) {
-			throw ArgError (_("the argument \"%s\" can only be used with the \"%s\" and \"%s\" commands."), curarg->c_str(), "embed", "extract") ;
+		if (Command.getValue() != EMBED && Command.getValue() != EXTRACT && Command.getValue() != CRACK) {
+			throw ArgError (_("the argument \"%s\" can only be used with the \"%s\", \"%s\", and \"%s\" commands."), curarg->c_str(), "embed", "extract", "crack") ;
 		}
 
 		if (StgFn.is_set()) {
@@ -311,6 +317,34 @@ bool Arguments::parse_StgFn (ArgIt& curarg)
 		}
 		else {
 			StgFn.setValue (*curarg) ;
+		}
+
+		found = true ;
+		curarg++ ;
+	}
+
+	return found ;
+}
+
+bool Arguments::parse_WordlistFn (ArgIt& curarg)
+{
+	bool found = false ;
+
+	if (*curarg == "-wl" || *curarg == "--wordlist") {
+		if (Command.getValue() != CRACK) {
+			throw ArgError (_("the argument \"%s\" can only be used with the \"%s\" command."), curarg->c_str(), "crack") ;
+		}
+
+		if (WordlistFn.is_set()) {
+			throw ArgError (_("the \"%s\" argument can be used only once."), (curarg - 1)->c_str()) ;
+		}
+
+		if (++curarg == TheArguments.end()) {
+			throw ArgError (_("the \"%s\" argument must be followed by the wordlist file name."), (curarg - 1)->c_str()) ;
+		}
+
+		else {
+			WordlistFn.setValue (*curarg) ;
 		}
 
 		found = true ;
@@ -635,8 +669,8 @@ bool Arguments::parse_Verbosity (ArgIt& curarg)
 	else if (*curarg == "-v" || *curarg == "--verbose") {
 		found = true ;
 
-		if (Command.getValue() != EMBED && Command.getValue() != EXTRACT) {
-			throw ArgError (_("the argument \"%s\" can only be used with the \"%s\" and \"%s\" commands."), curarg->c_str(), "embed", "extract") ;
+		if (Command.getValue() != EMBED && Command.getValue() != EXTRACT && Command.getValue() != CRACK) {
+			throw ArgError (_("the argument \"%s\" can only be used with the \"%s\", \"%s\", and \"%s\" commands."), curarg->c_str(), "embed", "extract", "crack") ;
 		}
 
 		if (Verbosity.is_set()) {
@@ -803,6 +837,7 @@ void Arguments::setDefaults (void)
 	ExtFn.setValue ("", false) ;
 	Passphrase.setValue ("", false) ;
 	StgFn.setValue ("", false) ;
+	WordlistFn.setValue ("", false) ;
 	Force.setValue (Default_Force, false) ;
 	Verbosity.setValue (Default_Verbosity, false) ;
 	Radius.setValue (Default_Radius, false) ;

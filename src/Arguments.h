@@ -67,6 +67,8 @@ class Arguments {
 	ArgString		CvrFn ;
 	/// the stego file name, "" if stdout/stdin
 	ArgString		StgFn ;
+	/// the wordlist file name, "" if stdout/stdin
+	ArgString		WordlistFn ;
 	ArgString		Passphrase ;
 	ArgBool			Checksum ;
 	ArgInt			Compression ;
@@ -124,6 +126,7 @@ class Arguments {
 	bool parse_ExtFn (ArgIt& curarg) ;
 	bool parse_CvrFn (ArgIt& curarg) ;
 	bool parse_StgFn (ArgIt& curarg) ;
+	bool parse_WordlistFn (ArgIt& curarg) ;
 	bool parse_Passphrase (ArgIt& curarg) ;
 	bool parse_Checksum (ArgIt& curarg) ;
 	bool parse_Compression (ArgIt& curarg) ;
