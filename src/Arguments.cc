@@ -368,8 +368,10 @@ bool Arguments::parse_Threading (ArgIt& curarg)
 		if (Threads.is_set()) {
 			throw ArgError (_("the \"%s\" argument can be used only once."), curarg->c_str()) ;
 		}
+		if (++curarg == TheArguments.end()) {
+			throw ArgError (_("the \"%s\" argument must be followed by the number of threads."), (curarg - 1)->c_str()) ;
+		}
 		else {
-			curarg++ ;
 			int tmp;
 			if (sscanf(curarg->c_str(), "%d", &tmp) == 1) {
 				if (tmp > 0) {
