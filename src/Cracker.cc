@@ -1,6 +1,8 @@
 /*
- * steghide 0.5.1 - a steganography program
- * Copyright (C) 1999-2003 Stefan Hetzl <shetzl@chello.at>
+ * [name] [version] - a steghide cracker
+ * Copyright (C) 2020 Rick de Jager
+ * 
+ * Based on the work of Stefan Hetzl <shetzl@chello.at>
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -139,13 +141,13 @@ bool Cracker::extract (std::string Passphrase)
 		if (sv_idx + (Globs.TheCvrStgFile->getSamplesPerVertex() * embvaluesrequested) >= Globs.TheCvrStgFile->getNumSamples()) {
 			if (Globs.TheCvrStgFile->is_std()) {
 				// TODO; Error out here, as we'll never crack this file
-				throw CorruptDataError (_("the stego data from standard input is too short to contain the embedded data.")) ;
-				//return false ;
+				//throw CorruptDataError (_("the stego data from standard input is too short to contain the embedded data.")) ;
+				return false ;
 			}
 			else {
 				// TODO; Error out here, as we'll never crack this file
-				throw CorruptDataError (_("the stego file \"%s\" is too short to contain the embedded data."), Globs.TheCvrStgFile->getName().c_str()) ;
-				//return false ;
+				//throw CorruptDataError (_("the stego file \"%s\" is too short to contain the embedded data."), Globs.TheCvrStgFile->getName().c_str()) ;
+				return false ;
 			}
 		}
 		BitString bits (Globs.TheCvrStgFile->getEmbValueModulus()) ;
@@ -156,25 +158,30 @@ bool Cracker::extract (std::string Passphrase)
 			}
 			bits.appendNAry(ev) ;
 		}
-		// TODO optimize this by getting rid of the try/catch structure.
-		// We should be able to read the magic from the first few bits
+		// The magic doesn't match, return false
+		/*
+		if (bits.getValue(0, EmbData::NBitsMagic) != EmbData::Magic) {
+			return false ;
+		}
+		*/
+
+		// It's possible that we find wrong passphrase for which we decrypt a valid magic
+		// Statistically, this only happens once every 256^3 times, but for a large wordlist, 
+		// such as rockyou, this _can_ happen.
 		try
 		{
 			embdata->addBits (bits) ;
 		}
-		catch(SteghideError e)
+		// Catching the error is fine, because this case will be extremely rare anyways.
+		catch(SteghideError)
+		{
+			return false ;
+		}
+		catch(CorruptDataError)
 		{
 			return false ;
 		}
 		
 	}
-
-	if (embdata->checksumOK()) {
-		return true ;
-	}
-	else {
-		// TODO; Show a different error here, password was correct but data is corrupted
-		//CriticalWarning w (_("crc32 checksum failed! extracted data is probably corrupted.")) ;
-		return false ;
-	}
+	return true ;
 }

@@ -1,7 +1,10 @@
 /*
- * steghide 0.5.1 - a steganography program
- * Copyright (C) 1999-2003 Stefan Hetzl <shetzl@chello.at>
  *
+ * [name] [version] - a steghide cracker
+ * Copyright (C) 2020 Rick de Jager
+ * 
+ * Based on the work of Stefan Hetzl <shetzl@chello.at>
+ * 
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
  * as published by the Free Software Foundation; either version 2

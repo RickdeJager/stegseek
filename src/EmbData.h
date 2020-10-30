@@ -15,6 +15,9 @@
  * You should have received a copy of the GNU General Public License
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
+ * 
+ * 2020:
+ *  - Modified header file to make Magic and NBitsMagic public
  *
  */
 
@@ -83,6 +86,10 @@ class EmbData {
 
 	/// the minimum size of the part of the generatred BitString that is not the data
 	static const unsigned int MinStegoHeaderSize = 50 ;
+	/// steghide magic to recognize embedded data (the string "shm")
+	static const UWORD32 Magic = 0x73688DUL ;
+	/// size (in bits of Magic)
+	static const unsigned int NBitsMagic = 24 ;
 
 	protected:
 	std::string stripDir (std::string s) ;
@@ -96,10 +103,6 @@ class EmbData {
 	static const unsigned int NBitsCrc32 = 32 ;
 	/// version of this steghide embedding (stego compatibility of EmbData)
 	static const unsigned short CodeVersion = 0 ;
-	/// steghide magic to recognize embedded data (the string "shm")
-	static const UWORD32 Magic = 0x73688DUL ;
-	/// size (in bits of Magic)
-	static const unsigned int NBitsMagic = 24 ;
 
 	MODE Mode ;
 	STATE State ;
