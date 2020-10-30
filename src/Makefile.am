@@ -31,7 +31,7 @@ RandomSource.cc SampleValue.cc SampleValueAdjacencyList.cc Selector.cc \
 Session.cc SteghideError.cc Terminal.cc Utils.cc Vertex.cc WavChunk.cc \
 WavChunkHeader.cc WavChunkUnused.cc WavFile.cc WavFormatChunk.cc \
 WavPCMSampleValue.cc error.cc main.cc msg.cc SMDConstructionHeuristic.cc
-LIBS = @LIBINTL@ @LIBS@
+LIBS = @LIBINTL@ @LIBS@ pthread
 localedir = $(datadir)/locale
 LIBTOOL = $(SHELL) libtool
 MAINTAINERCLEANFILES = Makefile.in

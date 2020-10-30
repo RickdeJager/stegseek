@@ -21,9 +21,14 @@
 #ifndef SH_CRACKER_H
 #define SH_CRACKER_H
 
+#include <thread>
+#include <mutex>
+#include <condition_variable>
 #include <iostream>
 #include <fstream>
 #include <string>
+#include <queue>
+#include <atomic>
 
 class Cracker {
 	public:
@@ -35,7 +40,12 @@ class Cracker {
 
 	private:
 	bool extract (std::string) ;
+	void consume () ;
 	std::ifstream wordlist ;
+	std::mutex QueueMutex ;
+	std::condition_variable cv ;
+	std::atomic<bool> stopped ;
+	std::queue<std::string> WorkQueue;
 
 } ;
 

@@ -225,7 +225,7 @@ am_steghide_OBJECTS = Arg.$(OBJEXT) Arguments.$(OBJEXT) \
 steghide_OBJECTS = $(am_steghide_OBJECTS)
 steghide_LDADD = $(LDADD)
 steghide_DEPENDENCIES =
-steghide_LDFLAGS =
+steghide_LDFLAGS = -pthread
 
 DEFAULT_INCLUDES =  -I. -I$(srcdir) -I$(top_builddir)
 depcomp = $(SHELL) $(top_srcdir)/depcomp

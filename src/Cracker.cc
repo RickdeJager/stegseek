@@ -55,20 +55,76 @@ void Cracker::crack ()
 	// Pass them both the steg file and wordlist file
 	// Let each thread iterate over the wordlist, in steps of 'n'
 
-	// TODO; move this to a header or config
-	int threads = 1;
 
 	// Load the Stegfile
 	Globs.TheCvrStgFile = CvrStgFile::readFile (Args.StgFn.getValue().c_str()) ;
 
-	for (int i = 0; i < threads; i++) {
-		std::string password;
+	// TODO; move this to an arg
+	int threads = 4 ;
+	std::vector<std::thread> ThreadPool ;
+	stopped = false ;
+
+	std::string password;
+	// Try to aquire a lock
+	// Wait untill we get a lock, and there are items in the queue
+	{
+		std::lock_guard<std::mutex> lk(QueueMutex) ;
 		while (std::getline(wordlist, password)) {
-			if (extract(password)) {
-				printf("Found password: \"%s\"\n", password.c_str()) ;
-			}
+			WorkQueue.push(password);
 		}
-		printf("Reached the end of the wordlist.\n") ;
+	}
+	printf("Reached the end of the wordlist.\n") ;
+	// TODO; The above loop pushes the entire wordlist into RAM. The alternative would be to push items in batches.
+	// This does mean that we'd lock/unlock a lot
+
+	for (int i = 0; i < threads; i++) {
+		ThreadPool.push_back(std::thread([this] {consume(); })) ;
+	}
+
+
+	// Wait for either one of the threads to find the solution,
+	// or the queue to become empty one last time --< TODO
+
+	// Join all threads
+	for (int i = 0; i < threads; i++) {
+		ThreadPool.back().join() ;
+		ThreadPool.pop_back() ;
+	}
+
+	printf("Joined all threads\n") ;
+}
+
+// Take jobs and crack 'em
+void Cracker::consume ()
+{
+	while (!stopped && !WorkQueue.empty())
+	{
+		std::string PasswordCandidate;
+		// Try to aquire a lock
+		{
+			std::lock_guard<std::mutex> lk(QueueMutex) ;
+
+			// Another thread found the password
+			// TODO, we exit on empty queue as well, because we're loading the entire queue in one go
+			// This won't work with batching
+			if (stopped || WorkQueue.empty()) 
+			{
+				puts("Stopped...") ; 
+				return ;
+			}
+
+			// Pop and item from the queue and unlock
+			PasswordCandidate = WorkQueue.front() ;
+			WorkQueue.pop() ;
+		}
+
+		// Try extracting with this password
+		if (extract(PasswordCandidate))
+		{
+			printf("Found password: \"%s\"\n", PasswordCandidate.c_str()) ;
+			// Tell the other threads that we have stopped
+			stopped = true ;
+		}
 	}
 }
 
@@ -113,7 +169,6 @@ bool Cracker::extract (std::string Passphrase)
 		}
 		
 	}
-
 
 	if (embdata->checksumOK()) {
 		return true ;
