@@ -72,6 +72,7 @@ class Arguments {
 	ArgString		Passphrase ;
 	ArgBool			Checksum ;
 	ArgInt			Compression ;
+	ArgInt			Threads ;
 	ArgBool			EmbedEmbFn ;
 	ArgEncAlgo		EncAlgo ;
 	ArgEncMode		EncMode ;
@@ -135,6 +136,7 @@ class Arguments {
 	bool parse_Radius (ArgIt& curarg) ;
 	bool parse_Goal (ArgIt& curarg) ;
 	bool parse_Force (ArgIt& curarg) ;
+	bool parse_Threading (ArgIt& curarg) ;
 	bool parse_Verbosity (ArgIt& curarg) ;
 	bool parse_Debug (ArgIt& curarg) ;
 

@@ -37,9 +37,12 @@ Cracker::Cracker ()
 	vrs.printMessage() ;
 	wordlist = std::ifstream(Args.WordlistFn.getValue().c_str()) ;
 
-
 	// get stegfile
 	vrs.setMessage (_("reading stegfile file \"%s\"..."), Args.StgFn.getValue().c_str()) ;
+	vrs.printMessage() ;
+
+	// Print threading info
+	vrs.setMessage (_("Running on %d threads..."), Args.Threads.getValue()) ;
 	vrs.printMessage() ;
 }
 
@@ -59,8 +62,6 @@ void Cracker::crack ()
 	// Load the Stegfile
 	Globs.TheCvrStgFile = CvrStgFile::readFile (Args.StgFn.getValue().c_str()) ;
 
-	// TODO; move this to an arg
-	int threads = 4 ;
 	std::vector<std::thread> ThreadPool ;
 	stopped = false ;
 
@@ -77,7 +78,7 @@ void Cracker::crack ()
 	// TODO; The above loop pushes the entire wordlist into RAM. The alternative would be to push items in batches.
 	// This does mean that we'd lock/unlock a lot
 
-	for (int i = 0; i < threads; i++) {
+	for (int i = 0; i < Args.Threads.getValue(); i++) {
 		ThreadPool.push_back(std::thread([this] {consume(); })) ;
 	}
 
@@ -86,12 +87,10 @@ void Cracker::crack ()
 	// or the queue to become empty one last time --< TODO
 
 	// Join all threads
-	for (int i = 0; i < threads; i++) {
+	for (int i = 0; i < Args.Threads.getValue(); i++) {
 		ThreadPool.back().join() ;
 		ThreadPool.pop_back() ;
 	}
-
-	printf("Joined all threads\n") ;
 }
 
 // Take jobs and crack 'em

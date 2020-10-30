@@ -21,6 +21,7 @@
 #include <cstring>
 #include <iostream>
 #include <string>
+#include <thread>
 
 #include "MCryptPP.h"
 #include "Terminal.h"
@@ -79,6 +80,7 @@ void Arguments::parse ()
 		if (parse_Radius(curarg)) continue ;
 		if (parse_Goal(curarg)) continue ;
 		if (parse_Force(curarg)) continue ;
+		if (parse_Threading(curarg)) continue ;
 		if (parse_Verbosity(curarg)) continue ;
 		if (parse_Debug(curarg)) continue ; // TODO - rename Debug -> Undocumented
 
@@ -353,6 +355,38 @@ bool Arguments::parse_WordlistFn (ArgIt& curarg)
 
 	return found ;
 }
+
+bool Arguments::parse_Threading (ArgIt& curarg)
+{
+	bool found = false ;
+
+	if (*curarg == "-t" || *curarg == "--threads") {
+		if (Command.getValue() != CRACK) {
+			throw ArgError (_("the argument \"%s\" can only be used with the \"%s\" command."), curarg->c_str(), "crack") ;
+		}
+
+		if (Threads.is_set()) {
+			throw ArgError (_("the \"%s\" argument can be used only once."), curarg->c_str()) ;
+		}
+		else {
+			curarg++ ;
+			int tmp;
+			if (sscanf(curarg->c_str(), "%d", &tmp) == 1) {
+				if (tmp > 0) {
+					Threads.setValue (tmp) ;
+					found = true ;
+					curarg++ ;
+				} else {
+					throw ArgError (_("The number of threads must be greater than 0.")) ;
+				}
+			} else {
+				throw ArgError (_("The number of threads must be an integer")) ;
+			}
+		}
+	}
+	return found ;
+}
+
 
 bool Arguments::parse_Passphrase (ArgIt& curarg)
 {
@@ -838,6 +872,7 @@ void Arguments::setDefaults (void)
 	Passphrase.setValue ("", false) ;
 	StgFn.setValue ("", false) ;
 	WordlistFn.setValue ("", false) ;
+	Threads.setValue (std::thread::hardware_concurrency(), false) ;
 	Force.setValue (Default_Force, false) ;
 	Verbosity.setValue (Default_Verbosity, false) ;
 	Radius.setValue (Default_Radius, false) ;
