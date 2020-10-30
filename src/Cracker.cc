@@ -131,23 +131,23 @@ void Cracker::consume ()
 
 bool Cracker::extract (std::string Passphrase)
 {
-	EmbData* embdata = new EmbData (EmbData::EXTRACT, Passphrase) ;
+	EmbData embdata (EmbData::EXTRACT, Passphrase) ;
 	Selector sel (Globs.TheCvrStgFile->getNumSamples(), Passphrase) ;
 
+	bool magicOkay = false ;
+
 	unsigned long sv_idx = 0 ;
-	while (!embdata->finished()) {
+	while (!embdata.finished()) {
 		unsigned short bitsperembvalue = AUtils::log2_ceil<unsigned short> (Globs.TheCvrStgFile->getEmbValueModulus()) ;
-		unsigned long embvaluesrequested = AUtils::div_roundup<unsigned long> (embdata->getNumBitsRequested(), bitsperembvalue) ;
+		unsigned long embvaluesrequested = AUtils::div_roundup<unsigned long> (embdata.getNumBitsRequested(), bitsperembvalue) ;
 		if (sv_idx + (Globs.TheCvrStgFile->getSamplesPerVertex() * embvaluesrequested) >= Globs.TheCvrStgFile->getNumSamples()) {
 			if (Globs.TheCvrStgFile->is_std()) {
-				// TODO; Error out here, as we'll never crack this file
-				//throw CorruptDataError (_("the stego data from standard input is too short to contain the embedded data.")) ;
-				return false ;
+				// Error out here, as we'll never crack this file
+				throw CorruptDataError (_("the stego data from standard input is too short to contain the embedded data.")) ;
 			}
 			else {
-				// TODO; Error out here, as we'll never crack this file
-				//throw CorruptDataError (_("the stego file \"%s\" is too short to contain the embedded data."), Globs.TheCvrStgFile->getName().c_str()) ;
-				return false ;
+				// Error out here, as we'll never crack this file
+				throw CorruptDataError (_("the stego file \"%s\" is too short to contain the embedded data."), Globs.TheCvrStgFile->getName().c_str()) ;
 			}
 		}
 		BitString bits (Globs.TheCvrStgFile->getEmbValueModulus()) ;
@@ -159,21 +159,24 @@ bool Cracker::extract (std::string Passphrase)
 			bits.appendNAry(ev) ;
 		}
 		// The magic doesn't match, return false
-		/*
-		if (bits.getValue(0, EmbData::NBitsMagic) != EmbData::Magic) {
-			return false ;
+		if (! magicOkay) {
+			BitString tBits (bits) ;
+			BitString ttBits = tBits.cutBits(0, EmbData::NBitsMagic) ; // take exactly the first NumBitsNeeded bits from Reservoir | addbits
+			if (ttBits.getValue(0, EmbData::NBitsMagic) != EmbData::Magic) {
+				return false ;
+			}
+			magicOkay = true ;
 		}
-		*/
 
 		// It's possible that we find wrong passphrase for which we decrypt a valid magic
 		// Statistically, this only happens once every 256^3 times, but for a large wordlist, 
 		// such as rockyou, this _can_ happen.
 		try
 		{
-			embdata->addBits (bits) ;
+			embdata.addBits(bits) ;
 		}
 		// Catching the error is fine, because this case will be extremely rare anyways.
-		catch(SteghideError)
+		catch(SteghideError e)
 		{
 			return false ;
 		}
