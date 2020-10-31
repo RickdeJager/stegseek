@@ -56,37 +56,39 @@ Cracker::~Cracker ()
 	
 void Cracker::crack ()
 {
-	// Spawn n new threads, and tell each of them their ID.
-	// Pass them both the steg file and wordlist file
-	// Let each thread iterate over the wordlist, in steps of 'n'
-
-
 	// Load the Stegfile
 	Globs.TheCvrStgFile = CvrStgFile::readFile (Args.StgFn.getValue().c_str()) ;
 
-	std::vector<std::thread> ThreadPool ;
-	stopped = false ;
+	// Look up these parameters once, to prevent function calls for each password attempt
+	bitsperembvalue = AUtils::log2_ceil<unsigned short> (Globs.TheCvrStgFile->getEmbValueModulus()) ;
+	numSamples = Globs.TheCvrStgFile->getNumSamples() ;
+	samplesPerVertex = Globs.TheCvrStgFile->getSamplesPerVertex() ;
+	EmbValueModulus = Globs.TheCvrStgFile->getEmbValueModulus();
 
-	std::string password;
-	// Try to aquire a lock
-	// Wait untill we get a lock, and there are items in the queue
+	// Load the wordlist into memory
+	std::string line;
 	{
+		// Try to aquire a lock
 		std::lock_guard<std::mutex> lk(QueueMutex) ;
-		while (std::getline(wordlist, password)) {
-			WorkQueue.push(password);
+		// Push each line of the wordlist into the WorkQueue
+		while (std::getline(wordlist, line)) {
+			WorkQueue.push(line);
 		}
 	}
-	printf("Reached the end of the wordlist.\n") ;
+	printf("Read the entire wordlist, starting threads...\n") ;
 	// TODO; The above loop pushes the entire wordlist into RAM. The alternative would be to push items in batches.
 	// This does mean that we'd lock/unlock a lot
+
+	// Initialize n threads
+	std::vector<std::thread> ThreadPool ;
+	stopped = false ;
 
 	for (int i = 0; i < Args.Threads.getValue(); i++) {
 		ThreadPool.push_back(std::thread([this] {consume(); })) ;
 	}
 
-
 	// Wait for either one of the threads to find the solution,
-	// or the queue to become empty one last time --< TODO
+	// or the queue to become empty
 
 	// Join all threads
 	for (int i = 0; i < Args.Threads.getValue(); i++) {
@@ -138,31 +140,26 @@ bool Cracker::extract (std::string Passphrase)
 
 	unsigned long sv_idx = 0 ;
 	while (!embdata.finished()) {
-		unsigned short bitsperembvalue = AUtils::log2_ceil<unsigned short> (Globs.TheCvrStgFile->getEmbValueModulus()) ;
 		unsigned long embvaluesrequested = AUtils::div_roundup<unsigned long> (embdata.getNumBitsRequested(), bitsperembvalue) ;
-		if (sv_idx + (Globs.TheCvrStgFile->getSamplesPerVertex() * embvaluesrequested) >= Globs.TheCvrStgFile->getNumSamples()) {
-			if (Globs.TheCvrStgFile->is_std()) {
-				// Error out here, as we'll never crack this file
-				throw CorruptDataError (_("the stego data from standard input is too short to contain the embedded data.")) ;
-			}
-			else {
-				// Error out here, as we'll never crack this file
-				throw CorruptDataError (_("the stego file \"%s\" is too short to contain the embedded data."), Globs.TheCvrStgFile->getName().c_str()) ;
-			}
+		if (sv_idx + (samplesPerVertex * embvaluesrequested) >= numSamples) {
+			// TODO; In theory, we should error out if we hit this.
+			// However, I've seen this error happen randomly on valid input files
+			// so I'm leaving it as a "return false" for now
+			// throw CorruptDataError (_("the stego data from standard input is too short to contain the embedded data.")) ;
+			return false ;
 		}
-		BitString bits (Globs.TheCvrStgFile->getEmbValueModulus()) ;
+		BitString bits (EmbValueModulus) ;
 		for (unsigned long i = 0 ; i < embvaluesrequested ; i++) {
 			EmbValue ev = 0 ;
-			for (unsigned int j = 0 ; j < Globs.TheCvrStgFile->getSamplesPerVertex() ; j++, sv_idx++) {
-				ev = (ev + Globs.TheCvrStgFile->getEmbeddedValue (sel[sv_idx])) % Globs.TheCvrStgFile->getEmbValueModulus() ;
+			for (unsigned int j = 0 ; j < samplesPerVertex ; j++, sv_idx++) {
+				ev = (ev + Globs.TheCvrStgFile->getEmbeddedValue (sel[sv_idx])) % EmbValueModulus ;
 			}
 			bits.appendNAry(ev) ;
 		}
-		// The magic doesn't match, return false
+		// We first check if the file magic makes sense
+		// It's important we only do this once, for the beginning of the file
 		if (! magicOkay) {
-			BitString tBits (bits) ;
-			BitString ttBits = tBits.cutBits(0, EmbData::NBitsMagic) ; // take exactly the first NumBitsNeeded bits from Reservoir | addbits
-			if (ttBits.getValue(0, EmbData::NBitsMagic) != EmbData::Magic) {
+			if (bits.getValue(0, EmbData::NBitsMagic) != EmbData::Magic) {
 				return false ;
 			}
 			magicOkay = true ;
@@ -175,8 +172,10 @@ bool Cracker::extract (std::string Passphrase)
 		{
 			embdata.addBits(bits) ;
 		}
-		// Catching the error is fine, because this case will be extremely rare anyways.
-		catch(SteghideError e)
+		// Catching other errors here is fine, they should be pretty rare.
+		//	* decompression error
+		//	* failed crc check
+		catch(SteghideError)
 		{
 			return false ;
 		}
@@ -186,5 +185,7 @@ bool Cracker::extract (std::string Passphrase)
 		}
 		
 	}
+	// We've found a password, for which both the file magic checks out
+	// and the CRC is valid. :D
 	return true ;
 }

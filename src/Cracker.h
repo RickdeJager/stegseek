@@ -48,7 +48,12 @@ class Cracker {
 	std::mutex QueueMutex ;
 	std::condition_variable cv ;
 	std::atomic<bool> stopped ;
-	std::queue<std::string> WorkQueue;
+	std::queue<std::string> WorkQueue ;
+
+	unsigned short bitsperembvalue ;
+	unsigned long numSamples ;
+	unsigned short samplesPerVertex ;
+	EmbValue EmbValueModulus ;
 
 } ;
 
