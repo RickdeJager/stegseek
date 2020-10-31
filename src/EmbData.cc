@@ -16,6 +16,8 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
  *
+ * 2020:
+ *  - Added file name sanitization to the extractor
  */
 
 #include "AUtils.h"
@@ -220,6 +222,9 @@ void EmbData::addBits (BitString addbits)
 				}
 				pos += 8 ;
 			} while (curchar != '\0') ;
+
+			// Strip the directory from the output file
+			FileName = stripDir (FileName) ;
 
 			// extract data
 			if ((plain.getLength() - pos) % 8 != 0) {
