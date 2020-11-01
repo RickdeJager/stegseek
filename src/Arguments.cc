@@ -687,8 +687,8 @@ bool Arguments::parse_Verbosity (ArgIt& curarg)
 	if (*curarg == "-q" || *curarg == "--quiet") {
 		found = true ;
 
-		if (Command.getValue() != EMBED && Command.getValue() != EXTRACT) {
-			throw ArgError (_("the argument \"%s\" can only be used with the \"%s\" and \"%s\" commands."), curarg->c_str(), "embed", "extract") ;
+		if (Command.getValue() != EMBED && Command.getValue() != EXTRACT && Command.getValue() != CRACK) {
+			throw ArgError (_("the argument \"%s\" can only be used with the \"%s\", \"%s\", and \"%s\" commands."), curarg->c_str(), "embed", "extract", "crack") ;
 		}
 
 		if (Verbosity.is_set()) {

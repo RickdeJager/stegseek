@@ -29,6 +29,7 @@
 #include "Extractor.h"
 #include "CvrStgFile.h"
 
+using namespace std::chrono_literals ;
 
 
 Cracker::Cracker ()
@@ -84,28 +85,36 @@ void Cracker::crack ()
 		// Then push each line of the wordlist into the WorkQueue
 		while (std::getline(wordlist, line)) {
 			WorkQueue.push(line) ;
+			wordlistLength += 1 ;
 		}
 	}
-	printf("[i] Read the entire wordlist, starting cracker\n") ;
+	printf("[i] Read the entire wordlist (%u words), starting cracker\n", wordlistLength) ;
 	// TODO; The above loop pushes the entire wordlist into RAM. The alternative would be to push items in batches.
 	// This does mean that we'd lock/unlock a lot
 
 	// Initialize n threads
 	std::vector<std::thread> ThreadPool ;
 	stopped = false ;
+	int threads = Args.Threads.getValue() ;
 
-	for (int i = 0; i < Args.Threads.getValue(); i++) {
+	for (int i = 0; i < threads; i++) {
 		ThreadPool.push_back(std::thread([this] {consume(); })) ;
 	}
 
-	// Wait for either one of the threads to find the solution,
-	// or the queue to become empty
+	// Add a thread to keep track of metrics
+	if (Args.Verbosity.getValue() != QUIET) {
+		ThreadPool.push_back(std::thread([this] {metrics(); })) ;
+		threads += 1 ;
+	}
 
 	// Join all threads
-	for (int i = 0; i < Args.Threads.getValue(); i++) {
+	for (int i = 0; i < threads; i++) {
 		ThreadPool.back().join() ;
 		ThreadPool.pop_back() ;
 	}
+
+	// Print a newline to clear metrics/debug messages
+	printf("\n");
 
 	// If we didn't find a passphrase, print a message
 	if (!stopped) {
@@ -114,7 +123,19 @@ void Cracker::crack ()
 		// Re-extract the data with the confirmed passphrase.
 		// This does mean we're throwing away one valid "embdata" object, but
 		// that's not a bad trade-off to be able to use steghide's structure
+		printf("[i] --> Found passphrase: \"%s\"\n\n", foundPassphrase.c_str()) ;
 		extract(foundPassphrase) ;
+	}
+}
+
+void Cracker::metrics ()
+{
+	while (!stopped && !WorkQueue.empty())
+	{
+		std::this_thread::sleep_for(std::chrono::milliseconds(10)) ; 
+		// This will be slightly incorrect, as we're not locking attempts
+		float percentage = 100.0f * ((float) attempts / (float) wordlistLength) ;
+		printf("\r[ %u / %u ]  (%.2f%%)                 ", attempts, wordlistLength, percentage) ;
 	}
 }
 
@@ -139,12 +160,13 @@ void Cracker::consume ()
 			// Pop and item from the queue and unlock
 			passphraseCandidate = WorkQueue.front() ;
 			WorkQueue.pop() ;
+			// Add to the perf metric
+			attempts += 1 ;
 		}
 
 		// Try extracting with this passphrase
 		if (tryPassphrase(passphraseCandidate))
 		{
-			printf("[i] --> Found passphrase: \"%s\"\n\n", passphraseCandidate.c_str()) ;
 			// Tell the other threads that we have stopped
 			stopped = true ;
 			foundPassphrase = passphraseCandidate;

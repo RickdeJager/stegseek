@@ -32,6 +32,7 @@
 #include <string>
 #include <queue>
 #include <atomic>
+#include <chrono>
 
 class Cracker {
 	public:
@@ -45,11 +46,14 @@ class Cracker {
 	bool tryPassphrase (std::string) ;
 	void extract (std::string) ;
 	void consume () ;
+	void metrics () ;
 	std::ifstream wordlist ;
 	std::mutex QueueMutex ;
 	std::condition_variable cv ;
 	std::atomic<bool> stopped ;
 	std::string foundPassphrase ;
+	unsigned int wordlistLength = 0 ;
+	unsigned int attempts = 0 ;
 	std::queue<std::string> WorkQueue ;
 
 	unsigned short bitsperembvalue ;
