@@ -15,6 +15,9 @@
  * You should have received a copy of the GNU General Public License
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
+ * 
+ * 2020:
+ *  - Changed userfacing steghide mentions to stegseek
  *
  */
 
@@ -132,7 +135,7 @@ Warning::Warning (const char *msgfmt, ...)
 void Warning::printMessage () const
 {
 	if (Args.Verbosity.getValue() != QUIET) {
-		std::cerr << "steghide: " << _("warning:") << " " << getMessage() << getNewline() ;
+		std::cerr << "stegseek: " << _("warning:") << " " << getMessage() << getNewline() ;
 	}
 }
 
@@ -150,7 +153,7 @@ CriticalWarning::CriticalWarning (const char *msgfmt, ...)
 
 void CriticalWarning::printMessage () const
 {
-	std::cerr << "steghide: " << _("warning:") << " " << getMessage() << getNewline() ;
+	std::cerr << "stegseek: " << _("warning:") << " " << getMessage() << getNewline() ;
 }
 
 //

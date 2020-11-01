@@ -15,6 +15,9 @@
  * You should have received a copy of the GNU General Public License
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
+ * 
+ * 2020:
+ * 	- Changed steghide help to stegseek help
  *
  */
 
@@ -42,7 +45,7 @@ ArgError::ArgError (const char* msgfmt, ...)
 void ArgError::printMessage () const
 {
 	SteghideError::printMessage() ;
-	std::cerr << "steghide: " << _("type \"steghide --help\" for help.") << std::endl ;
+	std::cerr << "stegseek: " << _("type \"stegseek --help\" for help.") << std::endl ;
 }
 
 //
@@ -138,9 +141,9 @@ NotImplementedError::NotImplementedError (const char *msgfmt, ...)
 void NotImplementedError::printMessage () const
 {
 	SteghideError::printMessage() ;
-	printf (_("This feature is not (yet) available. Please let me (shetzl@chello.at) know\n"
+	printf (_("This feature is not (yet) available. Please let steghides author (shetzl@chello.at) know\n"
 		"that you want to use this functionality to increase the chance that this will\n"
-		"be implemented in the near future. Steghide has to exit now. Sorry.\n")) ;
+		"be implemented in the near future.\n")) ;
 }
 
 //

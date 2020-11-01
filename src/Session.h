@@ -36,9 +36,11 @@ class Session {
 	std::string stripDir (std::string s) const ;
 	void printInfo (void) ;
 	void printEncInfo (void) ;
-	void printVersion (void) ;
-	void printHelp (void) ;
 	void printLicense (void) ;
+	void printSteghideHelp (void) ;
+	void printSteghideVersion (void) ;
+	void printHelp (void) ;
+	void printVersion (void) ;
 #ifdef DEBUG
 	void printFrequencies (void) ;
 	/**

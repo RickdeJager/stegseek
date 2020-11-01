@@ -15,6 +15,9 @@
  * You should have received a copy of the GNU General Public License
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
+ * 
+ * 2020:
+ *  - Modified to include stegseek help and version
  *
  */
 
@@ -32,6 +35,8 @@
 #include "Utils.h"
 #include "common.h"
 #include "error.h"
+
+#define STEGHIDE_VERSION "0.5.1"
 
 void Session::run ()
 {
@@ -240,14 +245,50 @@ void Session::printEncInfo ()
 #endif
 }
 
+
 void Session::printVersion ()
 {
-	std::cout << "steghide version " << VERSION << std::endl ;
+	std::cout << "stegseek version  " << VERSION << std::endl ;
+	if (Args.Verbosity.getValue() == VERBOSE) {
+		printSteghideVersion() ;
+	}
 }
 
 void Session::printHelp ()
 {
 	printVersion() ;
+	printf (_("\n"
+		"=== Stegseek Help ===\n"
+		"To crack a stegofile;\n"
+		"stegseek --crack -sf [stegofile.jpg] -wl [wordlist.txt]\n"
+		"\n"
+		"Cracking options:\n"
+		" -sf, --stegofile        select stego file\n"
+		" -wl, --wordlist         select the wordlist file\n"
+		" -t, --threads           set the number of threads. Defaults to the number of cores.\n"
+		" -t, --threads           set the number of threads. Defaults to the number of cores.\n"
+		" -v, --verbose           display detailed information\n"
+		)) ;
+	
+	if (Args.Verbosity.getValue() == VERBOSE)
+	{
+		printf("\n=== Steghide Help ===\n") ;
+		printSteghideHelp() ;
+	}
+	else
+	{
+		printf("Use stegseek -v to include steghides help.\n") ;
+	}
+
+}
+
+void Session::printSteghideVersion ()
+{
+	std::cout << "based on steghide version " << STEGHIDE_VERSION << std::endl ;
+}
+
+void Session::printSteghideHelp ()
+{
 	printf (_("\n"
 		"the first argument must be one of the following:\n"
 		" embed, --embed          embed data\n"

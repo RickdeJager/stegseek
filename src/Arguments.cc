@@ -16,6 +16,8 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
  *
+ * 2020:
+ *  - Modified to include stegseek arguments
  */
 
 #include <cstring>
@@ -170,9 +172,6 @@ void Arguments::parse_Command (ArgIt& curarg)
 	}
 	else if (*curarg == "version" || *curarg == "--version") {
 		Command.setValue (SHOWVERSION) ;
-		if (TheArguments.size() > 1) {
-			throw ArgError (_("you cannot use arguments with the \"%s\" command."), CommandString.c_str()) ;
-		}
 		++curarg ;
 	}
 	else if (*curarg == "license" || *curarg == "--license") {
@@ -184,9 +183,6 @@ void Arguments::parse_Command (ArgIt& curarg)
 	}
 	else if (*curarg == "help" || *curarg == "--help") {
 		Command.setValue (SHOWHELP) ;
-		if (TheArguments.size() > 1) {
-			throw ArgError (_("you cannot use arguments with the \"%s\" command."), CommandString.c_str()) ;
-		}
 		++curarg ;
 	}
 #ifdef DEBUG
@@ -705,8 +701,10 @@ bool Arguments::parse_Verbosity (ArgIt& curarg)
 	else if (*curarg == "-v" || *curarg == "--verbose") {
 		found = true ;
 
-		if (Command.getValue() != EMBED && Command.getValue() != EXTRACT && Command.getValue() != CRACK) {
-			throw ArgError (_("the argument \"%s\" can only be used with the \"%s\", \"%s\", and \"%s\" commands."), curarg->c_str(), "embed", "extract", "crack") ;
+		if (Command.getValue() != EMBED && Command.getValue() != EXTRACT && Command.getValue() != CRACK
+			&& Command.getValue() != SHOWHELP && Command.getValue() != SHOWVERSION) {
+			throw ArgError (_("the argument \"%s\" can only be used with the \"%s\", \"%s\", \"%s\", \"%s\" and \"%s\" commands."), 
+			curarg->c_str(), "embed", "extract", "crack", "version", "help") ;
 		}
 
 		if (Verbosity.is_set()) {

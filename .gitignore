@@ -1,6 +1,7 @@
 .DS_Store
 
 src/steghide
+src/stegseek
 *~
 steghide.doxygen
 config.h
