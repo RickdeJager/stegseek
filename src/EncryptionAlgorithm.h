@@ -96,7 +96,7 @@ class EncryptionAlgorithm {
 
 	typedef struct struct_Translation {
 		IRep	irep ;
-		char*	srep ;
+		const char*	srep ;
 	} Translation ;
 	static const Translation Translations[] ;
 } ;

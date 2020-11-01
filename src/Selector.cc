@@ -119,7 +119,7 @@ void Selector::calculate (UWORD32 m)
 bool Selector::idxX (UWORD32 v, UWORD32 m, UWORD32* p) const
 {
 	bool retval = false ;
-	sgi::hash_map<UWORD32,UWORD32>::const_iterator it = Xreversed.find (v) ;
+	std::unordered_map<UWORD32,UWORD32>::const_iterator it = Xreversed.find (v) ;
 	if ((it != Xreversed.end()) && (it->second < m)) {
 		*p = it->second ;
 		retval = true ;

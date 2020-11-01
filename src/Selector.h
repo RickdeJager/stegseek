@@ -23,7 +23,7 @@
 
 #include <string>
 #include <vector>
-#include "wrapper_hash_map.h"
+#include <unordered_map>
 
 #include "common.h"
 
@@ -70,7 +70,7 @@ class Selector {
 	private:
 	std::vector<UWORD32> X ;
 	std::vector<UWORD32> Y ;
-	sgi::hash_map<UWORD32,UWORD32> Xreversed ;
+	std::unordered_map<UWORD32,UWORD32> Xreversed ;
 	/// operator[] will return a value in {0,...,Maximum-1}
 	UWORD32 Maximum ;
 	/// the number of calculated positions in the arrays

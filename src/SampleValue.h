@@ -22,9 +22,9 @@
 #define SH_SAMPLEVALUE_H
 
 #include <functional>
+#include <unordered_map>
 
 #include "common.h"
-#include "wrapper_hash_set.h"
 
 class CvrStgFile ;
 
@@ -163,7 +163,7 @@ struct SampleValuesLess : public std::binary_function<SampleValue*, SampleValue*
 struct SampleValueHash : public std::unary_function<SampleValue*,size_t> {
 	size_t operator() (const SampleValue* s) const
 	{
-		sgi::hash<UWORD32> h ;
+		std::hash<UWORD32> h ;
 		return h(s->getKey()) ;
 	}
 } ;

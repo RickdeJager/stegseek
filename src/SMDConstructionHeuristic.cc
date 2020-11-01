@@ -24,6 +24,8 @@
 #include "SMDConstructionHeuristic.h"
 #include "Vertex.h"
 
+#include <algorithm>
+
 SMDConstructionHeuristic::SMDConstructionHeuristic (Graph* g, Matching* m, float goal)
 	: MatchingAlgorithm (g, m, goal)
 {

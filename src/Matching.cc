@@ -25,6 +25,8 @@
 #include "common.h"
 #include "msg.h"
 
+#include <algorithm>
+
 Matching::Matching (Graph* g, ProgressOutput* po)
 	: TheGraph(g), PrOut(po)
 {

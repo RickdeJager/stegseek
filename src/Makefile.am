@@ -12,8 +12,8 @@ MHashPP.h Matching.h MatchingAlgorithm.h ProgressOutput.h PseudoRandomSource.h \
 RGBTriple.h RandomSource.h SampleOccurence.h SampleValue.h \
 SampleValueAdjacencyList.h Selector.h Session.h SteghideError.h Terminal.h \
 Utils.h Vertex.h WavChunk.h WavChunkHeader.h WavChunkUnused.h WavFile.h \
-WavFormatChunk.h WavPCMSampleValue.h common.h error.h msg.h wrapper_hash_map.h \
-wrapper_hash_set.h SMDConstructionHeuristic.h gettext.h
+WavFormatChunk.h WavPCMSampleValue.h common.h error.h msg.h \
+SMDConstructionHeuristic.h gettext.h
 stegseek_SOURCES = \
 Arg.cc Arguments.cc AssertionFailed.cc AuFile.cc AuSampleValues.cc \
 DFSAPHeuristic.cc BFSAPHeuristic.cc BinaryIO.cc BitString.cc BmpFile.cc \

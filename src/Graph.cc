@@ -22,6 +22,9 @@
 #include <list>
 #include <map>
 #include <vector>
+#include <unordered_map>
+#include <unordered_set>
+#include <algorithm>
 
 #include "limits.h"
 #include "BitString.h"
@@ -32,7 +35,6 @@
 #include "Vertex.h"
 #include "common.h"
 #include "msg.h"
-#include "wrapper_hash_set.h"
 
 Graph::Graph (CvrStgFile *cvr, const BitString& emb, Selector& sel)
 {
@@ -82,12 +84,12 @@ void Graph::constructSamples (const std::vector<SamplePos*>& sposs, std::vector<
 	svalues.resize (numvertices) ;
 
 	// fill a hash table with the (unique) sample values and svalues with pointers to them
-	sgi::hash_set<SampleValue*,SampleValueHash,SampleValuesEqual> SampleValues_set ;
+	std::unordered_set<SampleValue*,SampleValueHash,SampleValuesEqual> SampleValues_set ;
 	for (unsigned long i = 0 ; i < numvertices ; i++) {
 		svalues[i] = new SampleValue*[File->getSamplesPerVertex()] ;
 		for (unsigned short j = 0 ; j < File->getSamplesPerVertex() ; j++) {
 			SampleValue *sv = File->getSampleValue (sposs[i][j]) ;
-			sgi::hash_set<SampleValue*,SampleValueHash,SampleValuesEqual>::iterator res = SampleValues_set.find (sv) ;
+			std::unordered_set<SampleValue*,SampleValueHash,SampleValuesEqual>::iterator res = SampleValues_set.find (sv) ;
 			if (res == SampleValues_set.end()) { // sample has not been found - add it !
 				SampleValues_set.insert (sv) ;
 				svalues[i][j] = sv ;
@@ -102,7 +104,7 @@ void Graph::constructSamples (const std::vector<SamplePos*>& sposs, std::vector<
 	// move the hash_set SampleValues_set into the vector SampleValues, set sample labels
 	SampleValues = std::vector<SampleValue*> (SampleValues_set.size()) ;
 	unsigned long label = 0 ;
-	for (sgi::hash_set<SampleValue*,SampleValueHash,SampleValuesEqual>::const_iterator i = SampleValues_set.begin() ; i != SampleValues_set.end() ; i++) {
+	for (std::unordered_set<SampleValue*,SampleValueHash,SampleValuesEqual>::const_iterator i = SampleValues_set.begin() ; i != SampleValues_set.end() ; i++) {
 		SampleValues[label] = *i ;
 		SampleValues[label]->setLabel (label) ;
 		label++ ;

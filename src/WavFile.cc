@@ -21,6 +21,7 @@
 #include <cstdio>
 #include <cstdlib>
 #include <cstring>
+#include <algorithm>
 
 #include "CvrStgFile.h"
 #include "DFSAPHeuristic.h"
