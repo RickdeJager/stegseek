@@ -11,6 +11,7 @@ steghide.spec
 aclocal.m4
 tests/data/Makefile.in
 
+.vscode
 
 
 

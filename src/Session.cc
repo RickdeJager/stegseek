@@ -259,7 +259,6 @@ void Session::printHelp ()
 	printVersion() ;
 	printf (_("\n"
 		"=== Stegseek Help ===\n"
-		"\n"
 		"To crack a stegofile;\n"
 		"stegseek --crack -sf [stegofile.jpg] -wl [wordlist.txt]\n"
 		"\n"
@@ -269,16 +268,17 @@ void Session::printHelp ()
 		" -t, --threads           set the number of threads. Defaults to the number of cores.\n"
 		" -v, --verbose           display detailed information\n"
 		" -q, --quiet             skip performance metrics (slightly increases performance)\n"
+		"\n"
 		)) ;
 	
 	if (Args.Verbosity.getValue() == VERBOSE)
 	{
-		printf("\n=== Steghide Help ===\n") ;
+		printf("=== Steghide Help ===\n") ;
 		printSteghideHelp() ;
 	}
 	else
 	{
-		printf("Use stegseek --help -v to include steghides help.\n") ;
+		printf("Use \"stegseek --help -v\" to include steghides help.\n") ;
 	}
 
 }
