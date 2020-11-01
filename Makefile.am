@@ -2,7 +2,7 @@ AUTOMAKE_OPTIONS = dist-bzip2 dist-zip
 SUBDIRS = m4 src tests
 docdir = $(prefix)/share/doc/$(PACKAGE)
 EXTRA_DIST = config.rpath mkinstalldirs BUGS CREDITS HISTORY depcomp
-doc_DATA = BUGS COPYING CREDITS HISTORY INSTALL README
+doc_DATA = BUGS COPYING CREDITS HISTORY INSTALL README.md
 MAINTAINERCLEANFILES = Makefile.in aclocal.m4 config.guess config.h.in \
 config.sub configure depcomp install-sh missing mkinstalldirs steghide.doxygen steghide.spec
 
