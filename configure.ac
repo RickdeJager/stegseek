@@ -1,7 +1,8 @@
 dnl Process this file with autoconf to produce a configure script.
-AC_INIT(src/main.cc)
+AC_INIT(stegseek, 0.1)
+AC_CONFIG_SRCDIR(src/main.cc)
 AC_CANONICAL_SYSTEM
-AM_INIT_AUTOMAKE(stegseek, 0.1)
+AM_INIT_AUTOMAKE([foreign])
 AM_CONFIG_HEADER(config.h)
 
 dnl checks for programs.
@@ -9,11 +10,6 @@ AC_PROG_CXX
 AC_PROG_INSTALL
 AC_PROG_AWK
 AC_PROG_LN_S
-
-dnl GNU gettext
-AC_CHECK_FUNCS(strchr)
-AM_GNU_GETTEXT
-AM_CONDITIONAL(USE_INTLDIR, test "$nls_cv_use_gnu_gettext" = yes)
 
 dnl check if debugging support is requested
 AC_MSG_CHECKING([wether to enable debugging])
@@ -216,4 +212,4 @@ then
 fi
 
 dnl create Makefiles
-AC_OUTPUT([Makefile steghide.spec steghide.doxygen doc/Makefile po/Makefile.in src/Makefile tests/Makefile tests/data/Makefile m4/Makefile intl/Makefile])
+AC_OUTPUT([Makefile src/Makefile tests/Makefile tests/data/Makefile m4/Makefile])

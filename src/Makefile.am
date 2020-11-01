@@ -1,8 +1,4 @@
-if USE_INTLDIR
-AM_CPPFLAGS = -I../intl -DLOCALEDIR=\"$(localedir)\"
-else
 AM_CPPFLAGS = -DLOCALEDIR=\"$(localedir)\"
-endif
 bin_PROGRAMS = stegseek
 noinst_HEADERS = \
 AUtils.h Arg.h Arguments.h AssertionFailed.h AuData.h AuFile.h \
@@ -31,7 +27,7 @@ RandomSource.cc SampleValue.cc SampleValueAdjacencyList.cc Selector.cc \
 Session.cc SteghideError.cc Terminal.cc Utils.cc Vertex.cc WavChunk.cc \
 WavChunkHeader.cc WavChunkUnused.cc WavFile.cc WavFormatChunk.cc \
 WavPCMSampleValue.cc error.cc main.cc msg.cc SMDConstructionHeuristic.cc
-LIBS = @LIBINTL@ @LIBS@ -lpthread
+LIBS = @LIBS@ -lpthread
 localedir = $(datadir)/locale
 LIBTOOL = $(SHELL) libtool
 MAINTAINERCLEANFILES = Makefile.in

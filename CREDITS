@@ -1,17 +1,10 @@
-Stefan Hetzl <shetzl@chello.at>             author, maintainer
+Rick de Jager,		Author
 
-I would like to thank...
+But most importantly, I'd like to thank Stefan Hetzl,
+the author of steghide. This repository is merely an addition
+to his original work.
 
-Petra Mutzel <mutzel@ads.tuwien.ac.at>             for being a great guide trough graph theory
-Christine Pippan <christine_pippan@chello.at>      for designing the logo
-Trimbitas Sorin <lacroix-iv@go.ro>                 romanian translation
-Alberto A. Schiano <chanio@users.sourceforge.net>  spanish translation
-Cedric Gross <cgross@wanadoo.fr>                   french translation
-Julien Catanese <julien_catanese@yahoo.fr>         french translation
-Tilman Linneweh <arved@freebsd.org>                freebsd port
-Rasputin <rara.rasputin@virgin.net>                freebsd port
-Brian Russo <wolfie@debian.org>                    debian package
-Guenter Bechly <gbechly@gmx.de>                    debian package
-
-and numerous others who have contributed by sending bug reports
-or interesting suggestions.
+You can find steghide at:
+* https://github.com/StefanoDeVuono/steghide
+* http://steghide.sourceforge.net/index.php
+Stefan Hetzl <shetzl@chello.at>             Steghide Author / Maintainer
