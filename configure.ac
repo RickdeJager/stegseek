@@ -18,14 +18,14 @@ AC_ARG_ENABLE(debug,[  --enable-debug          enable debugging],
 	then
 		AC_MSG_RESULT([yes])
 		AC_DEFINE(DEBUG,1,[enable code used only for debugging])
-		CXXFLAGS="-O2 -Wall -g"
+		CXXFLAGS="-O3 -Wall -g"
 	else
 		AC_MSG_RESULT([no])
-		CXXFLAGS="-O2 -Wall"
+		CXXFLAGS="-O3 -Wall"
 	fi
 	,
 	AC_MSG_RESULT([no])
-	CXXFLAGS="-O2 -Wall"
+	CXXFLAGS="-O3 -Wall"
 )
 
 dnl check if randomness should be disabled

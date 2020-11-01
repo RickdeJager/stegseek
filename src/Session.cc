@@ -266,7 +266,6 @@ void Session::printHelp ()
 		" -sf, --stegofile        select stego file\n"
 		" -wl, --wordlist         select the wordlist file\n"
 		" -t, --threads           set the number of threads. Defaults to the number of cores.\n"
-		" -t, --threads           set the number of threads. Defaults to the number of cores.\n"
 		" -v, --verbose           display detailed information\n"
 		)) ;
 	

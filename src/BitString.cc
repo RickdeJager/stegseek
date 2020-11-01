@@ -220,13 +220,6 @@ const std::vector<BYTE>& BitString::getBytes() const
 BitString& BitString::truncate (const unsigned long s, const unsigned long e)
 {
 	unsigned long newsize_i = e - s ;
-	unsigned long newsize_y = 0 ;
-	if (newsize_i % 8 == 0) {
-		newsize_y = newsize_i / 8 ;
-	}
-	else {
-		newsize_y = newsize_i / 8 + 1 ;
-	}
 
 	for (unsigned long i = 0 ; i < newsize_i ; i++) {
 		// replace i-th bit with (s+i)-th bit
