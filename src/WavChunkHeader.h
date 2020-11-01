@@ -28,7 +28,7 @@ class BinaryIO ;
 class WavChunkHeader {
 	public:
 	WavChunkHeader (void) {} ;
-	WavChunkHeader (char *id, UWORD32 len) ;
+	WavChunkHeader (const char *id, UWORD32 len) ;
 	WavChunkHeader (BinaryIO *io) ;
 
 	void read (BinaryIO *io) ;

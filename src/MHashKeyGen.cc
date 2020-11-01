@@ -103,7 +103,7 @@ void MHashKeyGen::setSalt (std::vector<unsigned char> salt)
 	}
 	AlgorithmData.salt = s_malloc (AlgorithmData.salt_size) ;
 	unsigned char *tmp = (unsigned char *) AlgorithmData.salt ;
-	for (int i = 0 ; i < AlgorithmData.salt_size ; i++) {
+	for (unsigned int i = 0 ; i < AlgorithmData.salt_size ; i++) {
 		tmp[i] = salt[i] ;
 	}
 }

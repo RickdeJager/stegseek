@@ -21,7 +21,7 @@
 #include "BinaryIO.h"
 #include "WavChunkHeader.h"
 
-WavChunkHeader::WavChunkHeader (char *id, UWORD32 len)
+WavChunkHeader::WavChunkHeader (const char *id, UWORD32 len)
 {
 	for (unsigned int i = 0 ; i < 4 ; i++) {
 		ChunkId[i] = id[i] ;

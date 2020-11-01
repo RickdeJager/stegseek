@@ -196,15 +196,10 @@ bool Cracker::tryPassphrase (std::string Passphrase)
 		// Catching other errors here is fine, they should be pretty rare.
 		//	* decompression error
 		//	* failed crc check
-		catch(SteghideError)
+		catch(const SteghideError&)
 		{
 			return false ;
 		}
-		catch(CorruptDataError)
-		{
-			return false ;
-		}
-		
 	}
 	// We've found a passphrase, for which both the file magic checks out
 	// and the CRC is valid. :D

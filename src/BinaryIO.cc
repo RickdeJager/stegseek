@@ -92,7 +92,7 @@ void BinaryIO::open (const std::string& fn, MODE m)
 	}
 	else {
 		FILE *s = NULL ;
-		char *cmode ;
+		const char *cmode ;
 
 		switch (m) {
 			case READ: {

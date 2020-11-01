@@ -198,7 +198,7 @@ void Session::printInfo ()
 
 			delete embdata ;
 		}
-		catch (CorruptDataError e) {
+		catch (const CorruptDataError&) {
 			printf (_("could not extract any data with that passphrase!\n")) ;
 		}
 	}

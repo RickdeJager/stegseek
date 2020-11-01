@@ -29,5 +29,4 @@ WavChunkHeader.cc WavChunkUnused.cc WavFile.cc WavFormatChunk.cc \
 WavPCMSampleValue.cc error.cc main.cc msg.cc SMDConstructionHeuristic.cc
 LIBS = @LIBS@ -lpthread
 localedir = $(datadir)/locale
-LIBTOOL = $(SHELL) libtool
 MAINTAINERCLEANFILES = Makefile.in
