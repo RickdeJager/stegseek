@@ -35,16 +35,19 @@ Cracker::Cracker ()
 {
 	VerboseMessage vrs ;
 	// read wordlist
-	vrs.setMessage (_("reading wordlist file \"%s\"..."), Args.WordlistFn.getValue().c_str()) ;
+	vrs.setMessage (_("[v] Using wordlist file \"%s\"."), Args.WordlistFn.getValue().c_str()) ;
 	vrs.printMessage() ;
 	wordlist = std::ifstream(Args.WordlistFn.getValue().c_str()) ;
 
 	// get stegfile
-	vrs.setMessage (_("reading stegfile file \"%s\"..."), Args.StgFn.getValue().c_str()) ;
+	vrs.setMessage (_("[v] Using stegfile file \"%s\"."), Args.StgFn.getValue().c_str()) ;
 	vrs.printMessage() ;
 
 	// Print threading info
-	vrs.setMessage (_("Running on %d threads..."), Args.Threads.getValue()) ;
+	vrs.setMessage (_("[v] Running on %d threads."), Args.Threads.getValue()) ;
+	vrs.printMessage() ;
+
+	vrs.setMessage ("") ;
 	vrs.printMessage() ;
 }
 
@@ -56,10 +59,15 @@ Cracker::~Cracker ()
 	
 void Cracker::crack ()
 {
+	// Validate wordlist
+	if (wordlist.fail()) {
+		throw SteghideError (_("could not open the wordlist \"%s\"."), Args.WordlistFn.getValue().c_str()) ;
+	}
+
 	// Load the Stegfile
 	Globs.TheCvrStgFile = CvrStgFile::readFile (Args.StgFn.getValue().c_str()) ;
 
-	// Look up these parameters once, to prevent function calls for each password attempt
+	// Look up these parameters once, to prevent function calls for each passphrase attempt
 	bitsperembvalue = AUtils::log2_ceil<unsigned short> (Globs.TheCvrStgFile->getEmbValueModulus()) ;
 	numSamples = Globs.TheCvrStgFile->getNumSamples() ;
 	samplesPerVertex = Globs.TheCvrStgFile->getSamplesPerVertex() ;
@@ -70,12 +78,15 @@ void Cracker::crack ()
 	{
 		// Try to aquire a lock
 		std::lock_guard<std::mutex> lk(QueueMutex) ;
-		// Push each line of the wordlist into the WorkQueue
+		// First push the "empty" passphrase into the Queue, as it is probably not included in a wordlist
+		line = "" ;
+		WorkQueue.push(line) ;
+		// Then push each line of the wordlist into the WorkQueue
 		while (std::getline(wordlist, line)) {
-			WorkQueue.push(line);
+			WorkQueue.push(line) ;
 		}
 	}
-	printf("Read the entire wordlist, starting threads...\n") ;
+	printf("[i] Read the entire wordlist, starting cracker\n") ;
 	// TODO; The above loop pushes the entire wordlist into RAM. The alternative would be to push items in batches.
 	// This does mean that we'd lock/unlock a lot
 
@@ -95,6 +106,16 @@ void Cracker::crack ()
 		ThreadPool.back().join() ;
 		ThreadPool.pop_back() ;
 	}
+
+	// If we didn't find a passphrase, print a message
+	if (!stopped) {
+		printf("[!] Could not find a valid passphrase.\n") ;
+	} else {
+		// Re-extract the data with the confirmed passphrase.
+		// This does mean we're throwing away one valid "embdata" object, but
+		// that's not a bad trade-off to be able to use steghide's structure
+		extract(foundPassphrase) ;
+	}
 }
 
 // Take jobs and crack 'em
@@ -102,36 +123,36 @@ void Cracker::consume ()
 {
 	while (!stopped && !WorkQueue.empty())
 	{
-		std::string PasswordCandidate;
+		std::string passphraseCandidate;
 		// Try to aquire a lock
 		{
 			std::lock_guard<std::mutex> lk(QueueMutex) ;
 
-			// Another thread found the password
+			// Another thread found the passphrase
 			// TODO, we exit on empty queue as well, because we're loading the entire queue in one go
 			// This won't work with batching
 			if (stopped || WorkQueue.empty()) 
 			{
-				puts("Stopped...") ; 
 				return ;
 			}
 
 			// Pop and item from the queue and unlock
-			PasswordCandidate = WorkQueue.front() ;
+			passphraseCandidate = WorkQueue.front() ;
 			WorkQueue.pop() ;
 		}
 
-		// Try extracting with this password
-		if (extract(PasswordCandidate))
+		// Try extracting with this passphrase
+		if (tryPassphrase(passphraseCandidate))
 		{
-			printf("Found password: \"%s\"\n", PasswordCandidate.c_str()) ;
+			printf("[i] --> Found passphrase: \"%s\"\n\n", passphraseCandidate.c_str()) ;
 			// Tell the other threads that we have stopped
 			stopped = true ;
+			foundPassphrase = passphraseCandidate;
 		}
 	}
 }
 
-bool Cracker::extract (std::string Passphrase)
+bool Cracker::tryPassphrase (std::string Passphrase)
 {
 	EmbData embdata (EmbData::EXTRACT, Passphrase) ;
 	Selector sel (Globs.TheCvrStgFile->getNumSamples(), Passphrase) ;
@@ -185,7 +206,28 @@ bool Cracker::extract (std::string Passphrase)
 		}
 		
 	}
-	// We've found a password, for which both the file magic checks out
+	// We've found a passphrase, for which both the file magic checks out
 	// and the CRC is valid. :D
 	return true ;
+}
+
+void Cracker::extract (std::string passphrase)
+{
+	Extractor ext (Args.StgFn.getValue(), passphrase) ;
+	EmbData* emb = ext.extract() ;
+
+	std::string origFn = emb->getFileName() ;
+	std::string outFn = Args.StgFn.getValue() + ".out" ;
+
+	if (origFn != "") {
+		printf("[i] Original filename: \"%s\"\n", origFn.c_str()) ;
+	}
+	printf("[i] Extracting to \"%s\"\n", outFn.c_str()) ;
+	BinaryIO io (outFn, BinaryIO::WRITE) ;
+	std::vector<BYTE> data = emb->getData() ;
+	for (std::vector<BYTE>::iterator i = data.begin() ; i != data.end() ; i++) {
+		io.write8 (*i) ;
+	}
+	io.close() ;
+	delete(emb) ;
 }

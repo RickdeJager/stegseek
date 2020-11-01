@@ -42,12 +42,14 @@ class Cracker {
 	void crack (void) ;
 
 	private:
-	bool extract (std::string) ;
+	bool tryPassphrase (std::string) ;
+	void extract (std::string) ;
 	void consume () ;
 	std::ifstream wordlist ;
 	std::mutex QueueMutex ;
 	std::condition_variable cv ;
 	std::atomic<bool> stopped ;
+	std::string foundPassphrase ;
 	std::queue<std::string> WorkQueue ;
 
 	unsigned short bitsperembvalue ;
