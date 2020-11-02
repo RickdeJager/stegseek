@@ -8,7 +8,7 @@ Skip ahead to [Performance](#chart_with_upwards_trend-performance) for some raw 
 At the moment, Stegseek can only be installed by building from source. The following steps will help you install Stegseek on Ubuntu.
 
 ## Installing dependencies
-Running the following command will install all requires dependencies:
+Running the following command will install all required dependencies:
 
 ```bash
 sudo apt install libmhash-dev libmcrypt-dev libjpeg-dev zlib1g-dev git autoconf build-essential
