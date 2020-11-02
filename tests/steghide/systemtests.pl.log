@@ -1,0 +1,18 @@
+-------------------------
+
+Running System Tests.....
+
+-------------------------
+
+Embedding Parameters:
+    Encryption......ok
+    Compression...ok
+    Checksum.....ok
+
+File Formats:
+    au...ok
+    bmp........ok
+    jpeg..ok
+    wav..ok
+
+PASS systemtests.pl (exit status: 0)

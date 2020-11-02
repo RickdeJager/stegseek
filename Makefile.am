@@ -1,5 +1,5 @@
 AUTOMAKE_OPTIONS = dist-bzip2 dist-zip
-SUBDIRS = m4 src tests
+SUBDIRS = m4 src tests/steghide
 docdir = $(prefix)/share/doc/$(PACKAGE)
 EXTRA_DIST = config.rpath mkinstalldirs BUGS CREDITS HISTORY depcomp
 doc_DATA = BUGS COPYING CREDITS HISTORY INSTALL README.md
