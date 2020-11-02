@@ -27,7 +27,9 @@ rm -f *.out
 printf 'Bogus\n%.0s' {1..1000000} > wordlist.tmp
 
 # Try cracking without the correct password in the wordlist
-SHOULD_FAIL=$($STEGSEEK --crack -sf $DATADIR/sun.jpg -wl wordlist.tmp)
+echo " [1/2] correct password not present..."
+SHOULD_FAIL=$(time $STEGSEEK --crack -sf $DATADIR/sun.jpg -wl wordlist.tmp)
+echo $SHOULD_FAIL
 
 if [[ $SHOULD_FAIL =~ $OKMSG ]]; then
    echo "Program claims to have found a password when it shouldn't have"
@@ -35,7 +37,6 @@ if [[ $SHOULD_FAIL =~ $OKMSG ]]; then
    exit 1
 fi
 
-echo " [1/2]"
 
 
 # Add the password to the wordlist
@@ -43,7 +44,9 @@ echo $PASSWORD >> wordlist.tmp
 # Add some more words
 printf 'Bogus\n%.0s' {1..123456} >> wordlist.tmp
 
-SHOULD_WORK=$($STEGSEEK --crack -sf $DATADIR/sun.jpg -wl wordlist.tmp)
+echo " [2/2] correct password present..."
+SHOULD_WORK=$(time $STEGSEEK --crack -sf $DATADIR/sun.jpg -wl wordlist.tmp)
+echo $SHOULD_WORK
 
 if [[ $SHOULD_WORD =~ $FAILMSG ]]; then
    echo "Program could not crack the steg file even though the password was present."
@@ -51,6 +54,5 @@ if [[ $SHOULD_WORD =~ $FAILMSG ]]; then
    exit 1
 fi
 
-echo " [2/2]"
 echo "All tests passed"
 rm wordlist.tmp
