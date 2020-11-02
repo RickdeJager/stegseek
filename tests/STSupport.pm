@@ -24,7 +24,7 @@ use constant DATADIR => "./data/" ;
 use constant RND100 => "rnd100" ;
 
 use constant TAB => "    " ;
-use constant STEGHIDE => "../src/steghide" ;
+use constant STEGHIDE => "../src/stegseek" ;
 use constant DEFAULTSTGFN => "stgfile" ;
 use constant DEFAULTEXTFN => "extfile" ;
 use constant DEFEMBARGBASE => (command => "embed", f => "", "q" => "", p => "\"a passphrase\"", sf => DEFAULTSTGFN) ;
@@ -43,7 +43,7 @@ sub parseArgs {
 }
 
 #
-# create a string of arguments ready to be fed to steghide
+# create a string of arguments ready to be fed to stegseek
 # expects a hash containing a "command" => "something" and argument/argument value pairs
 # 
 sub getArgString {

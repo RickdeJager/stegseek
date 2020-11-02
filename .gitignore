@@ -13,7 +13,10 @@ tests/data/Makefile.in
 
 .vscode
 
-
+# Test artifacts
+tests/*.log
+tests/*.trs
+tests/unittests
 
 
 ### C++ ###

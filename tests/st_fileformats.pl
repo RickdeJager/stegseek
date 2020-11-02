@@ -1,4 +1,8 @@
 #!/usr/bin/perl -w
+
+use FindBin qw( $RealBin );
+use lib $RealBin;
+
 use STSupport;
 
 use constant EMPTY => {e => "none", Z => "", K => "", "-check" => ""} ;

@@ -28,7 +28,7 @@ unittests_LDADD = \
 ../src/AuSampleValues.o ../src/DFSAPHeuristic.o ../src/BFSAPHeuristic.o ../src/BinaryIO.o \
 ../src/BitString.o ../src/BmpFile.o ../src/BmpPaletteSampleValue.o \
 ../src/BmpRGBSampleValue.o ../src/BmpSampleValue.o \
-../src/WKSConstructionHeuristic.o ../src/CvrStgFile.o \
+../src/WKSConstructionHeuristic.o ../src/CvrStgFile.o ../src/Cracker.o \
 ../src/Edge.o ../src/EdgeIterator.o ../src/DMDConstructionHeuristic.o \
 ../src/EmbData.o ../src/Embedder.o ../src/EncryptionAlgorithm.o \
 ../src/EncryptionMode.o ../src/Extractor.o ../src/Graph.o ../src/JpegFile.o \
@@ -40,5 +40,6 @@ unittests_LDADD = \
 ../src/Utils.o ../src/Vertex.o ../src/WavChunk.o ../src/WavChunkHeader.o \
 ../src/WavChunkUnused.o ../src/WavFile.o ../src/WavFormatChunk.o \
 ../src/WavPCMSampleValue.o ../src/error.o ../src/msg.o ../src/SMDConstructionHeuristic.o
-LIBS = @LIBINTL@ @LIBS@
+LIBS = @LIBS@ -lpthread
+@INC  = @INC .
 MAINTAINERCLEANFILES = Makefile.in
