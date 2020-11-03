@@ -6,8 +6,7 @@ on:
     branches: [ master ]
 
 jobs:
-  build:
-
+  build-linux:
     runs-on: ubuntu-latest
 
     steps:
@@ -24,3 +23,19 @@ jobs:
       run: make check
     - name: Run cracker tests
       run: cd tests/stegseek && ./testCracker.sh
+
+  build-windows:
+    runs-on: windows-latest
+
+    steps:
+    - uses: msys2/setup-msys2@v2
+      with:
+        update: true
+        install: 'pacman -Syu libmhash-devel libmcrypt-devel libjpeg-devel zlib1g-devel autoconf'
+    - uses: actions/checkout@v2
+    - shell: msys2 {0}
+      run:  |
+        cd stegseek
+        autoreconf -i
+        ./configure
+        make
