@@ -31,7 +31,7 @@ jobs:
     - uses: msys2/setup-msys2@v2
       with:
         update: true
-        install: 'pacman -Syu libmhash-devel libmcrypt-devel libjpeg-devel zlib1g-devel autoconf'
+        install: 'libmhash-devel libmcrypt-devel libjpeg-devel zlib1g-devel autoconf'
     - uses: actions/checkout@v2
     - shell: msys2 {0}
       run:  |
