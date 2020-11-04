@@ -48,7 +48,7 @@ Use "stegseek --help -v" to include steghides help.
 Stegseek includes nearly all of steghides functionality, so it can also be used to embed or extract data as normal.
 
 # :whale: Docker
-You can also run Stegseek in as Docker container:
+You can also run Stegseek as Docker container:
 
 ```
 docker run -it -v "$(pwd):/steg" rickdejager/stegseek --crack -sf [stegofile.jpg] -wl [wordlist.txt]
