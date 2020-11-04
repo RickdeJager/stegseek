@@ -14,9 +14,9 @@ tests/data/Makefile.in
 .vscode
 
 # Test artifacts
-tests/*.log
-tests/*.trs
-tests/unittests
+tests/steghide/*.log
+tests/steghide/*.trs
+tests/steghide/unittests
 
 
 ### C++ ###
