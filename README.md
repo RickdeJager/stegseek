@@ -6,16 +6,17 @@ Skip ahead to [Performance](#chart_with_upwards_trend-performance) for some raw 
 
 # :wrench: Installation
 
+The following instructions walk you through the installation process. Alternatively, you can run Stegseek in a Docker container. Skip ahead to [Docker](#whale-docker) for instructions.
+
 ## Releases
 
-On Debian based systems (Kali, Debian, Ubuntu, ...) you can use the provided `.deb` package for installation.
+On Ubuntu-based systems, you can use the provided `.deb` package for installation:
 
 1. Download the latest [Stegseek release](https://github.com/RickdeJager/stegseek/releases)
 1. Install the `.deb` file using `sudo apt install ./stegseek_0.1-1.deb`
 
 ## Building from source
-On other systems you will have to build Steghide yourself. See [BUILD.md](BUILD.md) for more information.
-
+On other systems you will have to build Stegseek yourself. See [BUILD.md](BUILD.md) for more information.  
 
 # :arrow_forward: Using Stegseek
 
@@ -42,8 +43,18 @@ Cracking options:
 
 Use "stegseek --help -v" to include steghides help.
 ```
+
 ## Steghide
 Stegseek includes nearly all of steghides functionality, so it can also be used to embed or extract data as normal.
+
+# :whale: Docker
+You can also run Stegseek in as Docker container:
+
+```
+docker run -it -v "$(pwd):/steg" rickdejager/stegseek --crack -sf [stegofile.jpg] -wl [wordlist.txt]
+```
+
+This does require that the wordlist and stegofile are located in current working directory, as that folder is mounted to `/steg` inside of the container.
 
 # :chart_with_upwards_trend: Performance
 This is where Stegseek really shines. As promised, let's start with the "`rockyou.txt` under a minute claim".  
