@@ -22,20 +22,11 @@ jobs:
     - name: make check
       run: make check
     - name: Run cracker tests
-      run: cd tests/stegseek && ./testCracker.sh
-
-  build-windows:
-    runs-on: windows-latest
-
-    steps:
-    - uses: msys2/setup-msys2@v2
+      run: cd tests/stegseek && ./testCracker.sh && cd ../..
+    - name: Create a .deb package
+      run: bash package/package
+    - name: Save the .deb as a build artifact
+      uses: actions/upload-artifact@v2
       with:
-        update: true
-        install: 'libmhash-devel libmcrypt-devel libjpeg-devel zlib1g-devel autoconf'
-    - uses: actions/checkout@v2
-    - shell: msys2 {0}
-      run:  |
-        cd stegseek
-        autoreconf -i
-        ./configure
-        make
+        name: stegseek-deb-package
+        path: stegseek*.deb

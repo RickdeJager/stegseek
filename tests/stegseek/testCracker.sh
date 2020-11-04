@@ -7,6 +7,9 @@
 # TODO
 # Make stegseek throw proper exit codes
 
+# Exit on first error
+set -e
+
 STEGSEEK=../../src/stegseek
 DATADIR=data
 PASSWORD="stegseek"
@@ -23,12 +26,13 @@ rm -f $DATADIR/*.out
 rm -f *.out
 
 
+echo "Creating bogus wordlist with 1 million entries..."
 # Create bogus wordlist with length 1 million
 printf 'Bogus\n%.0s' {1..1000000} > wordlist.tmp
 
 # Try cracking without the correct password in the wordlist
 echo " [1/2] correct password not present..."
-SHOULD_FAIL=$(time $STEGSEEK --crack -sf $DATADIR/sun.jpg -wl wordlist.tmp)
+SHOULD_FAIL=$(time $STEGSEEK --crack -sf $DATADIR/sun.jpg -wl wordlist.tmp -q)
 echo $SHOULD_FAIL
 
 if [[ $SHOULD_FAIL =~ $OKMSG ]]; then
@@ -39,13 +43,14 @@ fi
 
 
 
+echo "Adding correct password to the wordlist..."
 # Add the password to the wordlist
 echo $PASSWORD >> wordlist.tmp
 # Add some more words
 printf 'Bogus\n%.0s' {1..123456} >> wordlist.tmp
 
 echo " [2/2] correct password present..."
-SHOULD_WORK=$(time $STEGSEEK --crack -sf $DATADIR/sun.jpg -wl wordlist.tmp)
+SHOULD_WORK=$(time $STEGSEEK --crack -sf $DATADIR/sun.jpg -wl wordlist.tmp -q)
 echo $SHOULD_WORK
 
 if [[ $SHOULD_WORD =~ $FAILMSG ]]; then
