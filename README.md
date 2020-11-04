@@ -1,6 +1,6 @@
 # :zap: Stegseek
 
-Stegseek is a lightning fast steghide cracker, build as a fork of the original steghide project. As a result it is _way_ faster than other crackers and can run through the entirety of **`rockyou.txt` in under a minute.**
+Stegseek is a lightning fast steghide cracker, built as a fork of the original steghide project. As a result it is _way_ faster than other crackers and can run through the entirety of **`rockyou.txt` in under a minute.**
 
 Skip ahead to [Performance](#chart_with_upwards_trend-performance) for some raw numbers.
 
