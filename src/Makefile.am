@@ -1,4 +1,4 @@
-AM_CPPFLAGS = -DLOCALEDIR=\"$(localedir)\"
+AM_CPPFLAGS = -DLOCALEDIR=\"$(localedir)\" -fpermissive
 bin_PROGRAMS = stegseek
 noinst_HEADERS = \
 AUtils.h Arg.h Arguments.h AssertionFailed.h AuData.h AuFile.h \
