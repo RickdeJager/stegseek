@@ -24,7 +24,7 @@ jobs:
     - name: Run cracker tests
       run: cd tests/stegseek && ./testCracker.sh && cd ../..
     - name: Create a .deb package
-      run: bash package/package
+      run: bash package/package.sh
     - name: Save the .deb as a build artifact
       uses: actions/upload-artifact@v2
       with:
