@@ -5,7 +5,8 @@ Stegseek is a lightning fast steghide cracker, build as a fork of the original s
 Skip ahead to [Performance](#chart_with_upwards_trend-performance) for some raw numbers.
 
 # :wrench: Installation
-At the moment, Stegseek can only be installed by building from source. The following steps will help you install Stegseek on Ubuntu.
+At the moment, Stegseek can only be installed by building from source. The following steps will help you install Stegseek on Ubuntu.  
+If you'd rather use Docker, skip ahead to the [Docker section](#whale-docker).
 
 ## Installing dependencies
 Running the following command will install all required dependencies:
@@ -56,8 +57,18 @@ Cracking options:
 
 Use "stegseek --help -v" to include steghides help.
 ```
+
 ## Steghide
 Stegseek includes nearly all of steghides functionality, so it can also be used to embed or extract data as normal.
+
+# :whale: Docker
+You can also run Stegseek in as Docker container:
+
+```
+docker run -it -v "$(pwd):/steg" rickdejager/stegseek --crack -sf [stegofile.jpg] -wl [wordlist.txt]
+```
+
+This does require that the wordlist and stegofile are located in current working directory, as that folder is mounted to `/steg` inside of the container.
 
 # :chart_with_upwards_trend: Performance
 This is where Stegseek really shines. As promised, let's start with the "`rockyou.txt` under a minute claim".  
