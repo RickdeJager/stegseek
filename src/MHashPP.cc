@@ -120,7 +120,7 @@ std::string MHashPP::getAlgorithmName ()
 
 std::string MHashPP::getAlgorithmName (hashid id)
 {
-	char *name = mhash_get_hash_name (id) ;
+	char *name = (char*) mhash_get_hash_name (id) ;
 	std::string retval ;
 	if (name == NULL) {
 		retval = std::string ("<algorithm not found>") ;

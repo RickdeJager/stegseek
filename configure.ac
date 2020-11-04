@@ -212,4 +212,4 @@ then
 fi
 
 dnl create Makefiles
-AC_OUTPUT([Makefile src/Makefile tests/Makefile tests/data/Makefile m4/Makefile])
+AC_OUTPUT([Makefile src/Makefile tests/steghide/Makefile tests/steghide/data/Makefile m4/Makefile])

@@ -5,32 +5,18 @@ Stegseek is a lightning fast steghide cracker, built as a fork of the original s
 Skip ahead to [Performance](#chart_with_upwards_trend-performance) for some raw numbers.
 
 # :wrench: Installation
-At the moment, Stegseek can only be installed by building from source. The following steps will help you install Stegseek on Ubuntu.  
-If you'd rather use Docker, skip ahead to the [Docker section](#whale-docker).
 
-## Installing dependencies
-Running the following command will install all required dependencies:
+The following instructions walk you through the installation process. Alternatively, you can run Stegseek in a Docker container. Skip ahead to [Docker](#whale-docker) for instructions.
 
-```bash
-sudo apt install libmhash-dev libmcrypt-dev libjpeg-dev zlib1g-dev git autoconf build-essential
-```
+## Releases
 
-## Building Stegseek
+On Ubuntu-based systems, you can use the provided `.deb` package for installation:
 
-First, clone this repo by calling:
-```
-git clone https://github.com/RickdeJager/stegseek.git
-```
+1. Download the latest [Stegseek release](https://github.com/RickdeJager/stegseek/releases)
+1. Install the `.deb` file using `sudo apt install ./stegseek_0.1-1.deb`
 
-Next, enter the following commands to build and install Stegseek:
-
-```bash
-cd stegseek
-autoreconf -i
-./configure
-make
-sudo make install
-```
+## Building from source
+On other systems you will have to build Stegseek yourself. See [BUILD.md](BUILD.md) for more information.  
 
 # :arrow_forward: Using Stegseek
 
