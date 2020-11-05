@@ -104,6 +104,7 @@ void Session::run ()
 		break ; }
 
 		case CRACK: {
+			printVersion() ;
 			Cracker cr ;
 			cr.crack() ;
 		break ; }
