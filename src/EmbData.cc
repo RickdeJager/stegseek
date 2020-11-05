@@ -20,6 +20,7 @@
  *  - Added file name sanitization to the extractor
  */
 
+#include "Utils.h"
 #include "AUtils.h"
 #include "BinaryIO.h"
 #include "BitString.h"
@@ -369,12 +370,5 @@ BitString EmbData::getBitString ()
 
 std::string EmbData::stripDir (std::string s)
 {
-	unsigned int start = 0 ;
-	if ((start = s.find_last_of ("/\\")) == std::string::npos) {
-		start = 0 ;
-	}
-	else {
-		start += 1 ;
-	}
-	return s.substr (start, std::string::npos) ;
+	return Utils::stripDir(s) ;
 }

@@ -29,6 +29,7 @@ class Utils {
 	 * gets a number of bytes and returns a human-readable string like e.g. "3,5 KB"
 	 **/
 	static std::string formatHRSize (unsigned long size) ;
+	static std::string stripDir (std::string) ;
 } ;
 
 #endif // ndef SH_UTILS_H

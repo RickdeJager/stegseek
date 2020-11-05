@@ -22,6 +22,7 @@
 
 
 #include "error.h"
+#include "Utils.h"
 #include "common.h"
 #include "Cracker.h"
 #include "EmbData.h"
@@ -264,7 +265,7 @@ void Cracker::extract (std::string passphrase)
 	EmbData* emb = ext.extract() ;
 
 	std::string origFn = emb->getFileName() ;
-	std::string outFn = Args.StgFn.getValue() + ".out" ;
+	std::string outFn = Utils::stripDir(Globs.TheCvrStgFile->getName()) + ".out" ;
 
 	if (origFn != "") {
 		printf("[i] Original filename: \"%s\"\n", origFn.c_str()) ;

@@ -44,3 +44,15 @@ std::string Utils::formatHRSize (unsigned long size)
 	sprintf (buf, "%.1f %s", s, unit.c_str()) ;
 	return std::string (buf) ;
 }
+
+std::string Utils::stripDir (std::string s)
+{
+	unsigned int start = 0 ;
+	if ((start = s.find_last_of ("/\\")) == std::string::npos) {
+		start = 0 ;
+	}
+	else {
+		start += 1 ;
+	}
+	return s.substr (start, std::string::npos) ;
+}
