@@ -34,6 +34,8 @@
 #include <atomic>
 #include <chrono>
 
+#include "Selector.h"
+
 class Cracker {
 	public:
 	Cracker (void) ;

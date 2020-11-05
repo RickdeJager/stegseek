@@ -143,6 +143,7 @@ void Cracker::metrics ()
 // Take jobs and crack 'em
 void Cracker::consume ()
 {
+	// Define a selector for each thread
 	while (!stopped && !WorkQueue.empty())
 	{
 		std::string passphraseCandidate;
@@ -177,10 +178,11 @@ void Cracker::consume ()
 
 bool Cracker::verifyMagic (std::string Passphrase)
 {
-	//TODO; Still creates a selector object for each crack attempt
+	// Create a selector
 	Selector sel (numSamples, Passphrase) ;
+
 	// Magic, "shm" in binary LE
-	const int magics[] = {1, 0, 1, 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 1, 0, 1, 1, 0, 0, 1, 1, 1, 0} ;
+	const int magics[24] = {1, 0, 1, 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 1, 0, 1, 1, 0, 0, 1, 1, 1, 0} ;
 	if (samplesPerVertex * embvaluesRequestedMagic >= numSamples) {
 		// TODO; In theory, we should error out if we hit this.
 		// However, I've seen this error happen randomly on valid input files
@@ -204,8 +206,6 @@ bool Cracker::verifyMagic (std::string Passphrase)
 
 bool Cracker::tryPassphrase (std::string Passphrase)
 {
-
-
 	// We first check if the file magic makes sense
 	// It's important we only do this once, for the beginning of the file
 	if (! verifyMagic(Passphrase)) {

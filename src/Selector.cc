@@ -26,17 +26,20 @@
 Selector::Selector (UWORD32 m, std::string pp)
 	: Maximum(m), NumInArray(0)
 {
-	MHashPP hash (MHASH_MD5) ;
-	hash << pp << MHashPP::endhash ;
-	BitString h = hash.getHashBits() ;
-
-	myassert (h.getLength() == 128) ;
 	UWORD32 seed = 0 ;
-	for (unsigned short i = 0 ; i < 4 ; i++) {
-		seed ^= h.getValue (i * 32, 32) ;
-	}
+	MHASH td = mhash_init(MHASH_MD5);
+	mhash(td, pp.data(), pp.size() ) ;
 
+	UWORD32 hash[4] ;
+	mhash_deinit (td, hash) ;
+	for (unsigned int i = 0 ; i < 4 ; i++) {
+		seed ^= hash[i] ;
+	}
 	PRandom = new PseudoRandomSource (seed) ;
+
+	// Reserve some space to prevent many resizes
+	X.reserve(12) ;
+	Y.reserve(12) ;
 }
 
 Selector::Selector (UWORD32 m)
@@ -78,8 +81,11 @@ void Selector::calculate (UWORD32 m)
 
 	if (m > NumInArray) {
 		NumInArray = m ;
-		X.resize (NumInArray) ;
-		Y.resize (NumInArray) ;
+		// Never downsize the vector
+		if (NumInArray > X.size()) {
+			X.resize (NumInArray) ;
+			Y.resize (NumInArray) ;
+		}
 	}
 
 	for ( ; j < m ; j++) {
