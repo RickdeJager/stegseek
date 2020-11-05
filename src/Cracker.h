@@ -44,13 +44,14 @@ class Cracker {
 
 	private:
 	bool tryPassphrase (std::string) ;
+	bool verifyMagic (std::string) ;
 	void extract (std::string) ;
 	void consume () ;
 	void metrics () ;
 	std::ifstream wordlist ;
 	std::mutex QueueMutex ;
 	std::condition_variable cv ;
-	std::atomic<bool> stopped ;
+	bool stopped ;
 	std::string foundPassphrase ;
 	unsigned int wordlistLength = 0 ;
 	unsigned int attempts = 0 ;
@@ -60,6 +61,7 @@ class Cracker {
 	unsigned long numSamples ;
 	unsigned short samplesPerVertex ;
 	EmbValue EmbValueModulus ;
+	unsigned long embvaluesRequestedMagic ;
 
 } ;
 

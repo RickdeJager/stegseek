@@ -73,6 +73,7 @@ void Cracker::crack ()
 	numSamples = Globs.TheCvrStgFile->getNumSamples() ;
 	samplesPerVertex = Globs.TheCvrStgFile->getSamplesPerVertex() ;
 	EmbValueModulus = Globs.TheCvrStgFile->getEmbValueModulus();
+	embvaluesRequestedMagic = AUtils::div_roundup<unsigned long> (EmbData::NBitsMagic, bitsperembvalue) ;
 
 	// Load the wordlist into memory
 	std::string line;
@@ -157,7 +158,7 @@ void Cracker::consume ()
 				return ;
 			}
 
-			// Pop and item from the queue and unlock
+			// Pop an item from the queue and unlock
 			passphraseCandidate = WorkQueue.front() ;
 			WorkQueue.pop() ;
 			// Add to the perf metric
@@ -174,12 +175,49 @@ void Cracker::consume ()
 	}
 }
 
+bool Cracker::verifyMagic (std::string Passphrase)
+{
+	//TODO; Still creates a selector object for each crack attempt
+	Selector sel (numSamples, Passphrase) ;
+	// Magic, "shm" in binary LE
+	const int magics[] = {1, 0, 1, 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 1, 0, 1, 1, 0, 0, 1, 1, 1, 0} ;
+	if (samplesPerVertex * embvaluesRequestedMagic >= numSamples) {
+		// TODO; In theory, we should error out if we hit this.
+		// However, I've seen this error happen randomly on valid input files
+		// so I'm leaving it as a "return false" for now
+		// throw CorruptDataError (_("the stego data from standard input is too short to contain the embedded data.")) ;
+		return false ;
+	}
+	EmbValue ev = 0 ;
+	unsigned long sv_idx = 0;
+	for (unsigned long i = 0 ; i < embvaluesRequestedMagic ; i++) {
+		for (unsigned int j = 0 ; j < samplesPerVertex ; j++, sv_idx++) {
+			ev = (ev + Globs.TheCvrStgFile->getEmbeddedValue (sel[sv_idx])) % EmbValueModulus ;
+		}
+		if (ev != magics[i]) {
+			return false ;
+		}
+		ev = 0;
+	}
+	return true;
+}
+
 bool Cracker::tryPassphrase (std::string Passphrase)
 {
-	EmbData embdata (EmbData::EXTRACT, Passphrase) ;
-	Selector sel (Globs.TheCvrStgFile->getNumSamples(), Passphrase) ;
 
-	bool magicOkay = false ;
+
+	// We first check if the file magic makes sense
+	// It's important we only do this once, for the beginning of the file
+	if (! verifyMagic(Passphrase)) {
+		return false ;
+	}
+
+	// In case the magic checks out, we have to do a proper extract attempt.
+	// This does re-do the magic, but it's rare enough that that won't matter.
+
+	EmbData embdata (EmbData::EXTRACT, Passphrase) ;
+	Selector sel (numSamples, Passphrase) ;
+
 
 	unsigned long sv_idx = 0 ;
 	while (!embdata.finished()) {
@@ -198,14 +236,6 @@ bool Cracker::tryPassphrase (std::string Passphrase)
 				ev = (ev + Globs.TheCvrStgFile->getEmbeddedValue (sel[sv_idx])) % EmbValueModulus ;
 			}
 			bits.appendNAry(ev) ;
-		}
-		// We first check if the file magic makes sense
-		// It's important we only do this once, for the beginning of the file
-		if (! magicOkay) {
-			if (bits.getValue(0, EmbData::NBitsMagic) != EmbData::Magic) {
-				return false ;
-			}
-			magicOkay = true ;
 		}
 
 		// It's possible that we find wrong passphrase for which we decrypt a valid magic
