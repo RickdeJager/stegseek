@@ -48,16 +48,14 @@ class Cracker {
 	bool tryPassphrase (std::string) ;
 	bool verifyMagic (std::string) ;
 	void extract (std::string) ;
-	void consume () ;
+	void consume (int) ;
 	void metrics () ;
 	std::ifstream wordlist ;
-	std::mutex QueueMutex ;
-	std::condition_variable cv ;
 	bool stopped ;
 	std::string foundPassphrase ;
 	unsigned int wordlistLength = 0 ;
-	unsigned int attempts = 0 ;
-	std::queue<std::string> WorkQueue ;
+	std::atomic<unsigned int> attempts ;
+	std::vector<std::queue<std::string>> WorkQueues ;
 
 	unsigned short bitsperembvalue ;
 	unsigned long numSamples ;

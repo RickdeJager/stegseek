@@ -76,18 +76,23 @@ void Cracker::crack ()
 	EmbValueModulus = Globs.TheCvrStgFile->getEmbValueModulus();
 	embvaluesRequestedMagic = AUtils::div_roundup<unsigned long> (EmbData::NBitsMagic, bitsperembvalue) ;
 
+	// init the attempts counter
+	attempts = 0 ;
+
 	// Load the wordlist into memory
 	std::string line;
+	// init queues
+	WorkQueues.resize(Args.Threads.getValue()) ;
 	{
-		// Try to aquire a lock
-		std::lock_guard<std::mutex> lk(QueueMutex) ;
-		// First push the "empty" passphrase into the Queue, as it is probably not included in a wordlist
+		// First push the "empty" passphrase into a Queue, as it is probably not included in a wordlist
 		line = "" ;
-		WorkQueue.push(line) ;
+		WorkQueues[0].push(line) ;
 		// Then push each line of the wordlist into the WorkQueue
+		int i = 0;
 		while (std::getline(wordlist, line)) {
-			WorkQueue.push(line) ;
+			WorkQueues[i].push(line) ;
 			wordlistLength += 1 ;
+			i = (i + 1) % Args.Threads.getValue() ;
 		}
 	}
 	printf("[i] Read the entire wordlist (%u words), starting cracker\n", wordlistLength) ;
@@ -97,10 +102,10 @@ void Cracker::crack ()
 	// Initialize n threads
 	std::vector<std::thread> ThreadPool ;
 	stopped = false ;
-	int threads = Args.Threads.getValue() ;
+	unsigned int threads = Args.Threads.getValue() ;
 
-	for (int i = 0; i < threads; i++) {
-		ThreadPool.push_back(std::thread([this] {consume(); })) ;
+	for (unsigned int i = 0; i < threads; i++) {
+		ThreadPool.push_back(std::thread([this, i] {consume(i); })) ;
 	}
 
 	// Add a thread to keep track of metrics
@@ -110,7 +115,7 @@ void Cracker::crack ()
 	}
 
 	// Join all threads
-	for (int i = 0; i < threads; i++) {
+	for (unsigned int i = 0; i < threads; i++) {
 		ThreadPool.back().join() ;
 		ThreadPool.pop_back() ;
 	}
@@ -132,40 +137,30 @@ void Cracker::crack ()
 
 void Cracker::metrics ()
 {
-	while (!stopped && !WorkQueue.empty())
+	while (!stopped)
 	{
 		std::this_thread::sleep_for(std::chrono::milliseconds(10)) ; 
 		// This will be slightly incorrect, as we're not locking attempts
 		float percentage = 100.0f * ((float) attempts / (float) wordlistLength) ;
-		printf("\r[ %u / %u ]  (%.2f%%)                 ", attempts, wordlistLength, percentage) ;
+		unsigned int q = attempts ;
+		printf("\r[ %u / %u ]  (%.2f%%)                 ",q , wordlistLength, percentage) ;
 	}
 }
 
 // Take jobs and crack 'em
-void Cracker::consume ()
+void Cracker::consume (int id)
 {
-	// Define a selector for each thread
-	while (!stopped && !WorkQueue.empty())
+	// Another thread found the passphrase
+	// TODO, we exit on empty queue as well, because we're loading the entire queue in one go
+	// This won't work with batching
+	while (!stopped && !WorkQueues[id].empty())
 	{
 		std::string passphraseCandidate;
-		// Try to aquire a lock
-		{
-			std::lock_guard<std::mutex> lk(QueueMutex) ;
-
-			// Another thread found the passphrase
-			// TODO, we exit on empty queue as well, because we're loading the entire queue in one go
-			// This won't work with batching
-			if (stopped || WorkQueue.empty()) 
-			{
-				return ;
-			}
-
-			// Pop an item from the queue and unlock
-			passphraseCandidate = WorkQueue.front() ;
-			WorkQueue.pop() ;
-			// Add to the perf metric
-			attempts += 1 ;
-		}
+		// Pop an item from the queue
+		passphraseCandidate = WorkQueues[id].front() ;
+		WorkQueues[id].pop() ;
+		// Add to the perf metric
+		attempts += 1 ;
 
 		// Try extracting with this passphrase
 		if (tryPassphrase(passphraseCandidate))
