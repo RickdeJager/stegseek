@@ -12,7 +12,7 @@ jobs:
     steps:
     - uses: actions/checkout@v2
     - name: Install build dependencies
-      run: sudo apt install -y libmhash-dev libmcrypt-dev libjpeg-dev zlib1g-dev autoconf build-essential
+      run: sudo apt install -y libmhash-dev libmcrypt-dev libjpeg62-dev zlib1g-dev autoconf build-essential
     - name: autoreconf
       run: autoreconf -i
     - name: configure
