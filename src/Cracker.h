@@ -1,6 +1,6 @@
 /*
  *
- * Stegseek 0.2 - a steghide cracker
+ * Stegseek 0.3 - a steghide cracker
  * Copyright (C) 2020 Rick de Jager
  * 
  * Based on the work of Stefan Hetzl <shetzl@chello.at>

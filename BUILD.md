@@ -1,9 +1,37 @@
 # Build instructions
-## Installing dependencies
-Running the following command will install all required dependencies:
 
-```bash
-sudo apt install libmhash-dev libmcrypt-dev libjpeg-dev zlib1g-dev git autoconf build-essential
+The build instructions will vary somewhat based on your host system. Ubuntu is used as an example.
+
+## Installing dependencies
+In any case you will need to following dependencies:
+
+* libmhash-dev
+* libmcrypt-dev
+* libjpeg-dev
+  * Can either the independent JPEG version or the libjpeg-turbo version
+  * The libjpeg version must be below 9 
+* zlib1g-dev
+
+On Ubuntu, all of these packages can be installed using the following command:
+
+```
+sudo apt install libmhash-dev libmcrypt-dev libjpeg-dev zlib1g-dev
+```
+
+## build tools
+You will also need the "autotools" suite of build tools. Depending on your distribution, these might be bundled in a single package (such as `build-essential` on Ubuntu).  
+If there is not a bundle available, you should install the following tools:  
+
+* make
+* g++
+* autoconf
+* git
+
+
+On Ubuntu, all of these packages can be installed using the following command:
+
+```
+sudo apt install git autoconf build-essential
 ```
 
 ## Building Stegseek
@@ -22,4 +50,3 @@ autoreconf -i
 make
 sudo make install
 ```
-
