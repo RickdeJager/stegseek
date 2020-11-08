@@ -30,8 +30,6 @@
 #include "Extractor.h"
 #include "CvrStgFile.h"
 
-using namespace std::chrono_literals ;
-
 
 Cracker::Cracker ()
 {
@@ -45,27 +43,25 @@ Cracker::Cracker ()
 	vrs.setMessage (_("[v] Using stegfile file \"%s\"."), Args.StgFn.getValue().c_str()) ;
 	vrs.printMessage() ;
 
+	// get output file
+	if (Args.ExtFn.is_set()) {
+		vrs.setMessage (_("[v] Using output file \"%s\"."), Args.ExtFn.getValue().c_str()) ;
+		vrs.printMessage() ;
+	}
+
 	// Print threading info
 	vrs.setMessage (_("[v] Running on %d threads."), Args.Threads.getValue()) ;
 	vrs.printMessage() ;
 
 	vrs.setMessage ("") ;
 	vrs.printMessage() ;
-}
 
-Cracker::~Cracker ()
-{
-	// Might have to add a destructor, as this class will be manhandling threads
-	// And can be killed by an impatient user at any time
-}
-	
-void Cracker::crack ()
-{
 	// Validate wordlist
 	if (wordlist.fail()) {
 		throw SteghideError (_("could not open the wordlist \"%s\"."), Args.WordlistFn.getValue().c_str()) ;
 	}
 
+	// General initialization
 	// Load the Stegfile
 	Globs.TheCvrStgFile = CvrStgFile::readFile (Args.StgFn.getValue().c_str()) ;
 
@@ -78,6 +74,16 @@ void Cracker::crack ()
 
 	// init the attempts counter
 	attempts = 0 ;
+}
+
+Cracker::~Cracker ()
+{
+	// Might have to add a destructor, as this class will be manhandling threads
+	// And can be killed by an impatient user at any time
+}
+	
+void Cracker::crack ()
+{
 
 	// Load the wordlist into memory
 	std::string line;
@@ -99,23 +105,32 @@ void Cracker::crack ()
 	// TODO; The above loop pushes the entire wordlist into RAM. The alternative would be to push items in batches.
 	// This does mean that we'd lock/unlock a lot
 
-	// Initialize n threads
+	// Initialize threads
 	std::vector<std::thread> ThreadPool ;
 	stopped = false ;
+	success = false ;
 	unsigned int threads = Args.Threads.getValue() ;
+	bool metricsEnabled = Args.Verbosity.getValue() != QUIET ;
 
+	// Add a thread to keep track of metrics
+	if (metricsEnabled) {
+		ThreadPool.push_back(std::thread([this] {metrics(); })) ;
+	}
+
+	// Add n worker threads
 	for (unsigned int i = 0; i < threads; i++) {
 		ThreadPool.push_back(std::thread([this, i] {consume(i); })) ;
 	}
 
-	// Add a thread to keep track of metrics
-	if (Args.Verbosity.getValue() != QUIET) {
-		ThreadPool.push_back(std::thread([this] {metrics(); })) ;
-		threads += 1 ;
+	// Join all worker threads
+	for (unsigned int i = 0; i < threads; i++) {
+		ThreadPool.back().join() ;
+		ThreadPool.pop_back() ;
 	}
 
-	// Join all threads
-	for (unsigned int i = 0; i < threads; i++) {
+	// Set stopped flag and terminate the metrics thread
+	stopped = true ;
+	if (metricsEnabled) {
 		ThreadPool.back().join() ;
 		ThreadPool.pop_back() ;
 	}
@@ -124,7 +139,7 @@ void Cracker::crack ()
 	printf("\n");
 
 	// If we didn't find a passphrase, print a message
-	if (!stopped) {
+	if (!success) {
 		printf("[!] Could not find a valid passphrase.\n") ;
 	} else {
 		// Re-extract the data with the confirmed passphrase.
@@ -140,33 +155,32 @@ void Cracker::metrics ()
 	while (!stopped)
 	{
 		std::this_thread::sleep_for(std::chrono::milliseconds(10)) ; 
-		// This will be slightly incorrect, as we're not locking attempts
-		float percentage = 100.0f * ((float) attempts / (float) wordlistLength) ;
-		unsigned int q = attempts ;
-		printf("\r[ %u / %u ]  (%.2f%%)                 ",q , wordlistLength, percentage) ;
+		unsigned int a = attempts ;
+		float percentage = 100.0f * ((float) a / (float) wordlistLength) ;
+		printf("\r[ %u / %u ]  (%.2f%%)                 ",a , wordlistLength, percentage) ;
 	}
 }
 
 // Take jobs and crack 'em
-void Cracker::consume (int id)
+void Cracker::consume (int threadID)
 {
-	// Another thread found the passphrase
 	// TODO, we exit on empty queue as well, because we're loading the entire queue in one go
 	// This won't work with batching
-	while (!stopped && !WorkQueues[id].empty())
+	while (!stopped && !WorkQueues[threadID].empty())
 	{
 		std::string passphraseCandidate;
 		// Pop an item from the queue
-		passphraseCandidate = WorkQueues[id].front() ;
-		WorkQueues[id].pop() ;
+		passphraseCandidate = WorkQueues[threadID].front() ;
+		WorkQueues[threadID].pop() ;
 		// Add to the perf metric
 		attempts += 1 ;
 
 		// Try extracting with this passphrase
 		if (tryPassphrase(passphraseCandidate))
 		{
-			// Tell the other threads that we have stopped
+			// Tell the other threads that they should stop
 			stopped = true ;
+			success = true ;
 			foundPassphrase = passphraseCandidate;
 		}
 	}
@@ -261,6 +275,9 @@ void Cracker::extract (std::string passphrase)
 
 	std::string origFn = emb->getFileName() ;
 	std::string outFn = Utils::stripDir(Globs.TheCvrStgFile->getName()) + ".out" ;
+	if (Args.ExtFn.is_set()) {
+		outFn = Args.ExtFn.getValue() ;
+	}
 
 	if (origFn != "") {
 		printf("[i] Original filename: \"%s\"\n", origFn.c_str()) ;

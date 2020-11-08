@@ -51,6 +51,7 @@ class Cracker {
 	void consume (int) ;
 	void metrics () ;
 	std::ifstream wordlist ;
+	bool success ;
 	bool stopped ;
 	std::string foundPassphrase ;
 	unsigned int wordlistLength = 0 ;

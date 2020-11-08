@@ -236,8 +236,8 @@ bool Arguments::parse_ExtFn (ArgIt& curarg)
 	bool found = false ;
 
 	if (*curarg == "-xf" || *curarg == "--extractfile") {
-		if (Command.getValue() != EXTRACT) {
-			throw ArgError (_("the argument \"%s\" can only be used with the \"%s\" command."), curarg->c_str(), "extract") ;
+		if (Command.getValue() != EXTRACT && Command.getValue() != CRACK) {
+			throw ArgError (_("the argument \"%s\" can only be used with the \"%s\" and \"%s\" commands."), curarg->c_str(), "extract", "crack") ;
 		}
 
 		if (ExtFn.is_set()) {

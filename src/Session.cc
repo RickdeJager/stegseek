@@ -266,6 +266,7 @@ void Session::printHelp ()
 		"Cracking options:\n"
 		" -sf, --stegofile        select stego file\n"
 		" -wl, --wordlist         select the wordlist file\n"
+		" -xf, --extractfile      select file name for extracted data\n"
 		" -t, --threads           set the number of threads. Defaults to the number of cores.\n"
 		" -v, --verbose           display detailed information\n"
 		" -q, --quiet             skip performance metrics (slightly increases performance)\n"
