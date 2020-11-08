@@ -33,7 +33,7 @@ printf 'Bogus\n%.0s' {1..1000000} > wordlist.tmp
 # Try cracking without the correct password in the wordlist
 echo " [1/2] correct password not present..."
 echo "       allowed to run for 2 seconds"
-SHOULD_FAIL=$(timout 2s $STEGSEEK --crack -sf $DATADIR/sun.jpg -wl wordlist.tmp)
+SHOULD_FAIL=$(timeout 2s $STEGSEEK --crack -sf $DATADIR/sun.jpg -wl wordlist.tmp)
 echo $SHOULD_FAIL
 
 if [[ $SHOULD_FAIL =~ $OKMSG ]]; then
