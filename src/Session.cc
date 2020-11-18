@@ -28,6 +28,7 @@
 #include "EmbData.h"
 #include "Embedder.h"
 #include "Cracker.h"
+#include "SeedCracker.h"
 #include "Extractor.h"
 #include "CvrStgFile.h"
 #include "MCryptPP.h"
@@ -107,6 +108,12 @@ void Session::run ()
 			printVersion() ;
 			Cracker cr ;
 			cr.crack() ;
+		break ; }
+
+		case SEED_CRACK: {
+			printVersion() ;
+			SeedCracker scr ;
+			scr.crack() ;
 		break ; }
 
 		case INFO: {

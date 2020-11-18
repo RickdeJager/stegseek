@@ -138,6 +138,11 @@ void Arguments::parse_Command (ArgIt& curarg)
 		setDefaults () ;
 		++curarg ;
 	}
+	else if (*curarg == "seed" || *curarg == "--seed") {
+		Command.setValue (SEED_CRACK) ;
+		setDefaults () ;
+		++curarg ;
+	}
 	else if (*curarg == "info" || *curarg == "--info") {
 		Command.setValue (INFO) ;
 		setDefaults() ;
@@ -298,7 +303,8 @@ bool Arguments::parse_StgFn (ArgIt& curarg)
 	bool found = false ;
 
 	if (*curarg == "-sf" || *curarg == "--stegofile") {
-		if (Command.getValue() != EMBED && Command.getValue() != EXTRACT && Command.getValue() != CRACK) {
+		if (Command.getValue() != EMBED && Command.getValue() != EXTRACT \
+			&& Command.getValue() != CRACK && Command.getValue() != SEED_CRACK) {
 			throw ArgError (_("the argument \"%s\" can only be used with the \"%s\", \"%s\", and \"%s\" commands."), curarg->c_str(), "embed", "extract", "crack") ;
 		}
 

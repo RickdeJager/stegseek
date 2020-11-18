@@ -1,5 +1,5 @@
 dnl Process this file with autoconf to produce a configure script.
-AC_INIT(stegseek, 0.3)
+AC_INIT(stegseek, 0.3-DEVEL)
 AC_CONFIG_SRCDIR(src/main.cc)
 AC_CANONICAL_SYSTEM
 AM_INIT_AUTOMAKE([foreign])
