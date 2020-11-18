@@ -93,6 +93,12 @@ void Selector::calculate (UWORD32 m)
 		UWORD32 k = j + PRandom->getValue(Maximum - j) ;
 
 		UWORD32 i = 0 ;
+		// First we check whether this random number k has been seen before.
+		// In case of such a collision, we use 'j' as our "random" k instead.
+		//
+		// I think the original idea is that j can't collide with k, because k \in (j, max],
+		// However, k is actually \in [j, max]. It's still very unlikely to collide, so ¯\_(ツ)_/¯
+		//
 		if (idxX (k, j, &i)) { // there exists i < j with X[i] = k
 			// use Y[i] instead of k
 			setX (j, Y[i]) ;
@@ -122,6 +128,12 @@ void Selector::calculate (UWORD32 m)
 	}
 }
 
+// This function tries to find an index in X, such that X[index] = v.
+// The index must be in the range [0..m]
+//
+// It is mainly used to check for collisions with previously generated random numbers
+//
+// Random number, Index j, Pointer to i
 bool Selector::idxX (UWORD32 v, UWORD32 m, UWORD32* p) const
 {
 	bool retval = false ;
