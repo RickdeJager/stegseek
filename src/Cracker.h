@@ -33,6 +33,7 @@
 #include <queue>
 #include <atomic>
 #include <chrono>
+#include <set>
 
 #include "Selector.h"
 

@@ -26,6 +26,7 @@
 #include "common.h"
 #include "Cracker.h"
 #include "EmbData.h"
+#include "MHashPP.h"
 #include "Selector.h"
 #include "Extractor.h"
 #include "CvrStgFile.h"
@@ -188,8 +189,19 @@ void Cracker::consume (int threadID)
 
 bool Cracker::verifyMagic (std::string Passphrase)
 {
-	// Create a selector
-	Selector sel (numSamples, Passphrase) ;
+	// Create a buf to keep track of rng collisions
+	UWORD32 rngBuf[24*samplesPerVertex + 1] ;
+	rngBuf[0] = 0 ;
+
+	// Create a random number generator
+	MHASH td = mhash_init(MHASH_MD5);
+	mhash(td, Passphrase.data(), Passphrase.size() ) ;
+
+	UWORD32 hash[4] ;
+	mhash_deinit (td, hash) ;
+	for (unsigned int i = 0 ; i < 4 ; i++) {
+		rngBuf[0] ^= hash[i] ;
+	}
 
 	// Magic, "shm" in binary LE
 	const int magics[24] = {1, 0, 1, 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 1, 0, 1, 1, 0, 0, 1, 1, 1, 0} ;
@@ -204,7 +216,20 @@ bool Cracker::verifyMagic (std::string Passphrase)
 	unsigned long sv_idx = 0;
 	for (unsigned long i = 0 ; i < embvaluesRequestedMagic ; i++) {
 		for (unsigned int j = 0 ; j < samplesPerVertex ; j++, sv_idx++) {
-			ev = (ev + Globs.TheCvrStgFile->getEmbeddedValue (sel[sv_idx])) % EmbValueModulus ;
+			// Calc next random number
+			rngBuf[sv_idx+1] = (UWORD32) (rngBuf[sv_idx]*1367208549 + 1) ;
+			// Check for RNG collisions. Should be fairly rare as numSample gets larger
+			for (unsigned long i = 0; i <= sv_idx; i++) {
+				if (rngBuf[i] == rngBuf[sv_idx+1]) {
+					// In case we find an rng collision, just pretend the magic check was succesful.
+					// The stricter steghide extractor will double check our work
+					//
+					// This case is rare
+					return true;
+				}
+			}
+			const UWORD32 valIdx = sv_idx + (((double) rngBuf[sv_idx+1] / (double) 4294967296.0) * ((double) (numSamples-sv_idx))) ;
+			ev = (ev + Globs.TheCvrStgFile->getEmbeddedValue (valIdx)) % EmbValueModulus;
 		}
 		if (ev != magics[i]) {
 			return false ;
