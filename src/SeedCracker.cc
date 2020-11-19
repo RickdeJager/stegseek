@@ -187,7 +187,7 @@ bool SeedCracker::verifyMagic (UWORD32 seed)
 	for (unsigned long i = 0 ; i < requestedValues ; i++) {
 		for (unsigned int j = 0 ; j < samplesPerVertex ; j++, sv_idx++) {
 			// Calc next random number
-			rngBuf[sv_idx+1] = (UWORD32) (rngBuf[sv_idx]*1367208549 + 1) ;
+			rngBuf[sv_idx+1] = rngBuf[sv_idx] * 1367208549 + 1 ;
 			// Check for RNG collisions. Should be fairly rare as numSample gets larger
 			for (unsigned long k = 0; k <= sv_idx; k++) {
 				if (rngBuf[k] == rngBuf[sv_idx+1]) {
@@ -195,10 +195,12 @@ bool SeedCracker::verifyMagic (UWORD32 seed)
 					// The stricter steghide extractor will double check our work
 					//
 					// This case is rare
-					return true;
+					// TODO; Implement fallback
+					puts("RNG collision") ;
+					return false ;
 				}
 			}
-			const UWORD32 valIdx = sv_idx + (((double) rngBuf[sv_idx+1] / (double) 4294967296.0) * ((double) (numSamples-sv_idx))) ;
+			const UWORD32 valIdx = sv_idx + (double) (numSamples-sv_idx) * ( (double) rngBuf[sv_idx+1] / (double) 4294967296.0 ) ;
 			ev = (ev + Globs.TheCvrStgFile->getEmbeddedValue (valIdx)) % EmbValueModulus;
 		}
 		if ( i < 25 && ev != magics[i]) {
@@ -223,10 +225,10 @@ bool SeedCracker::verifyMagic (UWORD32 seed)
 				return false ;
 			}
 		}
-		ev = 0;
+		ev = 0 ;
 	}
-	printf("\nPlain size: %u bytes\n", plainSize / 8) ;
+	printf("\nPlain size: %u bytes (compressed)\n", plainSize / 8) ;
 	printf("Enc Mode: %u (%s)\nEnc Algo: %u (%s)\n", encMode, EncryptionMode::translate(EncryptionMode::IRep(encMode)).c_str(),
 													 encAlg, EncryptionAlgorithm::translate(EncryptionAlgorithm::IRep(encAlg)).c_str()) ;
-	return true;
+	return true ;
 }
