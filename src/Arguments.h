@@ -119,10 +119,24 @@ class Arguments {
 	void parse_Command (ArgIt& curarg) ;
 
 	/**
+	 * Parse arguments based on their positions.
+	 * Will fully ignore any argument starting with -
+	 **/ 
+	void parse_Positional (std::vector<std::string>) ;
+
+	/**
+	 * Parse arguments starting with a -
+	 **/
+	std::vector<std::string> parse_Arguments (ArgIt& curarg) ;
+
+	/**
 	 * test if curarg points to an emb filename argument and if yes: parse it
 	 * \return true iff one or more arguments have been parsed
 	 **/
 	bool parse_EmbFn (ArgIt& curarg) ;
+
+	bool parse_Generic_String (ArgIt& curarg, std::vector<COMMAND> compatibleCommands, ArgString* destArg) ;
+	bool parse_Generic_Bool (ArgIt& curarg, std::vector<COMMAND> compatibleCommands, ArgBool* destArg, bool ifMatch) ;
 
 	bool parse_ExtFn (ArgIt& curarg) ;
 	bool parse_CvrFn (ArgIt& curarg) ;

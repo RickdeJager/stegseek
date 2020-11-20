@@ -63,31 +63,16 @@ void Arguments::parse ()
 		return ;
 	}
 
+	// Otherwise, we start by looking for a command.
+	// A command must start with two dashes.
+	
 	ArgIt curarg = TheArguments.begin() ;
 
 	parse_Command (curarg) ;
+	setDefaults ();
 
-	// parse rest of arguments
-	while (curarg != TheArguments.end()) {
-		if (parse_EmbFn(curarg)) continue ;
-		if (parse_ExtFn(curarg)) continue ;
-		if (parse_CvrFn(curarg)) continue ;
-		if (parse_StgFn(curarg)) continue ;
-		if (parse_WordlistFn(curarg)) continue ;
-		if (parse_Passphrase(curarg)) continue ;
-		if (parse_Checksum(curarg)) continue ;
-		if (parse_Compression(curarg)) continue ;
-		if (parse_EmbedEmbFn(curarg)) continue ;
-		if (parse_Encryption(curarg)) continue ;
-		if (parse_Radius(curarg)) continue ;
-		if (parse_Goal(curarg)) continue ;
-		if (parse_Force(curarg)) continue ;
-		if (parse_Threading(curarg)) continue ;
-		if (parse_Verbosity(curarg)) continue ;
-		if (parse_Debug(curarg)) continue ; // TODO - rename Debug -> Undocumented
-
-		throw ArgError (_("unknown argument \"%s\"."), curarg->c_str()) ;
-	}
+	std::vector<std::string> leftOvers = parse_Arguments (curarg) ;
+	parse_Positional (leftOvers) ;
 
 	// (command-specific) argument post-processing 
 	if (Command.getValue() == EMBED) {
@@ -121,242 +106,222 @@ void Arguments::parse ()
 
 void Arguments::parse_Command (ArgIt& curarg)
 {
-	CommandString = *curarg ;
+	std::string CommandString = *curarg ;
 
-	if (*curarg == "embed" || *curarg == "--embed") {
-		Command.setValue (EMBED) ;
-		setDefaults () ;
-		++curarg ;
-	}
-	else if (*curarg == "extract" || *curarg == "--extract") {
-		Command.setValue (EXTRACT) ;
-		setDefaults () ;
-		++curarg ;
-	}
-	else if (*curarg == "crack" || *curarg == "--crack") {
+	// If no mode is set, assume cracking mode
+	if (CommandString.length() < 2 || CommandString.substr(0, 2) != "--") {
 		Command.setValue (CRACK) ;
-		setDefaults () ;
-		++curarg ;
+		// Return without pushing curarg forwards
+		return ;
 	}
-	else if (*curarg == "seed" || *curarg == "--seed") {
+	else if (CommandString == "--crack") {
+		Command.setValue (EMBED) ;
+	} 
+	else if (CommandString == "--embed") {
+		Command.setValue (EMBED) ;
+	} 
+	else if (CommandString == "--extract") {
+		Command.setValue (EXTRACT) ;
+	}
+	else if (CommandString == "--seed") {
 		Command.setValue (SEED_CRACK) ;
-		setDefaults () ;
-		++curarg ;
 	}
-	else if (*curarg == "info" || *curarg == "--info") {
+	else if (CommandString == "--info") {
 		Command.setValue (INFO) ;
-		setDefaults() ;
-
-		++curarg ;
-
-		if (curarg == TheArguments.end()) {
-			throw ArgError (_("you have to suppy a filename to the \"%s\" command."), CommandString.c_str()) ;
-		}
-		else {
-			parse_Passphrase (curarg) ; // try: maybe -p is first argument
-
-			if (*curarg == "-") {
-				CvrFn.setValue ("") ;
-			}
-			else {
-				CvrFn.setValue (*curarg) ;
-			}
-			++curarg ;
-
-			if (curarg != TheArguments.end()) {
-				parse_Passphrase (curarg) ;
-			}
-		}
 	}
-	else if (*curarg == "encinfo" || *curarg == "--encinfo") {
+	else if (CommandString == "--encinfo") {
 		Command.setValue (ENCINFO) ;
-		if (TheArguments.size() > 1) {
-			throw ArgError (_("you cannot use arguments with the \"%s\" command."), CommandString.c_str()) ;
-		}
-		++curarg ;
 	}
-	else if (*curarg == "version" || *curarg == "--version") {
+	else if (CommandString ==  "--version") {
 		Command.setValue (SHOWVERSION) ;
-		++curarg ;
 	}
-	else if (*curarg == "license" || *curarg == "--license") {
+	else if (CommandString == "--license") {
 		Command.setValue (SHOWLICENSE) ;
-		if (TheArguments.size() > 1) {
-			throw ArgError (_("you cannot use arguments with the \"%s\" command."), CommandString.c_str()) ;
-		}
-		++curarg ;
 	}
-	else if (*curarg == "help" || *curarg == "--help") {
+	else if (CommandString == "--help") {
 		Command.setValue (SHOWHELP) ;
-		++curarg ;
 	}
-#ifdef DEBUG
-	else if (*curarg == "printfreqs" || *curarg == "--printfreqs") {
-		Command.setValue (PRINTFREQS) ;
-		std::list<std::string> flist ;
-		while ((++curarg) != TheArguments.end()) {
-			flist.push_back (*curarg) ;
-		}
-		FileList.setValue (flist) ;
-	}
-#endif
 	else {
 		throw ArgError (_("unknown command \"%s\"."), CommandString.c_str()) ;
 	}
+	curarg++ ;
 }
 
-bool Arguments::parse_EmbFn (ArgIt& curarg)
+void Arguments::parse_Positional (std::vector<std::string> positionalArgs)
 {
-	bool found = false ;
+	// Decide what to do with the arguments, based on the command
+	switch (Command.getValue())
+	{
+	case CRACK:
+		{
+			ArgString* posPtr[]{&StgFn, &WordlistFn} ;
+			for (int i = 0; i < 2 && i < positionalArgs.size(); i++) {
+				if (! posPtr[i]->is_set())
+					posPtr[i]->setValue(positionalArgs[i]) ;
+			}
+		}
+		break;
+	case SEED_CRACK:
+		if (positionalArgs.size() > 0 && ! StgFn.is_set()) {
+			StgFn.setValue(positionalArgs[0]) ;
+		}
+		break;
+	case EMBED:
+		{
+			// Embed this in that and output there
+			ArgString* posPtr[]{&EmbFn, &CvrFn, &StgFn} ;
+			for (int i = 0; i < 3 && i < positionalArgs.size(); i++) {
+				if (! posPtr[i]->is_set())
+					posPtr[i]->setValue(positionalArgs[i]) ;
+			}
+		}
+		break;
+	case EXTRACT:
+		{
+			// Extract this file into that file
+			ArgString* posPtr[]{&StgFn, &ExtFn} ;
+			for (int i = 0; i < 2 && i < positionalArgs.size(); i++) {
+				if (! posPtr[i]->is_set())
+					posPtr[i]->setValue(positionalArgs[i]) ;
+			}
+		}
+		break;
+	case INFO:
+		if (positionalArgs.size() > 0 && ! StgFn.is_set()) {
+			StgFn.setValue(positionalArgs[0]) ;
+		}
+	
+	default:
+		break;
+	}
+}
 
-	if (*curarg == "-ef" || *curarg == "--embedfile") {
-		if (Command.getValue() != EMBED) {
-			throw ArgError (_("the argument \"%s\" can only be used with the \"%s\" command."), curarg->c_str(), "embed") ;
+std::vector<std::string> Arguments::parse_Arguments (ArgIt& curarg)
+{
+	// Anything that isn't a dashed argument (-v, -wl bla.txt, etc..)
+	// is added to this vector
+	std::vector<std::string> leftOvers ;
+	while (curarg != TheArguments.end()) {
+		if (curarg->c_str()[0] != '-') {
+			leftOvers.push_back(*curarg) ;
+			curarg++ ;
+			continue ;
 		}
 
-		if (EmbFn.is_set()) {
-			throw ArgError (_("the \"%s\" argument can be used only once."), (curarg - 1)->c_str()) ;
+		// Anything starting with "-" is a flag, and should be parsed.
+		if (*curarg == "-ef" || *curarg == "--embedfile") {
+			std::vector<COMMAND> compatible{EMBED} ;
+			parse_Generic_String(curarg, compatible, &EmbFn) ;
+		} else if (*curarg == "-xf" || *curarg == "--extractfile") {
+			std::vector<COMMAND> compatible{EXTRACT, CRACK} ;
+			parse_Generic_String(curarg, compatible, &ExtFn) ;
+		} else if (*curarg == "-cf" || *curarg == "--coverfile") {
+			std::vector<COMMAND> compatible{EMBED} ;
+			parse_Generic_String(curarg, compatible, &CvrFn) ;
+		} else if (*curarg == "-sf" || *curarg == "--stegofile") {
+			std::vector<COMMAND> compatible{EMBED, EXTRACT, CRACK, SEED_CRACK} ;
+			parse_Generic_String(curarg, compatible, &StgFn) ;
+		} else if (*curarg == "-wl" || *curarg == "--wordlist") {
+			std::vector<COMMAND> compatible{CRACK} ;
+			parse_Generic_String(curarg, compatible, &WordlistFn) ;
+		} else if (*curarg == "-p" || *curarg == "--passphrase") {
+			std::vector<COMMAND> compatible{} ;
+			parse_Generic_String(curarg, compatible, &Passphrase) ;
+		}else if (*curarg == "-K" || *curarg == "--nochecksum") {
+			std::vector<COMMAND> compatible{} ;
+			parse_Generic_Bool(curarg, compatible, &Checksum, false) ;
+		} else if (*curarg == "-N" || *curarg == "--dontembedname") {
+			std::vector<COMMAND> compatible{EMBED} ;
+			parse_Generic_Bool(curarg, compatible, &EmbedEmbFn, false) ;
+		} else if (*curarg == "-f" || *curarg == "--force") {
+			std::vector<COMMAND> compatible{EMBED, EXTRACT, CRACK, SEED_CRACK} ;
+			parse_Generic_Bool(curarg, compatible, &EmbedEmbFn, true) ;
 		}
-
-		if (++curarg == TheArguments.end()) {
-			throw ArgError (_("the \"%s\" argument must be followed by the embed file name."), (curarg - 1)->c_str()) ;
-		}
-
-		if (*curarg == "-") {
-			EmbFn.setValue ("") ;
-		}
+		// If there is no generic parser available, use a specific parser
 		else {
-			EmbFn.setValue (*curarg) ;
-		}
+			if (parse_Compression(curarg)) continue ;
+			if (parse_Encryption(curarg)) continue ;
+			if (parse_Radius(curarg)) continue ;
+			if (parse_Goal(curarg)) continue ;
+			if (parse_Threading(curarg)) continue ;
+			if (parse_Verbosity(curarg)) continue ;
+			if (parse_Debug(curarg)) continue ; // TODO - rename Debug -> Undocumented
 
-		found = true ;
-		curarg++ ;
+			throw ArgError (_("unknown argument \"%s\"."), curarg->c_str()) ;
+		}
+	}
+	return leftOvers ;
+}
+
+bool Arguments::parse_Generic_String (ArgIt& curarg, std::vector<COMMAND> compatibleCommands, ArgString* destArg)
+{
+	std::string argflag = *curarg ;
+
+	// A generic string argument requires two values, -someflag, somevalue
+	if (++curarg == TheArguments.end()) {
+		throw ArgError (_("the argument \"%s\" requires a value"), argflag.c_str()) ;
+	}
+	bool compatible = false ;
+	// If the compatibleCommands is empty, this argument doesn't have conflicts.
+	if (compatibleCommands.empty()) {
+		compatible = true ;
+	} 
+	// Otherwise, we check whether the current command is specified as compatible
+	else {
+		for (COMMAND c : compatibleCommands) {
+			if (Command.getValue() == c) {
+				compatible = true ;
+			}
+		}
+	}
+	if (! compatible) {
+		throw ArgError (_("the argument \"%s\" is not compatible with the current command"), argflag.c_str()) ;
+	}
+	if (destArg->is_set()) {
+		throw ArgError (_("the \"%s\" argument can be used only once."), argflag.c_str()) ;
 	}
 
-	return found ;
-}
-
-bool Arguments::parse_ExtFn (ArgIt& curarg)
-{
-	bool found = false ;
-
-	if (*curarg == "-xf" || *curarg == "--extractfile") {
-		if (Command.getValue() != EXTRACT && Command.getValue() != CRACK) {
-			throw ArgError (_("the argument \"%s\" can only be used with the \"%s\" and \"%s\" commands."), curarg->c_str(), "extract", "crack") ;
-		}
-
-		if (ExtFn.is_set()) {
-			throw ArgError (_("the \"%s\" argument can be used only once."), (curarg - 1)->c_str()) ;
-		}
-
-		if (++curarg == TheArguments.end()) {
-			throw ArgError (_("the \"%s\" argument must be followed by the extract file name."), (curarg - 1)->c_str()) ;
-		}
-
-		if (*curarg == "-") {
-			ExtFn.setValue ("") ;
-		}
-		else {
-			ExtFn.setValue (*curarg) ;
-		}
-
-		found = true ;
-		curarg++ ;
+	// Translate - to the empty string, to indicate stdin/stdout
+	if (*curarg == "-") {
+		EmbFn.setValue ("") ;
+	} else {
+		destArg->setValue (curarg->c_str()) ;
 	}
-
-	return found ;
+	curarg++ ;
+	return true ;
 }
 
-bool Arguments::parse_CvrFn (ArgIt& curarg)
+bool Arguments::parse_Generic_Bool (ArgIt& curarg, std::vector<COMMAND> compatibleCommands, ArgBool* destArg, bool ifMatch)
 {
-	bool found = false ;
+	std::string argflag = *curarg ;
 
-	if (*curarg == "-cf" || *curarg == "--coverfile") {
-		if (Command.getValue() != EMBED) {
-			throw ArgError (_("the argument \"%s\" can only be used with the \"%s\" command."), curarg->c_str(), "embed") ;
+	bool compatible = false ;
+	// If the compatibleCommands is empty, this argument doesn't have conflicts.
+	if (compatibleCommands.empty()) {
+		compatible = true ;
+	} 
+	// Otherwise, we check whether the current command is specified as compatible
+	else {
+		for (COMMAND c : compatibleCommands) {
+			if (Command.getValue() == c) {
+				compatible = true ;
+			}
 		}
-
-		if (CvrFn.is_set()) {
-			throw ArgError (_("the cover file name argument can be used only once.")) ;
-		}
-
-		if (++curarg == TheArguments.end()) {
-			throw ArgError (_("the \"%s\" argument must be followed by the cover file name."), (curarg - 1)->c_str()) ;
-		}
-
-		if (*curarg == "-") {
-			CvrFn.setValue ("") ;
-		}
-		else {
-			CvrFn.setValue (*curarg) ;
-		}
-
-		found = true ;
-		curarg++ ;
 	}
-
-	return found ;
+	if (! compatible) {
+		throw ArgError (_("the argument \"%s\" is not compatible with the current command"), argflag.c_str()) ;
+	}
+	if (destArg->is_set()) {
+		throw ArgError (_("the \"%s\" argument can be used only once."), argflag.c_str()) ;
+	}
+	else {
+		destArg->setValue (ifMatch) ;
+	}
+	curarg++ ;
+	return true ;
 }
 
-bool Arguments::parse_StgFn (ArgIt& curarg)
-{
-	bool found = false ;
 
-	if (*curarg == "-sf" || *curarg == "--stegofile") {
-		if (Command.getValue() != EMBED && Command.getValue() != EXTRACT \
-			&& Command.getValue() != CRACK && Command.getValue() != SEED_CRACK) {
-			throw ArgError (_("the argument \"%s\" can only be used with the \"%s\", \"%s\", and \"%s\" commands."), curarg->c_str(), "embed", "extract", "crack") ;
-		}
-
-		if (StgFn.is_set()) {
-			throw ArgError (_("the \"%s\" argument can be used only once."), (curarg - 1)->c_str()) ;
-		}
-
-		if (++curarg == TheArguments.end()) {
-			throw ArgError (_("the \"%s\" argument must be followed by the stego file name."), (curarg - 1)->c_str()) ;
-		}
-
-		if (*curarg == "-") {
-			StgFn.setValue ("") ;
-		}
-		else {
-			StgFn.setValue (*curarg) ;
-		}
-
-		found = true ;
-		curarg++ ;
-	}
-
-	return found ;
-}
-
-bool Arguments::parse_WordlistFn (ArgIt& curarg)
-{
-	bool found = false ;
-
-	if (*curarg == "-wl" || *curarg == "--wordlist") {
-		if (Command.getValue() != CRACK) {
-			throw ArgError (_("the argument \"%s\" can only be used with the \"%s\" command."), curarg->c_str(), "crack") ;
-		}
-
-		if (WordlistFn.is_set()) {
-			throw ArgError (_("the \"%s\" argument can be used only once."), (curarg - 1)->c_str()) ;
-		}
-
-		if (++curarg == TheArguments.end()) {
-			throw ArgError (_("the \"%s\" argument must be followed by the wordlist file name."), (curarg - 1)->c_str()) ;
-		}
-
-		else {
-			WordlistFn.setValue (*curarg) ;
-		}
-
-		found = true ;
-		curarg++ ;
-	}
-
-	return found ;
-}
 
 bool Arguments::parse_Threading (ArgIt& curarg)
 {
@@ -388,51 +353,6 @@ bool Arguments::parse_Threading (ArgIt& curarg)
 			}
 		}
 	}
-	return found ;
-}
-
-
-bool Arguments::parse_Passphrase (ArgIt& curarg)
-{
-	bool found = false ;
-
-	if (*curarg == "-p" || *curarg == "--passphrase") {
-		if (Passphrase.is_set()) {
-			throw ArgError (_("the passphrase argument can be used only once.")) ;
-		}
-
-		if (++curarg == TheArguments.end()) {
-			throw ArgError (_("the \"%s\" argument must be followed by the passphrase."), (curarg - 1)->c_str());
-		}
-
-		Passphrase.setValue (*curarg) ;
-
-		found = true ;
-		curarg++ ;
-	}
-
-	return found ;
-}
-
-bool Arguments::parse_Checksum (ArgIt& curarg)
-{
-	bool found = false ;
-
-	if (*curarg == "-K" || *curarg == "--nochecksum") {
-		if (Command.getValue() != EMBED) {
-			throw ArgError (_("the argument \"%s\" can only be used with the \"%s\" command."), curarg->c_str(), "embed") ;
-		}
-
-		if (Checksum.is_set()) {
-			throw ArgError (_("the checksum argument can be used only once.")) ;
-		}
-
-		Checksum.setValue (false) ;
-
-		found = true ;
-		curarg++ ;
-	}
-
 	return found ;
 }
 
@@ -473,28 +393,6 @@ bool Arguments::parse_Compression (ArgIt& curarg)
 		}
 
 		Compression.setValue (NoCompression) ;
-
-		found = true ;
-		curarg++ ;
-	}
-
-	return found ;
-}
-
-bool Arguments::parse_EmbedEmbFn (ArgIt& curarg)
-{
-	bool found = false ;
-
-	if (*curarg == "-N" || *curarg == "--dontembedname") {
-		if (Command.getValue() != EMBED) {
-			throw ArgError (_("the argument \"%s\" can only be used with the \"embed\" command."), curarg->c_str()) ;
-		}
-
-		if (EmbedEmbFn.is_set()) {
-			throw ArgError (_("the file name embedding argument can be used only once.")) ;
-		}
-
-		EmbedEmbFn.setValue (false) ;
 
 		found = true ;
 		curarg++ ;
@@ -656,28 +554,6 @@ bool Arguments::parse_Goal (ArgIt& curarg)
 			throw ArgError (_("the \"%s\" argument must be followed by a number between 0 and 100."), (curarg - 1)->c_str()) ;
 		}
 		Goal.setValue (tmp) ;
-
-		found = true ;
-		curarg++ ;
-	}
-
-	return found ;
-}
-
-bool Arguments::parse_Force (ArgIt& curarg)
-{
-	bool found = false ;
-
-	if (*curarg == "-f" || *curarg == "--force") {
-		if (Command.getValue() != EMBED && Command.getValue() != EXTRACT) {
-			throw ArgError (_("the argument \"%s\" can only be used with the \"%s\" and \"%s\" commands."), curarg->c_str(), "embed", "extract") ;
-		}
-
-		if (Force.is_set()) {
-			throw ArgError (_("the force argument can be used only once.")) ;
-		}
-
-		Force.setValue (true);
 
 		found = true ;
 		curarg++ ;
@@ -877,7 +753,7 @@ void Arguments::setDefaults (void)
 	ExtFn.setValue ("", false) ;
 	Passphrase.setValue ("", false) ;
 	StgFn.setValue ("", false) ;
-	WordlistFn.setValue ("", false) ;
+	WordlistFn.setValue ("/usr/share/wordlists/rockyou.txt", false) ;
 	Threads.setValue (std::thread::hardware_concurrency(), false) ;
 	Force.setValue (Default_Force, false) ;
 	Verbosity.setValue (Default_Verbosity, false) ;
