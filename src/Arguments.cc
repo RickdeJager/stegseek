@@ -115,7 +115,7 @@ void Arguments::parse_Command (ArgIt& curarg)
 		return ;
 	}
 	else if (CommandString == "--crack") {
-		Command.setValue (EMBED) ;
+		Command.setValue (CRACK) ;
 	} 
 	else if (CommandString == "--embed") {
 		Command.setValue (EMBED) ;
