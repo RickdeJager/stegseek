@@ -27,8 +27,8 @@ use constant TAB => "    " ;
 use constant STEGHIDE => "../../src/stegseek" ;
 use constant DEFAULTSTGFN => "stgfile" ;
 use constant DEFAULTEXTFN => "extfile" ;
-use constant DEFEMBARGBASE => (command => "embed", f => "", "q" => "", p => "\"a passphrase\"", sf => DEFAULTSTGFN) ;
-use constant DEFEXTARGBASE => (command => "extract", f => "", "q" => "", p => "\"a passphrase\"", sf => DEFAULTSTGFN, xf => DEFAULTEXTFN) ;
+use constant DEFEMBARGBASE => (command => "--embed", f => "", "q" => "", p => "\"a passphrase\"", sf => DEFAULTSTGFN) ;
+use constant DEFEXTARGBASE => (command => "--extract", f => "", "q" => "", p => "\"a passphrase\"", sf => DEFAULTSTGFN, xf => DEFAULTEXTFN) ;
 
 #
 # parse arguments for a st_*.pl script

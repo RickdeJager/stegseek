@@ -36,7 +36,7 @@ unittests_LDADD = \
 ../../src/MHashPP.o ../../src/Matching.o ../../src/MatchingAlgorithm.o \
 ../../src/ProgressOutput.o ../../src/PseudoRandomSource.o ../../src/RGBTriple.o \
 ../../src/RandomSource.o ../../src/SampleValue.o ../../src/SampleValueAdjacencyList.o \
-../../src/Selector.o ../../src/Session.o ../../src/SteghideError.o ../../src/Terminal.o \
+../../src/Selector.o ../../src/SeedCracker.o ../../src/Session.o ../../src/SteghideError.o ../../src/Terminal.o \
 ../../src/Utils.o ../../src/Vertex.o ../../src/WavChunk.o ../../src/WavChunkHeader.o \
 ../../src/WavChunkUnused.o ../../src/WavFile.o ../../src/WavFormatChunk.o \
 ../../src/WavPCMSampleValue.o ../../src/error.o ../../src/msg.o ../../src/SMDConstructionHeuristic.o
