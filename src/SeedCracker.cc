@@ -109,9 +109,6 @@ void SeedCracker::crack ()
 		ThreadPool.pop_back() ;
 	}
 
-	// Print a newline to clear metrics/debug messages
-	printf("\n");
-
 	// If we didn't find a passphrase, print a message
 	if (!success) {
 		printf("[!] Could not find a valid seed.\n") ;
@@ -120,6 +117,7 @@ void SeedCracker::crack ()
 		// This does mean we're throwing away one valid "embdata" object, but
 		// that's not a bad trade-off to be able to use steghide's structure
 		printf("[i] --> Found seed: \"%x\"\n\n", foundSeed) ;
+		finish() ;
 	}
 }
 
@@ -137,8 +135,6 @@ void SeedCracker::metrics ()
 // Take jobs and crack 'em
 void SeedCracker::consume (unsigned int i, unsigned int stop)
 {
-	// TODO, we exit on empty queue as well, because we're loading the entire queue in one go
-	// This won't work with batching
 	while (!stopped && i < stop)
 	{
 		// Add to the perf metric
@@ -180,7 +176,7 @@ bool SeedCracker::verifyMagic (UWORD32 seed)
 		return false ;
 	}
 	EmbValue ev = 0 ;
-	unsigned int encAlg = 0 ;
+	unsigned int encAlgo = 0 ;
 	unsigned int encMode = 0 ;
 	unsigned int plainSize = 0 ;
 	unsigned long sv_idx = 0;
@@ -208,8 +204,8 @@ bool SeedCracker::verifyMagic (UWORD32 seed)
 		}
 		// Get enc algo
 		if (25 <= i && i < 30) {
-			encAlg ^= ev << (i - 25) ;
-			if (encAlg > 23) {
+			encAlgo ^= ev << (i - 25) ;
+			if (encAlgo > 23) {
 				return false ;
 			}
 		}
@@ -227,8 +223,46 @@ bool SeedCracker::verifyMagic (UWORD32 seed)
 		}
 		ev = 0 ;
 	}
-	printf("\nPlain size: %u bytes (compressed)\n", plainSize / 8) ;
-	printf("Enc Mode: %u (%s)\nEnc Algo: %u (%s)\n", encMode, EncryptionMode::translate(EncryptionMode::IRep(encMode)).c_str(),
-													 encAlg, EncryptionAlgorithm::translate(EncryptionAlgorithm::IRep(encAlg)).c_str()) ;
+	fencMode = encMode ;
+	fencAlgo = encAlgo ;
+	fplainSize = plainSize ;
 	return true ;
+}
+
+// TODO; fix code duplication w/ cracker.cc
+void SeedCracker::extract(UWORD32 seed)
+{
+	Extractor ext (Args.StgFn.getValue(), seed) ;
+	EmbData* emb = ext.extract() ;
+
+	std::string origFn = emb->getFileName() ;
+	std::string outFn = Utils::stripDir(Globs.TheCvrStgFile->getName()) + ".out" ;
+	if (Args.ExtFn.is_set()) {
+		outFn = Args.ExtFn.getValue() ;
+	}
+
+	if (origFn != "") {
+		printf("[i] Original filename: \"%s\"\n", origFn.c_str()) ;
+	}
+	printf("[i] Extracting to \"%s\"\n", outFn.c_str()) ;
+	BinaryIO io (outFn, BinaryIO::WRITE) ;
+	std::vector<BYTE> data = emb->getData() ;
+	for (std::vector<BYTE>::iterator i = data.begin() ; i != data.end() ; i++) {
+		io.write8 (*i) ;
+	}
+	io.close() ;
+	delete(emb) ;
+
+}
+void SeedCracker::finish()
+{
+	printf("\nPlain size: %u bytes (compressed)\n", fplainSize / 8) ;
+	printf("Enc Mode: %u (%s)\nEnc Algo: %u (%s)\n", fencMode, EncryptionMode::translate(EncryptionMode::IRep(fencMode)).c_str(),
+													 fencAlgo, EncryptionAlgorithm::translate(EncryptionAlgorithm::IRep(fencAlgo)).c_str()) ;
+
+	// Data is not encrypted :D
+	// Let's dump it to a file
+	if (fencAlgo == 0) {
+		extract(foundSeed) ;
+	}
 }

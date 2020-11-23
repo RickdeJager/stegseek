@@ -50,9 +50,15 @@ class SeedCracker {
 	bool verifyMagic (UWORD32) ;
 	void consume (unsigned int, unsigned int) ;
 	void metrics () ;
+	void extract (UWORD32) ;
+	void finish () ;
 	bool success ;
 	bool stopped ;
+	// TODO; create a result struct instead
 	UWORD32 foundSeed ;
+	unsigned int fencMode = 0;
+	unsigned int fencAlgo = 0;
+	unsigned int fplainSize = 0;
 	std::atomic<unsigned int> attempts ;
 	std::vector<std::queue<UWORD32>> WorkQueues ;
 

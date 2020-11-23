@@ -42,6 +42,15 @@ Selector::Selector (UWORD32 m, std::string pp)
 	Y.reserve(12) ;
 }
 
+Selector::Selector (UWORD32 m, UWORD32 seed)
+	: Maximum(m), NumInArray(0)
+{
+	PRandom = new PseudoRandomSource (seed) ;
+	// Reserve some space to prevent many resizes
+	X.reserve(12) ;
+	Y.reserve(12) ;
+}
+
 Selector::Selector (UWORD32 m)
 {
 	Maximum = m ;

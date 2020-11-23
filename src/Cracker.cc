@@ -86,6 +86,8 @@ Cracker::~Cracker ()
 void Cracker::crack ()
 {
 
+	unsigned int threads = Args.Threads.getValue() ;
+
 	// Load the wordlist into memory
 	std::string line;
 	// init queues
@@ -99,7 +101,7 @@ void Cracker::crack ()
 		while (std::getline(wordlist, line)) {
 			WorkQueues[i].push(line) ;
 			wordlistLength += 1 ;
-			i = (i + 1) % Args.Threads.getValue() ;
+			i = (i + 1) % threads ;
 		}
 	}
 	printf("[i] Read the entire wordlist (%u words), starting cracker\n", wordlistLength) ;
@@ -110,7 +112,6 @@ void Cracker::crack ()
 	std::vector<std::thread> ThreadPool ;
 	stopped = false ;
 	success = false ;
-	unsigned int threads = Args.Threads.getValue() ;
 	bool metricsEnabled = Args.Verbosity.getValue() != QUIET ;
 
 	// Add a thread to keep track of metrics

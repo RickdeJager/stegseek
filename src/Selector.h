@@ -43,6 +43,13 @@ class Selector {
 	Selector (UWORD32 m, std::string pp) ;
 
 	/**
+	 * construct a Selector object
+	 * \param m the range - operator[] will return numbers in {0,...,m-1}
+	 * \param seed the seed to use for the selector
+	 **/
+	Selector (UWORD32 m, UWORD32 seed) ;
+
+	/**
 	 * construct a Selector object that resembles the identity permutation with range m
 	 * \param m the range - (*this)[i] will be i for i in {0,...,m-1}
 	 **/

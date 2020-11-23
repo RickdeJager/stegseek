@@ -46,8 +46,17 @@ EmbData* Extractor::extract ()
 	VerboseMessage vd (_(" done")) ;
 	vd.printMessage() ;
 
-	EmbData* embdata = new EmbData (EmbData::EXTRACT, Passphrase) ;
-	Selector sel (Globs.TheCvrStgFile->getNumSamples(), Passphrase) ;
+	Selector* sel ;
+	EmbData* embdata ;
+	if (Passphrase.empty()) {
+		// The password is only used for encrypted data.
+		// We can still extract plain text using only a seed value
+		embdata = new EmbData (EmbData::EXTRACT, "") ;
+		sel = new Selector (Globs.TheCvrStgFile->getNumSamples(), seed) ;
+	} else {
+		embdata = new EmbData (EmbData::EXTRACT, Passphrase) ;
+		sel = new Selector (Globs.TheCvrStgFile->getNumSamples(), Passphrase) ;
+	}
 
 	VerboseMessage ve (_("extracting data...")) ;
 	ve.setNewline (false) ;
@@ -69,12 +78,14 @@ EmbData* Extractor::extract ()
 		for (unsigned long i = 0 ; i < embvaluesrequested ; i++) {
 			EmbValue ev = 0 ;
 			for (unsigned int j = 0 ; j < Globs.TheCvrStgFile->getSamplesPerVertex() ; j++, sv_idx++) {
-				ev = (ev + Globs.TheCvrStgFile->getEmbeddedValue (sel[sv_idx])) % Globs.TheCvrStgFile->getEmbValueModulus() ;
+				ev = (ev + Globs.TheCvrStgFile->getEmbeddedValue ((*sel)[sv_idx])) % Globs.TheCvrStgFile->getEmbValueModulus() ;
 			}
 			bits.appendNAry(ev) ;
 		}
 		embdata->addBits (bits) ;
 	}
+
+	delete(sel) ;
 
 	vd.printMessage() ;
 

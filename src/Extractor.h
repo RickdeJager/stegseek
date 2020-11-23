@@ -28,11 +28,15 @@ class Extractor {
 	Extractor (std::string stgfn, std::string pp)
 		: StegoFileName(stgfn), Passphrase(pp) {} ;
 
+	Extractor (std::string stgfn, UWORD32 seed)
+		: StegoFileName(stgfn), seed(seed) {} ;
+
 	EmbData* extract (void) ;
 
 	private:
 	std::string StegoFileName ;
 	std::string Passphrase ;
+	UWORD32 seed ;
 } ;
 
 #endif // ndef SH_EXTRACTOR_H
