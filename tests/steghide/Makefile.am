@@ -33,7 +33,7 @@ unittests_LDADD = \
 ../../src/EmbData.o ../../src/Embedder.o ../../src/EncryptionAlgorithm.o \
 ../../src/EncryptionMode.o ../../src/Extractor.o ../../src/Graph.o ../../src/JpegFile.o \
 ../../src/JpegSampleValue.o ../../src/MCryptPP.o ../../src/MHashKeyGen.o \
-../../src/MHashPP.o ../../src/Matching.o ../../src/MatchingAlgorithm.o \
+../../src/MHashPP.o ../../src/Matching.o ../../src/MatchingAlgorithm.o ../../src/PasswordCracker.o\
 ../../src/ProgressOutput.o ../../src/PseudoRandomSource.o ../../src/RGBTriple.o \
 ../../src/RandomSource.o ../../src/SampleValue.o ../../src/SampleValueAdjacencyList.o \
 ../../src/Selector.o ../../src/SeedCracker.o ../../src/Session.o ../../src/SteghideError.o ../../src/Terminal.o \

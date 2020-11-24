@@ -20,13 +20,11 @@
  *
  */
 
+#include "SeedCracker.h"
 
 #include "error.h"
-#include "Utils.h"
 #include "common.h"
-#include "SeedCracker.h"
 #include "EmbData.h"
-#include "MHashPP.h"
 #include "Selector.h"
 #include "Extractor.h"
 #include "CvrStgFile.h"
@@ -34,60 +32,16 @@
 #include "EncryptionAlgorithm.h"
 
 
-SeedCracker::SeedCracker ()
-{
-	VerboseMessage vrs ;
-
-	// get stegfile
-	vrs.setMessage (_("[v] Using stegfile file \"%s\"."), Args.StgFn.getValue().c_str()) ;
-	vrs.printMessage() ;
-
-	// get output file
-	if (Args.ExtFn.is_set()) {
-		vrs.setMessage (_("[v] Using output file \"%s\"."), Args.ExtFn.getValue().c_str()) ;
-		vrs.printMessage() ;
-	}
-
-	// Print threading info
-	vrs.setMessage (_("[v] Running on %d threads."), Args.Threads.getValue()) ;
-	vrs.printMessage() ;
-
-	vrs.setMessage ("") ;
-	vrs.printMessage() ;
-
-	// General initialization
-	// Load the Stegfile
-	Globs.TheCvrStgFile = CvrStgFile::readFile (Args.StgFn.getValue().c_str()) ;
-
-	// Look up these parameters once, to prevent function calls for each passphrase attempt
-	bitsperembvalue = AUtils::log2_ceil<unsigned short> (Globs.TheCvrStgFile->getEmbValueModulus()) ;
-	numSamples = Globs.TheCvrStgFile->getNumSamples() ;
-	samplesPerVertex = Globs.TheCvrStgFile->getSamplesPerVertex() ;
-	EmbValueModulus = Globs.TheCvrStgFile->getEmbValueModulus();
-	embvaluesRequestedMagic = AUtils::div_roundup<unsigned long> (EmbData::NBitsMagic, bitsperembvalue) ;
-
-	// init the attempts counter
-	attempts = 0 ;
-}
-
-SeedCracker::~SeedCracker ()
-{
-	// Might have to add a destructor, as this class will be manhandling threads
-	// And can be killed by an impatient user at any time
-}
-	
 void SeedCracker::crack ()
 {
 	// Initialize threads
 	std::vector<std::thread> ThreadPool ;
-	stopped = false ;
-	success = false ;
 	unsigned int threads = Args.Threads.getValue() ;
 	bool metricsEnabled = Args.Verbosity.getValue() != QUIET ;
 
 	// Add a thread to keep track of metrics
 	if (metricsEnabled) {
-		ThreadPool.push_back(std::thread([this] {metrics(); })) ;
+		ThreadPool.push_back(std::thread([this] {metrics(UWORD32_MAX); })) ;
 	}
 
 	// Add n worker threads
@@ -113,22 +67,10 @@ void SeedCracker::crack ()
 	if (!success) {
 		printf("[!] Could not find a valid seed.\n") ;
 	} else {
-		// Re-extract the data with the confirmed passphrase.
-		// This does mean we're throwing away one valid "embdata" object, but
-		// that's not a bad trade-off to be able to use steghide's structure
-		printf("[i] --> Found seed: \"%x\"\n\n", foundSeed) ;
+		// Output the found seed. At the moment this isn't particularly
+		// useful to then end-user, it's nice for debugging
+		printf("[i] --> Found seed: \"%x\"\n\n", foundResult.seed) ;
 		finish() ;
-	}
-}
-
-void SeedCracker::metrics ()
-{
-	while (!stopped)
-	{
-		std::this_thread::sleep_for(std::chrono::milliseconds(10)) ; 
-		unsigned int a = attempts ;
-		float percentage = 100.0f * ((float) a / (float) UWORD32_MAX) ;
-		printf("\r[ %u / %u ]  (%.2f%%)                 ",a , UWORD32_MAX, percentage) ;
 	}
 }
 
@@ -141,128 +83,84 @@ void SeedCracker::consume (unsigned int i, unsigned int stop)
 		attempts += 1 ;
 
 		// Try extracting with this passphrase
-		if (verifyMagic(i))
+		if (trySeed(i))
 		{
 			// Tell the other threads that they should stop
 			stopped = true ;
 			success = true ;
-			foundSeed = i;
 		}
 		i++ ;
 	}
 }
 
-bool SeedCracker::verifyMagic (UWORD32 seed)
+bool SeedCracker::trySeed (UWORD32 seed)
 {
-	const int magics[24 + 1] = {
-		// Magic, "shm" in binary LE
-		1, 0, 1, 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 1, 0, 1, 1, 0, 0, 1, 1, 1, 0,
-		// Code version, must be zero
-		0,
-	} ;
-
-	// Magic + code version + enc mode + enc algo + plain size
-	const unsigned int requestedValues = (24+1+3+5+32);
-
-	// Create a buf to keep track of rng collisions
-	UWORD32 rngBuf[requestedValues*samplesPerVertex + 1] ;
-	rngBuf[0] = seed ;
-
-	if (requestedValues*samplesPerVertex >= numSamples) {
-		// TODO; In theory, we should error out if we hit this.
-		// However, I've seen this error happen randomly on valid input files
-		// so I'm leaving it as a "return false" for now
-		//throw CorruptDataError (_("the stego data from standard input is too short to contain the embedded data.")) ;
+	// First verify the magic
+	if (!verifyMagic(seed)) {
 		return false ;
 	}
+	// Next, try to interpret the remaining bits
+	// enc mode + enc algo + plain size
+	const unsigned int requestedValues = 3 + 5 + 32 ;
+
+	// Create a "proper" selector object
+	Selector sel (numSamples, seed) ;
 	EmbValue ev = 0 ;
 	unsigned int encAlgo = 0 ;
 	unsigned int encMode = 0 ;
 	unsigned int plainSize = 0 ;
-	unsigned long sv_idx = 0;
+	// We've already verified the magic (25 bits), so we can skip them
+	unsigned long sv_idx = 25*samplesPerVertex ;
 	for (unsigned long i = 0 ; i < requestedValues ; i++) {
 		for (unsigned int j = 0 ; j < samplesPerVertex ; j++, sv_idx++) {
-			// Calc next random number
-			rngBuf[sv_idx+1] = rngBuf[sv_idx] * 1367208549 + 1 ;
-			// Check for RNG collisions. Should be fairly rare as numSample gets larger
-			for (unsigned long k = 0; k <= sv_idx; k++) {
-				if (rngBuf[k] == rngBuf[sv_idx+1]) {
-					// In case we find an rng collision, just pretend the magic check was succesful.
-					// The stricter steghide extractor will double check our work
-					//
-					// This case is rare
-					// TODO; Implement fallback
-					puts("RNG collision") ;
-					return false ;
-				}
-			}
-			const UWORD32 valIdx = sv_idx + (double) (numSamples-sv_idx) * ( (double) rngBuf[sv_idx+1] / (double) 4294967296.0 ) ;
-			ev = (ev + Globs.TheCvrStgFile->getEmbeddedValue (valIdx)) % EmbValueModulus;
-		}
-		if ( i < 25 && ev != magics[i]) {
-			return false ;
+			ev = (ev + Globs.TheCvrStgFile->getEmbeddedValue (sel[sv_idx])) % EmbValueModulus;
 		}
 		// Get enc algo
-		if (25 <= i && i < 30) {
-			encAlgo ^= ev << (i - 25) ;
+		if (i < 5) {
+			encAlgo ^= ev << i ;
 			if (encAlgo > 23) {
 				return false ;
 			}
 		}
 		// Get enc mode
-		if (30 <= i && i < 33) {
-			encMode ^= ev << (i - 30) ;
+		if (5 <= i && i < 8) {
+			encMode ^= ev << (i - 5) ;
 		}
 		// get Plain size
-		if (33 <= i && i < 65) {
-			plainSize ^= ev << (i - 33) ;
-			if (plainSize * samplesPerVertex > numSamples - requestedValues*samplesPerVertex ) {
-				// This plain size wouldn't fit, so it must be wrong
+		if (8 <= i && i < 40) {
+			plainSize ^= ev << (i - 8) ;
+			if (plainSize * samplesPerVertex > numSamples - (25 + requestedValues) * samplesPerVertex ) {
+				// This plain size wouldn't fit, so the seed must be wrong.
 				return false ;
 			}
 		}
 		ev = 0 ;
 	}
-	fencMode = encMode ;
-	fencAlgo = encAlgo ;
-	fplainSize = plainSize ;
+
+	// Save the values on success
+	foundResult = Result {
+		seed,
+		plainSize,
+		encAlgo,
+		encMode,
+	} ;
 	return true ;
 }
 
-// TODO; fix code duplication w/ cracker.cc
-void SeedCracker::extract(UWORD32 seed)
-{
-	Extractor ext (Args.StgFn.getValue(), seed) ;
-	EmbData* emb = ext.extract() ;
-
-	std::string origFn = emb->getFileName() ;
-	std::string outFn = Utils::stripDir(Globs.TheCvrStgFile->getName()) + ".out" ;
-	if (Args.ExtFn.is_set()) {
-		outFn = Args.ExtFn.getValue() ;
-	}
-
-	if (origFn != "") {
-		printf("[i] Original filename: \"%s\"\n", origFn.c_str()) ;
-	}
-	printf("[i] Extracting to \"%s\"\n", outFn.c_str()) ;
-	BinaryIO io (outFn, BinaryIO::WRITE) ;
-	std::vector<BYTE> data = emb->getData() ;
-	for (std::vector<BYTE>::iterator i = data.begin() ; i != data.end() ; i++) {
-		io.write8 (*i) ;
-	}
-	io.close() ;
-	delete(emb) ;
-
-}
 void SeedCracker::finish()
 {
-	printf("\nPlain size: %u bytes (compressed)\n", fplainSize / 8) ;
-	printf("Enc Mode: %u (%s)\nEnc Algo: %u (%s)\n", fencMode, EncryptionMode::translate(EncryptionMode::IRep(fencMode)).c_str(),
-													 fencAlgo, EncryptionAlgorithm::translate(EncryptionAlgorithm::IRep(fencAlgo)).c_str()) ;
+	printf("\nPlain size: %u bytes (compressed)\n", foundResult.plainSize / 8) ;
+	printf("Encryption Algorithm: %u (%s)\n", foundResult.encAlgo, 
+			EncryptionAlgorithm::translate(EncryptionAlgorithm::IRep(foundResult.encAlgo)).c_str()) ;
+	printf("Encryption Mode: %u (%s)\n", foundResult.encMode, 
+			EncryptionMode::translate(EncryptionMode::IRep(foundResult.encMode)).c_str()) ;
 
 	// Data is not encrypted :D
 	// Let's dump it to a file
-	if (fencAlgo == 0) {
-		extract(foundSeed) ;
+	if (foundResult.encAlgo == 0) {
+		Extractor ext (Args.StgFn.getValue(), foundResult.seed) ;
+		EmbData* emb = ext.extract() ;
+		extract(emb) ;
+		delete(emb) ;
 	}
 }

@@ -38,8 +38,8 @@ Selector::Selector (UWORD32 m, std::string pp)
 	PRandom = new PseudoRandomSource (seed) ;
 
 	// Reserve some space to prevent many resizes
-	X.reserve(12) ;
-	Y.reserve(12) ;
+	X.reserve(99) ;
+	Y.reserve(99) ;
 }
 
 Selector::Selector (UWORD32 m, UWORD32 seed)
@@ -47,8 +47,8 @@ Selector::Selector (UWORD32 m, UWORD32 seed)
 {
 	PRandom = new PseudoRandomSource (seed) ;
 	// Reserve some space to prevent many resizes
-	X.reserve(12) ;
-	Y.reserve(12) ;
+	X.reserve(99) ;
+	Y.reserve(99) ;
 }
 
 Selector::Selector (UWORD32 m)

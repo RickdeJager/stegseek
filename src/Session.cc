@@ -27,7 +27,7 @@
 
 #include "EmbData.h"
 #include "Embedder.h"
-#include "Cracker.h"
+#include "PasswordCracker.h"
 #include "SeedCracker.h"
 #include "Extractor.h"
 #include "CvrStgFile.h"
@@ -106,8 +106,8 @@ void Session::run ()
 
 		case CRACK: {
 			printVersion() ;
-			Cracker cr ;
-			cr.crack() ;
+			PasswordCracker pcr ;
+			pcr.crack() ;
 		break ; }
 
 		case SEED_CRACK: {
@@ -267,14 +267,25 @@ void Session::printHelp ()
 	printVersion() ;
 	printf (_("\n"
 		"=== Stegseek Help ===\n"
-		"To crack a stegofile;\n"
-		"stegseek --crack -sf [stegofile.jpg] -wl [wordlist.txt]\n"
+		"To crack a stegofile:\n"
+		"stegseek [stegofile.jpg] [wordlist.txt]\n"
 		"\n"
-		"Cracking options:\n"
+		"Commands:\n"
+		" --crack                 Crack a stego file using a wordlist. This is the default mode.\n"
+		" --seed                  Crack a stego file by attempting all embedding patterns.\n"
+		"                         This mode can be used to detect a file encoded by steghide.\n"
+		"                         In case the file was encoded without encryption, this mode will\n"
+		"                         even recover the embedded file.\n"
+		"Positional arguments:\n"
+		" --crack [stegofile.jpg] [wordlist.txt] [output.txt]\n"
+		" --seed  [stegofile.jpg] [output.txt]\n"
+		"\n"
+		"Keyword arguments:\n"
 		" -sf, --stegofile        select stego file\n"
 		" -wl, --wordlist         select the wordlist file\n"
 		" -xf, --extractfile      select file name for extracted data\n"
 		" -t, --threads           set the number of threads. Defaults to the number of cores.\n"
+		" -f, --force             overwrite existing files\n"
 		" -v, --verbose           display detailed information\n"
 		" -q, --quiet             skip performance metrics (slightly increases performance)\n"
 		"\n"
@@ -301,14 +312,13 @@ void Session::printSteghideHelp ()
 {
 	printf (_("\n"
 		"the first argument must be one of the following:\n"
-		" embed, --embed          embed data\n"
-		" extract, --extract      extract data\n"
-		" info, --info            display information about a cover- or stego-file\n"
-		"   info <filename>       display information about <filename>\n"
-		" encinfo, --encinfo      display a list of supported encryption algorithms\n"
-		" version, --version      display version information\n"
-		" license, --license      display steghide's license\n"
-		" help, --help            display this usage information\n"
+		" --embed                 embed data\n"
+		" --extract               extract data\n"
+		" --info                  display information about a cover- or stego-file\n"
+		" --encinfo               display a list of supported encryption algorithms\n"
+		" --version               display version information\n"
+		" --license               display steghide's license\n"
+		" --help                  display this usage information\n"
 
 		"\nembedding options:\n"
 		" -ef, --embedfile        select file to be embedded\n"

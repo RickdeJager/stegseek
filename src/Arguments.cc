@@ -18,6 +18,7 @@
  *
  * 2020:
  *  - Modified to include stegseek arguments
+ *  - Overhauled parser to allow for positional arguments
  */
 
 #include <cstring>
@@ -235,7 +236,7 @@ std::vector<std::string> Arguments::parse_Arguments (ArgIt& curarg)
 			parse_Generic_Bool(curarg, compatible, &EmbedEmbFn, false) ;
 		} else if (*curarg == "-f" || *curarg == "--force") {
 			std::vector<COMMAND> compatible{EMBED, EXTRACT, CRACK, SEED_CRACK} ;
-			parse_Generic_Bool(curarg, compatible, &EmbedEmbFn, true) ;
+			parse_Generic_Bool(curarg, compatible, &Force, true) ;
 		}
 		// If there is no generic parser available, use a specific parser
 		else {

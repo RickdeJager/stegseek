@@ -16,6 +16,9 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
  *
+ * 2020:
+ *  Removed original authors email from the assert message, as I've made
+ * a significant amount of changes and bugs in stegseek might not be his fault.
  */
 
 #include <cstring>
@@ -25,9 +28,9 @@ void AssertionFailed::printMessage () const
 {
 	printf ("\n") ;
 	SteghideError::printMessage() ;
-	printf (_("This means that you have found a bug. Please let me (shetzl@chello.at)\n"
-		"know this if you have a way to reproduce the error.\n"
-		"Steghide has to exit now. Sorry.\n")) ;
+	printf (_("This means that you have found a bug. Please open an issue on Github\n"
+		"if you have a way to reproduce the error.\n"
+		"Stegseek has to exit now. Sorry.\n")) ;
 }
 
 char* AssertionFailed::stripDir (const char *fn)

@@ -8,7 +8,7 @@ BmpSampleValue.h ColorPalette.h WKSConstructionHeuristic.h Cracker.h CvrStgFile.
 CvrStgObject.h Edge.h EdgeIterator.h DMDConstructionHeuristic.h \
 EmbData.h Embedder.h EncryptionAlgorithm.h EncryptionMode.h Extractor.h \
 Globals.h Graph.h JpegFile.h JpegSampleValue.h MCryptPP.h MHashKeyGen.h \
-MHashPP.h Matching.h MatchingAlgorithm.h ProgressOutput.h PseudoRandomSource.h \
+MHashPP.h Matching.h MatchingAlgorithm.h PasswordCracker.h ProgressOutput.h PseudoRandomSource.h \
 RGBTriple.h RandomSource.h SampleOccurence.h SampleValue.h \
 SampleValueAdjacencyList.h Selector.h Session.h SeedCracker.h SteghideError.h Terminal.h \
 Utils.h Vertex.h WavChunk.h WavChunkHeader.h WavChunkUnused.h WavFile.h \
@@ -22,7 +22,7 @@ WKSConstructionHeuristic.cc DMDConstructionHeuristic.cc Cracker.cc CvrStgFile.cc
 Edge.cc EdgeIterator.cc EmbData.cc Embedder.cc \
 EncryptionAlgorithm.cc EncryptionMode.cc Extractor.cc Graph.cc JpegFile.cc \
 JpegSampleValue.cc MCryptPP.cc MHashKeyGen.cc MHashPP.cc Matching.cc \
-MatchingAlgorithm.cc ProgressOutput.cc PseudoRandomSource.cc RGBTriple.cc \
+MatchingAlgorithm.cc PasswordCracker.cc ProgressOutput.cc PseudoRandomSource.cc RGBTriple.cc \
 RandomSource.cc SampleValue.cc SampleValueAdjacencyList.cc Selector.cc \
 Session.cc SeedCracker.cc SteghideError.cc Terminal.cc Utils.cc Vertex.cc WavChunk.cc \
 WavChunkHeader.cc WavChunkUnused.cc WavFile.cc WavFormatChunk.cc \

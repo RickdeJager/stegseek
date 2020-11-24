@@ -21,8 +21,8 @@
  *
  */
 
-#ifndef SH_SEEDCRACKER_H
-#define SH_SEEDCRACKER_H
+#ifndef SH_PASSWORDCRACKER_H
+#define SH_PASSWORDCRACKER_H
 
 #include <thread>
 #include <mutex>
@@ -38,25 +38,20 @@
 #include "Cracker.h"
 #include "Selector.h"
 
-struct Result {
-	unsigned int seed ;
-	unsigned int plainSize ;
-	unsigned int encAlgo ;
-	unsigned int encMode ;
-};
-
-class SeedCracker : Cracker{
+class PasswordCracker : Cracker {
 	public:
-	SeedCracker () {};
+	PasswordCracker (void) ;
 
-	void crack () ;
+	void crack (void) ;
 
 	private:
-	bool trySeed (UWORD32) ;
-	void consume (unsigned int, unsigned int) ;
-	void finish () ;
-	Result foundResult ;
+	bool tryPassphrase (std::string) ;
+	void extract (std::string) ;
+	void consume (int) ;
+	std::ifstream wordlist ;
+	std::string foundPassphrase ;
+	unsigned int wordlistLength = 0 ;
+	std::vector<std::queue<std::string>> WorkQueues ;
 } ;
 
-
-#endif // ndef SH_SEEDCRACKER_H
+#endif // ndef SH_PASSWORDCRACKER_H

@@ -35,30 +35,28 @@
 #include <chrono>
 #include <set>
 
+#include "EmbData.h"
 #include "Selector.h"
 
 class Cracker {
 	public:
-	Cracker (void) ;
+	Cracker () ;
 
-	~Cracker (void) ;
+	void crack () ;
 
-	void crack (void) ;
-
-	private:
-	bool tryPassphrase (std::string) ;
+	protected:
+	void metrics (UWORD32 max) ;
+	void finish () ;
+	void extract (EmbData*) ;
 	bool verifyMagic (std::string) ;
-	void extract (std::string) ;
-	void consume (int) ;
-	void metrics () ;
-	std::ifstream wordlist ;
+	bool verifyMagic (UWORD32) ;
+
+	// Control variables
 	bool success ;
 	bool stopped ;
-	std::string foundPassphrase ;
-	unsigned int wordlistLength = 0 ;
 	std::atomic<unsigned int> attempts ;
-	std::vector<std::queue<std::string>> WorkQueues ;
 
+	// File properties
 	unsigned short bitsperembvalue ;
 	unsigned long numSamples ;
 	unsigned short samplesPerVertex ;
