@@ -72,7 +72,9 @@ void Arguments::parse ()
 	parse_Command (curarg) ;
 	setDefaults ();
 
+	// Next, parse all keyword arguments. This returns all unmatched arguments
 	std::vector<std::string> leftOvers = parse_Arguments (curarg) ;
+	// Parse the leftover arguments as positional arguments
 	parse_Positional (leftOvers) ;
 
 	// (command-specific) argument post-processing 
@@ -155,8 +157,8 @@ void Arguments::parse_Positional (std::vector<std::string> positionalArgs)
 	{
 	case CRACK:
 		{
-			ArgString* posPtr[]{&StgFn, &WordlistFn} ;
-			for (int i = 0; i < 2 && i < positionalArgs.size(); i++) {
+			ArgString* posPtr[]{&StgFn, &WordlistFn, &ExtFn} ;
+			for (int i = 0; i < 3 && i < positionalArgs.size(); i++) {
 				if (! posPtr[i]->is_set())
 					posPtr[i]->setValue(positionalArgs[i]) ;
 			}
@@ -203,8 +205,14 @@ std::vector<std::string> Arguments::parse_Arguments (ArgIt& curarg)
 	// is added to this vector
 	std::vector<std::string> leftOvers ;
 	while (curarg != TheArguments.end()) {
-		if (curarg->c_str()[0] != '-') {
-			leftOvers.push_back(*curarg) ;
+		// Match any arguments that aren't of the shape -.*
+		if (curarg->c_str()[0] != '-' || *curarg == "-") {
+			// If the argument is a single '-', translate it to ""
+			if (*curarg == "-") {
+				leftOvers.push_back("") ;
+			} else {
+				leftOvers.push_back(*curarg) ;
+			}
 			curarg++ ;
 			continue ;
 		}
