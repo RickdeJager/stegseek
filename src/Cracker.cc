@@ -62,6 +62,12 @@ Cracker::Cracker ()
 	EmbValueModulus = Globs.TheCvrStgFile->getEmbValueModulus();
 	embvaluesRequestedMagic = AUtils::div_roundup<unsigned long> (EmbData::NBitsMagic, bitsperembvalue) ;
 
+	// Load the embedded values into a "plain" array for faster lookup
+	embeddedValues = new EmbValue[numSamples] ;
+	for (unsigned int i = 0; i < numSamples; i++) {
+		embeddedValues[i] = Globs.TheCvrStgFile->getEmbeddedValue(i) ;
+	}
+
 	// init the attempts counter
 	attempts = 0 ;
 	stopped = false ;
@@ -135,7 +141,7 @@ bool Cracker::verifyMagic (UWORD32 seed)
 				}
 			}
 			const UWORD32 valIdx = sv_idx + (((double) rngBuf[sv_idx+1] / (double) 4294967296.0) * ((double) (numSamples-sv_idx))) ;
-			ev = (ev + Globs.TheCvrStgFile->getEmbeddedValue (valIdx)) % EmbValueModulus;
+			ev = (ev + embeddedValues[valIdx]) % EmbValueModulus;
 		}
 		if (ev != magics[i]) {
 			return false ;

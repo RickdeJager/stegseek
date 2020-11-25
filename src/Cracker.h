@@ -63,6 +63,9 @@ class Cracker {
 	EmbValue EmbValueModulus ;
 	unsigned long embvaluesRequestedMagic ;
 
+	private:
+	EmbValue* embeddedValues ;
+
 } ;
 
 #endif // ndef SH_CRACKER_H
