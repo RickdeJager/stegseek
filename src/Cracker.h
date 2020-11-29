@@ -1,6 +1,6 @@
 /*
  *
- * Stegseek 0.3 - a steghide cracker
+ * Stegseek 0.4 - a steghide cracker
  * Copyright (C) 2020 Rick de Jager
  * 
  * Based on the work of Stefan Hetzl <shetzl@chello.at>
@@ -45,7 +45,7 @@ class Cracker {
 	void crack () ;
 
 	protected:
-	void metrics (UWORD32 max) ;
+	void metrics (unsigned long max) ;
 	void finish () ;
 	void extract (EmbData*) ;
 	bool verifyMagic (std::string) ;
@@ -54,7 +54,7 @@ class Cracker {
 	// Control variables
 	bool success ;
 	bool stopped ;
-	std::atomic<unsigned int> attempts ;
+	std::atomic<unsigned long> attempts ;
 
 	// File properties
 	unsigned short bitsperembvalue ;

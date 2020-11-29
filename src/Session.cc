@@ -157,7 +157,7 @@ void Session::printInfo ()
 		printf (_("data from standard input:\n")) ;
 	}
 	else {
-		printf ("\"%s\":\n", stripDir(Args.CvrFn.getValue()).c_str()) ;
+		printf ("\"%s\":\n", Utils::stripDir(Args.CvrFn.getValue()).c_str()) ;
 	}
 
 	std::list<CvrStgFile::Property> props = file->getProperties() ;
@@ -210,18 +210,6 @@ void Session::printInfo ()
 			printf (_("could not extract any data with that passphrase!\n")) ;
 		}
 	}
-}
-
-std::string Session::stripDir (std::string s) const
-{
-	unsigned int start = 0 ;
-	if ((start = s.find_last_of ("/\\")) == std::string::npos) {
-		start = 0 ;
-	}
-	else {
-		start += 1 ;
-	}
-	return s.substr (start, std::string::npos) ;
 }
 
 void Session::printEncInfo ()
@@ -287,7 +275,7 @@ void Session::printHelp ()
 		" -t, --threads           set the number of threads. Defaults to the number of cores.\n"
 		" -f, --force             overwrite existing files\n"
 		" -v, --verbose           display detailed information\n"
-		" -q, --quiet             skip performance metrics (slightly increases performance)\n"
+		" -q, --quiet             hide performance metrics\n"
 		"\n"
 		)) ;
 	
@@ -356,14 +344,14 @@ void Session::printSteghideHelp ()
 		" -p, --passphrase        specify passphrase\n"
 		"   -p <passphrase>       use <passphrase> to get info about embedded data\n"
 
-		"\nTo embed emb.txt in cvr.jpg: steghide embed -cf cvr.jpg -ef emb.txt\n"
-		"To extract embedded data from stg.jpg: steghide extract -sf stg.jpg\n")) ;
+		"\nTo embed emb.txt in cvr.jpg: stegseek --embed -cf cvr.jpg -ef emb.txt\n"
+		"To extract embedded data from stg.jpg: stegseek --extract -sf stg.jpg\n")) ;
 }
 
 void Session::printLicense ()
 {
  	printf (
-		"Copyright (C) 1999-2003 Stefan Hetzl <shetzl@chello.at>\n\n"
+		"Copyright (C) 2020 Rick de Jager ( https://github.com/rickdejager )\n\n"
 
  		"This program is free software; you can redistribute it and/or\n"
  		"modify it under the terms of the GNU General Public License\n"

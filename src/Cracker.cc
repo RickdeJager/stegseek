@@ -1,5 +1,5 @@
 /*
- * Stegseek 0.3 - a steghide cracker
+ * Stegseek 0.4 - a steghide cracker
  * Copyright (C) 2020 Rick de Jager
  * 
  * Based on the work of Stefan Hetzl <shetzl@chello.at>
@@ -74,13 +74,13 @@ Cracker::Cracker ()
 	success = false ;
 }
 
-void Cracker::metrics (UWORD32 max)
+void Cracker::metrics (unsigned long max)
 {
 	while (!stopped)
 	{
-		unsigned int a = attempts ;
+		unsigned long a = attempts ;
 		float percentage = 100.0f * ((float) a / (float) max) ;
-		printf("\r[ %u / %u ]  (%.2f%%)                 ",a , max, percentage) ;
+		printf("\r[ %lu / %lu ]  (%.2f%%)                 ",a , max, percentage) ;
 		std::this_thread::sleep_for(std::chrono::milliseconds(10)) ; 
 	}
 	// Print a newline before returning
@@ -131,8 +131,8 @@ bool Cracker::verifyMagic (UWORD32 seed)
 			// Calc next random number
 			rngBuf[sv_idx+1] = (UWORD32) (rngBuf[sv_idx]*A + C) ;
 			// Check for RNG collisions. Should be fairly rare as numSample gets larger
-			for (unsigned long i = 0; i <= sv_idx; i++) {
-				if (rngBuf[i] == rngBuf[sv_idx+1]) {
+			for (unsigned long k = 0; k <= sv_idx; k++) {
+				if (rngBuf[k] == rngBuf[sv_idx+1]) {
 					// In case we find an rng collision, just pretend the magic check was succesful.
 					// The stricter steghide extractor will double check our work
 					//
@@ -163,7 +163,11 @@ void Cracker::extract (EmbData* emb)
 	if (origFn != "") {
 		printf("[i] Original filename: \"%s\"\n", origFn.c_str()) ;
 	}
-	printf("[i] Extracting to \"%s\"\n", outFn.c_str()) ;
+	if (outFn != "") {
+		printf("[i] Extracting to \"%s\"\n", outFn.c_str()) ;
+	} else {
+		printf("[i] Extracting to stdout\n") ;
+	}
 	BinaryIO io (outFn, BinaryIO::WRITE) ;
 	std::vector<BYTE> data = emb->getData() ;
 	for (std::vector<BYTE>::iterator i = data.begin() ; i != data.end() ; i++) {

@@ -1,5 +1,5 @@
 /*
- * Stegseek 0.3 - a steghide cracker
+ * Stegseek 0.4 - a steghide cracker
  * Copyright (C) 2020 Rick de Jager
  * 
  * Based on the work of Stefan Hetzl <shetzl@chello.at>
@@ -68,7 +68,7 @@ void PasswordCracker::crack ()
 			i = (i + 1) % threads ;
 		}
 	}
-	printf("[i] Read the entire wordlist (%u words), starting cracker\n", wordlistLength) ;
+	printf("[i] Read the entire wordlist (%lu words), starting cracker\n", wordlistLength) ;
 	// TODO; The above loop pushes the entire wordlist into RAM. The alternative would be to push items in batches.
 	// This does mean that we'd lock/unlock a lot
 

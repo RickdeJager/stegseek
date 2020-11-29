@@ -1,6 +1,6 @@
 /*
  *
- * Stegseek 0.3 - a steghide cracker
+ * Stegseek 0.4 - a steghide cracker
  * Copyright (C) 2020 Rick de Jager
  * 
  * Based on the work of Stefan Hetzl <shetzl@chello.at>
@@ -50,7 +50,7 @@ class PasswordCracker : Cracker {
 	void consume (int) ;
 	std::ifstream wordlist ;
 	std::string foundPassphrase ;
-	unsigned int wordlistLength = 0 ;
+	unsigned long wordlistLength = 0 ;
 	std::vector<std::queue<std::string>> WorkQueues ;
 } ;
 

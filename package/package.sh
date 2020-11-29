@@ -10,8 +10,8 @@
 #
 
 NAME="stegseek"
-VER="0.3"
-REV="2"
+VER="0.4"
+REV="1"
 VERSION="${VER}-${REV}"
 PACKAGE="${NAME}_${VERSION}"
 INSTALL_PATH="${PACKAGE}/usr/local/bin/"
@@ -31,6 +31,3 @@ sed -i "s/<<VERSION>>/${VERSION}/g" "${PACKAGE}/DEBIAN/control"
 
 # Build the package
 dpkg-deb --build ${PACKAGE}
-
-
-
