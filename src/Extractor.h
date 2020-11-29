@@ -26,16 +26,17 @@
 class Extractor {
 	public:
 	Extractor (std::string stgfn, std::string pp)
-		: StegoFileName(stgfn), Passphrase(pp) {} ;
+		: StegoFileName(stgfn), Passphrase(pp), passphraseSet(true) {} ;
 
 	Extractor (std::string stgfn, UWORD32 seed)
-		: StegoFileName(stgfn), seed(seed) {} ;
+		: StegoFileName(stgfn), seed(seed), passphraseSet(false) {} ;
 
 	EmbData* extract (void) ;
 
 	private:
 	std::string StegoFileName ;
 	std::string Passphrase ;
+	bool passphraseSet ;
 	UWORD32 seed ;
 } ;
 

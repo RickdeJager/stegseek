@@ -48,14 +48,16 @@ EmbData* Extractor::extract ()
 
 	Selector* sel ;
 	EmbData* embdata ;
-	if (Passphrase.empty()) {
+
+	// Determine wether we are cracking with or without a passphrase
+	if (passphraseSet) {
+		embdata = new EmbData (EmbData::EXTRACT, Passphrase) ;
+		sel = new Selector (Globs.TheCvrStgFile->getNumSamples(), Passphrase) ;
+	} else {
 		// The password is only used for encrypted data.
 		// We can still extract plain text using only a seed value
 		embdata = new EmbData (EmbData::EXTRACT, "") ;
 		sel = new Selector (Globs.TheCvrStgFile->getNumSamples(), seed) ;
-	} else {
-		embdata = new EmbData (EmbData::EXTRACT, Passphrase) ;
-		sel = new Selector (Globs.TheCvrStgFile->getNumSamples(), Passphrase) ;
 	}
 
 	VerboseMessage ve (_("extracting data...")) ;
