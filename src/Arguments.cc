@@ -111,13 +111,7 @@ void Arguments::parse_Command (ArgIt& curarg)
 {
 	std::string CommandString = *curarg ;
 
-	// If no mode is set, assume cracking mode
-	if (CommandString.length() < 2 || CommandString.substr(0, 2) != "--") {
-		Command.setValue (CRACK) ;
-		// Return without pushing curarg forwards
-		return ;
-	}
-	else if (CommandString == "--crack") {
+	if (CommandString == "--crack") {
 		Command.setValue (CRACK) ;
 	} 
 	else if (CommandString == "--embed") {
@@ -143,9 +137,12 @@ void Arguments::parse_Command (ArgIt& curarg)
 	}
 	else if (CommandString == "--help") {
 		Command.setValue (SHOWHELP) ;
-	}
-	else {
-		throw ArgError (_("unknown command \"%s\"."), CommandString.c_str()) ;
+	} else {
+		// If none of these matched, assume cracking mode
+		Command.setValue (CRACK) ;
+		// Return without pushing curarg forwards (since we didn't 
+		// match anything)
+		return ;
 	}
 	curarg++ ;
 }
@@ -165,8 +162,13 @@ void Arguments::parse_Positional (std::vector<std::string> positionalArgs)
 		}
 		break;
 	case SEED_CRACK:
-		if (positionalArgs.size() > 0 && ! StgFn.is_set()) {
-			StgFn.setValue(positionalArgs[0]) ;
+		{
+			// Extract this file into that file
+			ArgString* posPtr[]{&StgFn, &ExtFn} ;
+			for (int i = 0; i < 2 && i < positionalArgs.size(); i++) {
+				if (! posPtr[i]->is_set())
+					posPtr[i]->setValue(positionalArgs[i]) ;
+			}
 		}
 		break;
 	case EMBED:
@@ -190,8 +192,8 @@ void Arguments::parse_Positional (std::vector<std::string> positionalArgs)
 		}
 		break;
 	case INFO:
-		if (positionalArgs.size() > 0 && ! StgFn.is_set()) {
-			StgFn.setValue(positionalArgs[0]) ;
+		if (positionalArgs.size() > 0 && ! CvrFn.is_set()) {
+			CvrFn.setValue(positionalArgs[0]) ;
 		}
 	
 	default:
@@ -222,7 +224,7 @@ std::vector<std::string> Arguments::parse_Arguments (ArgIt& curarg)
 			std::vector<COMMAND> compatible{EMBED} ;
 			parse_Generic_String(curarg, compatible, &EmbFn) ;
 		} else if (*curarg == "-xf" || *curarg == "--extractfile") {
-			std::vector<COMMAND> compatible{EXTRACT, CRACK} ;
+			std::vector<COMMAND> compatible{EXTRACT, CRACK, SEED_CRACK} ;
 			parse_Generic_String(curarg, compatible, &ExtFn) ;
 		} else if (*curarg == "-cf" || *curarg == "--coverfile") {
 			std::vector<COMMAND> compatible{EMBED} ;
@@ -292,7 +294,7 @@ bool Arguments::parse_Generic_String (ArgIt& curarg, std::vector<COMMAND> compat
 
 	// Translate - to the empty string, to indicate stdin/stdout
 	if (*curarg == "-") {
-		EmbFn.setValue ("") ;
+		destArg->setValue ("") ;
 	} else {
 		destArg->setValue (curarg->c_str()) ;
 	}
@@ -302,8 +304,6 @@ bool Arguments::parse_Generic_String (ArgIt& curarg, std::vector<COMMAND> compat
 
 bool Arguments::parse_Generic_Bool (ArgIt& curarg, std::vector<COMMAND> compatibleCommands, ArgBool* destArg, bool ifMatch)
 {
-	std::string argflag = *curarg ;
-
 	bool compatible = false ;
 	// If the compatibleCommands is empty, this argument doesn't have conflicts.
 	if (compatibleCommands.empty()) {
@@ -318,10 +318,10 @@ bool Arguments::parse_Generic_Bool (ArgIt& curarg, std::vector<COMMAND> compatib
 		}
 	}
 	if (! compatible) {
-		throw ArgError (_("the argument \"%s\" is not compatible with the current command"), argflag.c_str()) ;
+		throw ArgError (_("the argument \"%s\" is not compatible with the current command"), curarg->c_str()) ;
 	}
 	if (destArg->is_set()) {
-		throw ArgError (_("the \"%s\" argument can be used only once."), argflag.c_str()) ;
+		throw ArgError (_("the \"%s\" argument can be used only once."), curarg->c_str()) ;
 	}
 	else {
 		destArg->setValue (ifMatch) ;
@@ -578,8 +578,10 @@ bool Arguments::parse_Verbosity (ArgIt& curarg)
 	if (*curarg == "-q" || *curarg == "--quiet") {
 		found = true ;
 
-		if (Command.getValue() != EMBED && Command.getValue() != EXTRACT && Command.getValue() != CRACK) {
-			throw ArgError (_("the argument \"%s\" can only be used with the \"%s\", \"%s\", and \"%s\" commands."), curarg->c_str(), "embed", "extract", "crack") ;
+		if (Command.getValue() != EMBED && Command.getValue() != EXTRACT 
+			&& Command.getValue() != CRACK && Command.getValue() != SEED_CRACK) {
+			throw ArgError (_("the argument \"%s\" can only be used with the \"%s\", \"%s\", \"%s\", and \"%s\" commands."), 
+								curarg->c_str(), "embed", "extract", "crack", "seed") ;
 		}
 
 		if (Verbosity.is_set()) {
@@ -593,9 +595,9 @@ bool Arguments::parse_Verbosity (ArgIt& curarg)
 		found = true ;
 
 		if (Command.getValue() != EMBED && Command.getValue() != EXTRACT && Command.getValue() != CRACK
-			&& Command.getValue() != SHOWHELP && Command.getValue() != SHOWVERSION) {
-			throw ArgError (_("the argument \"%s\" can only be used with the \"%s\", \"%s\", \"%s\", \"%s\" and \"%s\" commands."), 
-			curarg->c_str(), "embed", "extract", "crack", "version", "help") ;
+			&& Command.getValue() != SEED_CRACK && Command.getValue() != SHOWHELP && Command.getValue() != SHOWVERSION) {
+			throw ArgError (_("the argument \"%s\" can only be used with the \"%s\", \"%s\", \"%s\", \"%s\", \"%s\" and \"%s\" commands."), 
+			curarg->c_str(), "embed", "extract", "crack", "seed", "version", "help") ;
 		}
 
 		if (Verbosity.is_set()) {

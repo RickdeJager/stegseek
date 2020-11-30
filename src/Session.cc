@@ -235,9 +235,9 @@ void Session::printEncInfo ()
 		}
 	}
 #else
-	printf (_("steghide has been compiled without support for encryption.\n"
+	printf (_("stegseek has been compiled without support for encryption.\n"
 		"If you want to encrypt your data before embedding it, use an external encryption\n"
-		"program or install libmcrypt (http://mcrypt.sourceforge.net/) and recompile steghide.\n")) ;
+		"program or install libmcrypt (http://mcrypt.sourceforge.net/) and recompile stegseek.\n")) ;
 #endif
 }
 
@@ -286,7 +286,7 @@ void Session::printHelp ()
 	}
 	else
 	{
-		printf("Use \"stegseek --help -v\" to include steghides help.\n") ;
+		printf("Use \"stegseek --help -v\" to include steghide's help.\n") ;
 	}
 
 }
@@ -305,7 +305,7 @@ void Session::printSteghideHelp ()
 		" --info                  display information about a cover- or stego-file\n"
 		" --encinfo               display a list of supported encryption algorithms\n"
 		" --version               display version information\n"
-		" --license               display steghide's license\n"
+		" --license               display stegseek's license\n"
 		" --help                  display this usage information\n"
 
 		"\nembedding options:\n"
