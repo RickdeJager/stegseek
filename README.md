@@ -4,7 +4,7 @@ Stegseek is a lightning fast steghide cracker, built as a fork of the original s
 
 ## Demo with a randomly picked password
 
-![](./.demo/crack.gif, "PoC || GTFO")
+![](./.demo/crack.gif "PoC || GTFO")
 
 Skip ahead to [Performance](#chart_with_upwards_trend-performance) for some raw numbers.
 
