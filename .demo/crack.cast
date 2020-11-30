@@ -38,3 +38,4 @@
 [7.941752, "o", "[i] Original filename: \"secret.txt\"\r\n[i] Extracting to stdout\r\nThis is a secret message.\r\n- RdJ\r\n"]
 [8.037406, "o", "\r\nreal\t0m1,501s\r\nuser\t0m6,665s\r\nsys\t0m0,144s\r\n"]
 [8.037634, "o", "\u001b[38;5;4m[\u001b[m\u001b(B\u001b[38;5;1m/tmp/steg\u001b[m\u001b(B\u001b[38;5;4m]\u001b[m\u001b(B\u001b[38;5;10m~$\u001b[m\u001b(B "]
+[12.000000, "o", ""]
