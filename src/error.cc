@@ -141,7 +141,7 @@ NotImplementedError::NotImplementedError (const char *msgfmt, ...)
 void NotImplementedError::printMessage () const
 {
 	SteghideError::printMessage() ;
-	printf (_("This feature is not (yet) available. Please let steghides author (shetzl@chello.at) know\n"
+	printf (_("This feature is not (yet) available. Please let steghide's author (shetzl@chello.at) know\n"
 		"that you want to use this functionality to increase the chance that this will\n"
 		"be implemented in the near future.\n")) ;
 }

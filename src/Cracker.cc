@@ -36,12 +36,16 @@ Cracker::Cracker ()
 {
 	VerboseMessage vrs ;
 	// get stegfile
-	vrs.setMessage (_("[v] Using stegfile file \"%s\"."), Args.StgFn.getValue().c_str()) ;
+	vrs.setMessage (_("[v] Using stegofile \"%s\"."), Args.StgFn.getValue().c_str()) ;
 	vrs.printMessage() ;
 
 	// get output file
 	if (Args.ExtFn.is_set()) {
-		vrs.setMessage (_("[v] Using output file \"%s\"."), Args.ExtFn.getValue().c_str()) ;
+		if (Args.ExtFn.getValue() != "") {
+			vrs.setMessage (_("[v] Using output file \"%s\"."), Args.ExtFn.getValue().c_str()) ;
+		} else {
+			vrs.setMessage (_("[v] Using stdout as output.")) ;
+		}
 		vrs.printMessage() ;
 	}
 

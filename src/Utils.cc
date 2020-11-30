@@ -26,7 +26,7 @@ std::string Utils::formatHRSize (unsigned long size)
 {
 	float s = (float) size ;
 
-	std::string unit = "Byte" ;
+	std::string unit = "Byte(s)" ;
 	if (s > 1024.0) {
 		s /= 1024.0 ;
 		unit = "KB" ;

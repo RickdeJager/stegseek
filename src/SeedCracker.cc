@@ -23,6 +23,7 @@
 #include "SeedCracker.h"
 
 #include "error.h"
+#include "Utils.h"
 #include "common.h"
 #include "EmbData.h"
 #include "Selector.h"
@@ -149,10 +150,11 @@ bool SeedCracker::trySeed (UWORD32 seed)
 
 void SeedCracker::finish()
 {
-	printf("\nPlain size: %u bytes (compressed)\n", foundResult.plainSize / 8) ;
-	printf("Encryption Algorithm: %u (%s)\n", foundResult.encAlgo, 
+	std::string size = Utils::formatHRSize(foundResult.plainSize / 8) ;
+	printf("\nPlain size: %s (compressed)\n", size.c_str()) ;
+	printf("Encryption Algorithm: %s\n", 
 			EncryptionAlgorithm::translate(EncryptionAlgorithm::IRep(foundResult.encAlgo)).c_str()) ;
-	printf("Encryption Mode: %u (%s)\n", foundResult.encMode, 
+	printf("Encryption Mode:      %s\n",
 			EncryptionMode::translate(EncryptionMode::IRep(foundResult.encMode)).c_str()) ;
 
 	// Data is not encrypted :D
