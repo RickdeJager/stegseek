@@ -2,9 +2,9 @@
 
 Stegseek is a lightning fast steghide cracker, built as a fork of the original steghide project. As a result it is _thousands of times_ faster than other crackers and can run through the entirety of **`rockyou.txt` in under 2 seconds.**
 
-## Demo, with randomly pick password
+## Demo with a randomly picked password
 
-![](./.demo/crack.gif)
+![](./.demo/crack.gif, "PoC || GTFO")
 
 Skip ahead to [Performance](#chart_with_upwards_trend-performance) for some raw numbers.
 
@@ -25,7 +25,10 @@ On other systems you will have to build Stegseek yourself. See [BUILD.md](BUILD.
 
 ### Windows
 
-Building Stegseek as a native Windows app is sadly not supported. Instead you should run Stegseek using [WSL](https://docs.microsoft.com/en-us/windows/wsl/about). The Ubuntu WSL distrobution is recommended for compatibility.
+Building Stegseek as a native Windows app is sadly not supported. Instead you should run Stegseek using [WSL](https://docs.microsoft.com/en-us/windows/wsl/about). The Ubuntu WSL distribution is recommended for optimal compatibility.  
+Once you have configured WSL, Stegseek can be installed using the above Linux instructions.  
+
+By default, WSL mounts the `C:\` drive at `/mnt/c/`, which you can use to easily access any Windows files.
 
 
 # :arrow_forward: Using Stegseek
@@ -40,10 +43,17 @@ This mode will simply try all passwords in the provided wordlist against the pro
 
 ## Detection and passwordless extraction
 
-Stegseek can also be used to detect and extract any **unencrypted** data from a steghide image. This exploits the fact that the random number generator used in steghide only has 2^32 possible seeds, which can be bruteforced in a matter of minutes.
+Stegseek can also be used to detect and extract any **unencrypted** data from a steghide image. This exploits the fact that the random number generator used in steghide only has 2^32 possible seeds, which can be bruteforced in a matter of minutes.  
+
 ```
 stegseek --seed [stegofile.jpg]
-```
+```  
+Depending on how the file was encoded, this will tell you:
+* Whether this file actually contains steghide content
+* How much hidden content the file contains
+* How the content was encrypted  
+  
+If you're (very) lucky and the file was encoded without encryption, this mode will even recover the encoded file for you!
 
 ## Available arguments
 
@@ -74,24 +84,25 @@ Keyword arguments:
  -v, --verbose           display detailed information
  -q, --quiet             hide performance metrics
 
-Use "stegseek --help -v" to include steghides help.
+Use "stegseek --help -v" to include steghide's help.
 
 ```
 
 ## Steghide
-Stegseek includes nearly all of steghides functionality, so it can also be used to embed or extract data as normal.
+Stegseek includes nearly all of steghide's functionality, so it can also be used to embed or extract data as normal. The only catch is that commands must use the `--command` format.  
+So `steghide embed [...]` becomes `stegseek --embed [...]` .
 
 # :whale: Docker
 You can also run Stegseek as Docker container:
 
 ```
-docker run -it -v "$(pwd):/steg" rickdejager/stegseek [stegofile.jpg] [wordlist.txt]
+docker run --rm -it -v "$(pwd):/steg" rickdejager/stegseek [stegofile.jpg] [wordlist.txt]
 ```
 
 This does require that the wordlist and stegofile are located in current working directory, as that folder is mounted to `/steg` inside of the container.
 
 # :chart_with_upwards_trend: Performance
-This is where Stegseek really shines. As promised, let's start with the "`rockyou.txt` in just 5 seconds" claim.  
+This is where Stegseek really shines. As promised, let's start with the "`rockyou.txt` in just 2 seconds" claim.  
 All of these numbers are measured on a laptop with an Intel i7-7700HQ CPU @ 2.80GHz and 8 GB of RAM.  
 
 ## RockYou.txt
@@ -131,6 +142,7 @@ To test the performance of of other tools, I created several stego files with di
 [p] = projected time based on previous results.  
   
 To compare the speed of each tool, let's look at the last row of the table (otherwise Stegseek finishes before all threads have started).  
+
 At this scale Stegseek is over **10 000** times faster than Stegcracker and over **6000** times faster than Stegbrute.
 
 
