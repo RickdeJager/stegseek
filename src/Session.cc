@@ -244,7 +244,7 @@ void Session::printEncInfo ()
 
 void Session::printVersion ()
 {
-	std::cout << "Stegseek version  " << VERSION << std::endl ;
+	std::cout << "Stegseek version " << VERSION << std::endl ;
 	if (Args.Verbosity.getValue() == VERBOSE) {
 		printSteghideVersion() ;
 	}

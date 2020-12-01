@@ -53,7 +53,10 @@ Depending on how the file was encoded, this will tell you:
 * How much hidden content the file contains
 * How the content was encrypted  
   
-If you're (very) lucky and the file was encoded without encryption, this mode will even recover the encoded file for you!
+If you're (very) lucky and the file was encoded without encryption, this mode will even recover the encoded file for you!  
+  
+In this demo I used a very secure random password to embed a file, but disabled encryption by passing the `-e none` argument to steghide. Within a few minutes, Stegseek is able to recover the embedded file.  
+![](./.demo/seed.gif "Sped up by a factor of 10 for your viewing pleasure.")
 
 ## Available arguments
 
