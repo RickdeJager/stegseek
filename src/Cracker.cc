@@ -35,8 +35,12 @@
 Cracker::Cracker ()
 {
 	VerboseMessage vrs ;
-	// get stegfile
-	vrs.setMessage (_("[v] Using stegofile \"%s\"."), Args.StgFn.getValue().c_str()) ;
+	// get stegofile
+	if (Args.StgFn.getValue() != "") {
+		vrs.setMessage (_("[v] Using stegofile \"%s\"."), Args.StgFn.getValue().c_str()) ;
+	} else {
+		vrs.setMessage (_("[v] Reading stegofile from stdin.")) ;
+	}
 	vrs.printMessage() ;
 
 	// get output file
