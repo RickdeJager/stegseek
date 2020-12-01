@@ -1,8 +1,12 @@
 # :zap: Stegseek
 
-Stegseek is a lightning fast steghide cracker the can be used to extract hidden data from jpeg files.   It is built as a fork of the original steghide project. As a result it is _thousands of times_ faster than other crackers and can run through the entirety of **`rockyou.txt` in under 2 seconds.**
+Stegseek is a lightning fast steghide cracker that can be used to extract hidden data from files. It is built as a fork of the original steghide project and, as a result, it is _thousands of times_ faster than other crackers and can run through the entirety of **`rockyou.txt`\* in under 2 seconds.**  
+  
+Stegseek can also be used to extract steghide metadata without a password, which can be used to test whether a file contains steghide data.
+  
+>\* `rockyou.txt` is a well-known password list with over 14 million passwords.
 
-## Demo with a randomly picked password
+## Demo: random rockyou.txt password (in real time)
 
 ![](./.demo/crack.gif "PoC || GTFO")
 
@@ -16,7 +20,7 @@ The following instructions walk you through the installation process. Alternativ
 
 ### Linux
 
-On Ubuntu and Debian-based systems, you can use the provided `.deb` package for installation:
+On Ubuntu and other Debian-based systems, you can use the provided `.deb` package for installation:
 
 1. Download the latest [Stegseek release](https://github.com/RickdeJager/stegseek/releases)
 1. Install the `.deb` file using `sudo apt install ./stegseek_0.4-1.deb`  
@@ -28,7 +32,7 @@ On other systems you will have to build Stegseek yourself. See [BUILD.md](BUILD.
 Building Stegseek as a native Windows app is sadly not supported. Instead you should run Stegseek using [WSL](https://docs.microsoft.com/en-us/windows/wsl/about). The Ubuntu WSL distribution is recommended for optimal compatibility.  
 Once you have configured WSL, Stegseek can be installed using the above Linux instructions.  
 
-By default, WSL mounts the `C:\` drive at `/mnt/c/`, which you can use to easily access any Windows files.
+By default, WSL mounts the `C:\` drive at `/mnt/c/`, which you can use to easily access your files.
 
 
 # :arrow_forward: Using Stegseek
@@ -42,8 +46,7 @@ stegseek [stegofile.jpg] [wordlist.txt]
 This mode will simply try all passwords in the provided wordlist against the provided stegofile.
 
 ## Detection and passwordless extraction
-
-Stegseek can also be used to detect and extract any **unencrypted** data from a steghide image. This exploits the fact that the random number generator used in steghide only has 2^32 possible seeds, which can be bruteforced in a matter of minutes.  
+Stegseek can also be used to detect and extract any **unencrypted** (meta) data from a steghide image. This exploits the fact that the random number generator used in steghide only has 2^32 possible seeds, which can be bruteforced in a matter of minutes.  
 
 ```
 stegseek --seed [stegofile.jpg]
@@ -115,7 +118,7 @@ This password is on line `14344383` out of `14344391`
 
 ```
 time stegseek 7spaces1.jpg rockyou.txt 
-Stegseek version  0.4
+Stegseek version 0.4
 [i] Read the entire wordlist (14344391 words), starting cracker
 [ 14231679 / 14344391 ]  (99,21%)                 
 [i] --> Found passphrase: "       1"
@@ -153,7 +156,7 @@ At this scale Stegseek is over **10 000** times faster than Stegcracker and over
 # :notebook: Changelog
 
 ## v0.4
-2020-11-08  
+2020-12-01  
 improvements:  
 * Added seed cracking to allow for passwordless data extraction
 * Overhauled parser to allow for positional arguments
