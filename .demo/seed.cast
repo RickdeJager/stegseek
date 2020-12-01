@@ -135,4 +135,4 @@
 [166.558353, "o", "[i] Original filename: \"secret.txt\"\r\n[i] Extracting to stdout\r\nThis file can even be recovered without a password\r\nbecause `-e none` was used to embed it. \r\n- RdJ\r\n"]
 [166.558769, "o", "\r\nreal\t2m40,163s\r\nuser\t20m47,703s\r\nsys\t0m0,619s\r\n"]
 [166.558876, "o", "\u001b[38;5;4m[\u001b[m\u001b(B\u001b[38;5;1m/tmp/steg\u001b[m\u001b(B\u001b[38;5;4m]\u001b[m\u001b(B\u001b[38;5;10m~$\u001b[m\u001b(B "]
-[200.000000, "o", ""]
+[250.000000, "o", ""]

@@ -1,6 +1,6 @@
 # :zap: Stegseek
 
-Stegseek is a lightning fast steghide cracker, built as a fork of the original steghide project. As a result it is _thousands of times_ faster than other crackers and can run through the entirety of **`rockyou.txt` in under 2 seconds.**
+Stegseek is a lightning fast steghide cracker the can be used to extract hidden data from jpeg files.   It is built as a fork of the original steghide project. As a result it is _thousands of times_ faster than other crackers and can run through the entirety of **`rockyou.txt` in under 2 seconds.**
 
 ## Demo with a randomly picked password
 
@@ -48,15 +48,16 @@ Stegseek can also be used to detect and extract any **unencrypted** data from a 
 ```
 stegseek --seed [stegofile.jpg]
 ```  
-Depending on how the file was encoded, this will tell you:
-* Whether this file actually contains steghide content
-* How much hidden content the file contains
-* How the content was encrypted  
+This command will tell you:
+* Whether this file actually contains steghide content.
+* How much hidden content the file contains.
+* How the content was encrypted  .
   
 If you're (very) lucky and the file was encoded without encryption, this mode will even recover the encoded file for you!  
   
 In this demo I used a very secure random password to embed a file, but disabled encryption by passing the `-e none` argument to steghide. Within a few minutes, Stegseek is able to recover the embedded file.  
-![](./.demo/seed.gif "Sped up by a factor of 10 for your viewing pleasure.")
+
+![](./.demo/seed.gif "Sped up by a factor of 20 for your viewing pleasure.")
 
 ## Available arguments
 
