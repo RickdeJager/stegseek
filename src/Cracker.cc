@@ -112,8 +112,7 @@ bool Cracker::verifyMagic (std::string Passphrase)
 bool Cracker::verifyMagic (UWORD32 seed)
 {
 	// Create a buf to keep track of rng collisions
-	UWORD32 rngBuf[25*samplesPerVertex + 1] ;
-	rngBuf[0] = seed ;
+	UWORD32 rngBuf[25*samplesPerVertex] ;
 
 	// Pseudorandom properties
 	const UWORD32 A = 1367208549 ;
@@ -137,18 +136,21 @@ bool Cracker::verifyMagic (UWORD32 seed)
 	for (unsigned long i = 0 ; i < embvaluesRequestedMagic ; i++) {
 		for (unsigned int j = 0 ; j < samplesPerVertex ; j++, sv_idx++) {
 			// Calc next random number
-			rngBuf[sv_idx+1] = (UWORD32) (rngBuf[sv_idx]*A + C) ;
+			seed = (UWORD32) (seed*A + C) ;
+			// Get next value index
+			const UWORD32 valIdx = sv_idx + (((double) seed / (double) 4294967296.0) * ((double) (numSamples-sv_idx))) ;
 			// Check for RNG collisions. Should be fairly rare as numSample gets larger
-			for (unsigned long k = 0; k <= sv_idx; k++) {
-				if (rngBuf[k] == rngBuf[sv_idx+1]) {
-					// In case we find an rng collision, just pretend the magic check was succesful.
+			for (unsigned long k = 0; k < sv_idx; k++) {
+				if (rngBuf[k] == valIdx) {
+					// In case we find an rng collision, just pretend the magic check was successful.
 					// The stricter steghide extractor will double check our work
 					//
 					// This case is rare
 					return true;
 				}
 			}
-			const UWORD32 valIdx = sv_idx + (((double) rngBuf[sv_idx+1] / (double) 4294967296.0) * ((double) (numSamples-sv_idx))) ;
+			// Save the value index, to keep track of collisions
+			rngBuf[sv_idx] = valIdx ;
 			ev = (ev + embeddedValues[valIdx]) % EmbValueModulus;
 		}
 		if (ev != magics[i]) {
