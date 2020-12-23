@@ -21,6 +21,9 @@
  */
 
 
+#include <sys/stat.h>
+#include <string.h>
+
 #include "PasswordCracker.h"
 
 #include "error.h"
@@ -52,25 +55,11 @@ void PasswordCracker::crack ()
 
 	unsigned int threads = Args.Threads.getValue() ;
 
-	// init queues
-	WorkQueues.resize(threads) ;
-	// Load the wordlist into memory
-	std::string line;
-	{
-		// First push the "empty" passphrase into a Queue, as it is probably not included in a wordlist
-		line = "" ;
-		WorkQueues[0].push(line) ;
-		// Then push each line of the wordlist into the WorkQueue
-		int i = 0;
-		while (std::getline(wordlist, line)) {
-			WorkQueues[i].push(line) ;
-			wordlistLength += 1 ;
-			i = (i + 1) % threads ;
-		}
-	}
-	printf("[i] Read the entire wordlist (%lu words), starting cracker\n", wordlistLength) ;
-	// TODO; The above loop pushes the entire wordlist into RAM. The alternative would be to push items in batches.
-	// This does mean that we'd lock/unlock a lot
+	// First stat the word list to get the file length
+	struct stat st ;
+	stat(Args.WordlistFn.getValue().c_str(), &st) ;
+	//TODO; This isn't accurate, since st_size is in bytes rather than words.
+	wordlistLength = st.st_size ;
 
 	// Initialize threads
 	std::vector<std::thread> ThreadPool ;
@@ -82,8 +71,9 @@ void PasswordCracker::crack ()
 	}
 
 	// Add n worker threads
+	unsigned long part = wordlistLength / threads ;
 	for (unsigned int i = 0; i < threads; i++) {
-		ThreadPool.push_back(std::thread([this, i] {consume(i); })) ;
+		ThreadPool.push_back(std::thread([this, i, part] {consume(i*part, (i+1)*part); })) ;
 	}
 
 	// Join all worker threads
@@ -112,42 +102,47 @@ void PasswordCracker::crack ()
 }
 
 // Take jobs and crack 'em
-void PasswordCracker::consume (int threadID)
+void PasswordCracker::consume (unsigned long i, unsigned long stop)
 {
-	// TODO, we exit on empty queue as well, because we're loading the entire queue in one go
-	// This won't work with batching
-	while (!stopped && !WorkQueues[threadID].empty())
-	{
-		std::string passphraseCandidate;
-		// Pop an item from the queue
-		passphraseCandidate = WorkQueues[threadID].front() ;
-		WorkQueues[threadID].pop() ;
-		// Add to the perf metric
-		attempts += 1 ;
+	FILE * pWordList ;
+	pWordList = fopen(Args.WordlistFn.getValue().c_str(), "r") ;
+	// Skip to our section
+	fseek(pWordList, i, SEEK_SET) ;
+
+	char line[256] ;
+	while (!stopped && fgets(line, sizeof(line), pWordList) && ftell(pWordList) <= stop+sizeof(line)) {
+		// Strip \n and \r, \rn
+		line[strcspn(line, "\r\n")] = 0 ;
 
 		// Try extracting with this passphrase
-		if (tryPassphrase(passphraseCandidate))
+		if (tryPassphrase(line))
 		{
 			// Tell the other threads that they should stop
 			stopped = true ;
 			success = true ;
-			foundPassphrase = passphraseCandidate;
+			foundPassphrase = std::string(line);
+			break ;
 		}
+		attempts ++;
 	}
+
+	fclose(pWordList) ;
 }
 
-bool PasswordCracker::tryPassphrase (std::string Passphrase)
+bool PasswordCracker::tryPassphrase (char * Passphrase)
 {
 	// We first check if the file magic makes sense
 	if (! verifyMagic(Passphrase)) {
 		return false ;
 	}
 
+	std::string PassphraseStr(Passphrase) ;
+
 	// In case the magic checks out, we have to do a proper extract attempt.
 	// This does re-do the magic, but it's rare enough that that won't matter.
 
-	EmbData embdata (EmbData::EXTRACT, Passphrase) ;
-	Selector sel (numSamples, Passphrase) ;
+	EmbData embdata (EmbData::EXTRACT, PassphraseStr) ;
+	Selector sel (numSamples, PassphraseStr) ;
 
 
 	unsigned long sv_idx = 0 ;

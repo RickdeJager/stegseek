@@ -31,6 +31,8 @@
 #include "Extractor.h"
 #include "CvrStgFile.h"
 
+#include <cstring>
+
 
 Cracker::Cracker ()
 {
@@ -107,6 +109,22 @@ bool Cracker::verifyMagic (std::string Passphrase)
 		seed ^= hash[i] ;
 	}
 	return verifyMagic(seed) ;
+}
+
+bool Cracker::verifyMagic (char * Passphrase)
+{
+	MHASH td = mhash_init(MHASH_MD5);
+	//mhash(td, Passphrase, sizeof(Passphrase) / sizeof(char)) ;
+	mhash(td, Passphrase, std::strlen(Passphrase)) ;
+
+	UWORD32 seed = 0;
+	UWORD32 hash[4] ;
+	mhash_deinit (td, hash) ;
+	for (unsigned int i = 0 ; i < 4 ; i++) {
+		seed ^= hash[i] ;
+	}
+	return verifyMagic(seed) ;
+
 
 }
 bool Cracker::verifyMagic (UWORD32 seed)

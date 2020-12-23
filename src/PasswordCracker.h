@@ -45,13 +45,12 @@ class PasswordCracker : Cracker {
 	void crack (void) ;
 
 	private:
-	bool tryPassphrase (std::string) ;
+	bool tryPassphrase (char *) ;
 	void extract (std::string) ;
-	void consume (int) ;
+	void consume (unsigned long, unsigned long) ;
 	std::ifstream wordlist ;
 	std::string foundPassphrase ;
 	unsigned long wordlistLength = 0 ;
-	std::vector<std::queue<std::string>> WorkQueues ;
 } ;
 
 #endif // ndef SH_PASSWORDCRACKER_H

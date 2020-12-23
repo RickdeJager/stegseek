@@ -49,6 +49,7 @@ class Cracker {
 	void finish () ;
 	void extract (EmbData*) ;
 	bool verifyMagic (std::string) ;
+	bool verifyMagic (char *) ;
 	bool verifyMagic (UWORD32) ;
 
 	// Control variables
