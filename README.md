@@ -23,7 +23,7 @@ The following instructions walk you through the installation process. Alternativ
 On Ubuntu and other Debian-based systems, you can use the provided `.deb` package for installation:
 
 1. Download the latest [Stegseek release](https://github.com/RickdeJager/stegseek/releases)
-1. Install the `.deb` file using `sudo apt install ./stegseek_0.4-1.deb`  
+1. Install the `.deb` file using `sudo apt install ./stegseek_0.4.1-1.deb`  
   
 On other systems you will have to build Stegseek yourself. See [BUILD.md](BUILD.md) for more information.  
 
@@ -161,6 +161,9 @@ improvements:
 * Added seed cracking to allow for passwordless data extraction
 * Overhauled parser to allow for positional arguments
 * cracks `rockyou.txt` in 2 seconds
+### v0.4.1
+2020-12-23  
+Fixed a bug where stegseek would fail to find a password on rare occasions.
 
 ## v0.3
 2020-11-08  
