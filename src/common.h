@@ -42,10 +42,10 @@ typedef TYPE_SWORD16	SWORD16 ;
 typedef TYPE_SBYTE		SBYTE ;
 #else
 // use types that are at least the correct size
-typedef unsigned long	UWORD32 ;
+typedef unsigned int	UWORD32 ;
 typedef unsigned short	UWORD16 ;
 typedef unsigned char	BYTE ;
-typedef long			SWORD32 ;
+typedef int 			SWORD32 ;
 typedef short			SWORD16 ;
 typedef char			SBYTE ;
 #endif
@@ -73,9 +73,8 @@ typedef UWORD32 SampleKey ;
 #define VERTEXLABEL_MAX UWORD32_MAX
 
 //
-// gettext support
-#include "gettext.h" 
-#define _(S) gettext (S)
+// (Removed) ~~gettext support~~
+#define _(S) S
 
 //
 // global variables

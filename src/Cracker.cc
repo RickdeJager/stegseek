@@ -114,7 +114,6 @@ bool Cracker::verifyMagic (std::string Passphrase)
 bool Cracker::verifyMagic (char * Passphrase)
 {
 	MHASH td = mhash_init(MHASH_MD5);
-	//mhash(td, Passphrase, sizeof(Passphrase) / sizeof(char)) ;
 	mhash(td, Passphrase, std::strlen(Passphrase)) ;
 
 	UWORD32 seed = 0;

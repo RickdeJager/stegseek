@@ -13,6 +13,9 @@ tests/data/Makefile.in
 
 .vscode
 
+# Build dir
+build
+
 # Test artifacts
 tests/steghide/*.log
 tests/steghide/*.trs

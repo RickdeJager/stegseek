@@ -37,8 +37,6 @@
 #include "common.h"
 #include "error.h"
 
-#define STEGHIDE_VERSION "0.5.1"
-
 void Session::run ()
 {
 	switch (Args.Command.getValue()) {
