@@ -13,14 +13,16 @@ jobs:
     - uses: actions/checkout@v2
     - name: Install build dependencies
       run: sudo apt install -y libmhash-dev libmcrypt-dev libjpeg62-dev zlib1g-dev build-essential cmake
-    - name: setup cmake
-      run: mkdir build && cd build && cmake ..
-    - name: compile project
-      run: make -j2
+    - name: Compile project
+      run: |
+              mkdir -p build
+              cd build
+              cmake ..
+              make -j2
     - name: Run unit tests
-      run: make test
+      run: cd build && make test
     - name: Run cracker tests
-      run: cd ../tests/stegseek && ./testCracker.sh && cd ../..
+      run: cd tests/stegseek && ./testCracker.sh
     - name: Create a .deb package
       run: bash package/package.sh
     - name: Save the .deb as a build artifact

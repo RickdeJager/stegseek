@@ -19,7 +19,7 @@ INSTALL_PATH="${PACKAGE}/usr/local/bin/"
 # Create a relative root
 mkdir -p ${INSTALL_PATH}
 # Copy the binary over
-cp "src/${NAME}" ${INSTALL_PATH}
+cp "build/src/${NAME}" ${INSTALL_PATH}
 
 # Create a DEBIAN directory
 mkdir -p "${PACKAGE}/DEBIAN"
