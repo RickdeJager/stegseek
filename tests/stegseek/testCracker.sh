@@ -12,7 +12,7 @@
 # Exit on first error
 set -e
 
-STEGSEEK=../../src/stegseek
+STEGSEEK=../../build/src/stegseek
 DATADIR=data
 PASSWORD="stegseek"
 
