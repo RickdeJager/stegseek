@@ -47,7 +47,7 @@ class PasswordCracker : Cracker {
 	private:
 	bool tryPassphrase (char *) ;
 	void extract (std::string) ;
-	void consume (unsigned long, unsigned long) ;
+	void consume (unsigned long, unsigned long, bool) ;
 	std::ifstream wordlist ;
 	std::string foundPassphrase ;
 	unsigned long wordlistLength = 0 ;

@@ -86,15 +86,20 @@ Cracker::Cracker ()
 
 void Cracker::metrics (unsigned long max)
 {
-	while (!stopped)
-	{
+	Message msg ;
+	msg.setNewline(false) ;
+	
+	do {
 		unsigned long a = attempts ;
 		float percentage = 100.0f * ((float) a / (float) max) ;
-		printf("\r[ %lu / %lu ]  (%.2f%%)                 ",a , max, percentage) ;
+		msg.setMessage("\rProgress: %.2f%%  ", percentage) ;
+		msg.printMessage() ;
 		std::this_thread::sleep_for(std::chrono::milliseconds(10)) ; 
-	}
+	} while (!stopped) ;
 	// Print a newline before returning
-	puts("") ;
+	msg.setNewline(true) ;
+	msg.setMessage("") ;
+	msg.printMessage() ;
 }
 
 bool Cracker::verifyMagic (std::string Passphrase)
@@ -187,13 +192,17 @@ void Cracker::extract (EmbData* emb)
 		outFn = Args.ExtFn.getValue() ;
 	}
 
+	Message msg ;
 	if (origFn != "") {
-		printf("[i] Original filename: \"%s\"\n", origFn.c_str()) ;
+		msg.setMessage("[i] Original filename: \"%s\"", origFn.c_str()) ;
+		msg.printMessage() ;
 	}
 	if (outFn != "") {
-		printf("[i] Extracting to \"%s\"\n", outFn.c_str()) ;
+		msg.setMessage("[i] Extracting to \"%s\"", outFn.c_str()) ;
+		msg.printMessage() ;
 	} else {
-		printf("[i] Extracting to stdout\n") ;
+		msg.setMessage("[i] Extracting to stdout") ;
+		msg.printMessage() ;
 	}
 	BinaryIO io (outFn, BinaryIO::WRITE) ;
 	std::vector<BYTE> data = emb->getData() ;

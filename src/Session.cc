@@ -242,7 +242,7 @@ void Session::printEncInfo ()
 
 void Session::printVersion ()
 {
-	std::cout << "Stegseek version " << VERSION << std::endl ;
+	fprintf(stderr,"Stegseek version %s\n" , VERSION);
 	if (Args.Verbosity.getValue() == VERBOSE) {
 		printSteghideVersion() ;
 	}
@@ -291,7 +291,7 @@ void Session::printHelp ()
 
 void Session::printSteghideVersion ()
 {
-	std::cout << "based on steghide version " << STEGHIDE_VERSION << std::endl ;
+	fprintf(stderr, "based on steghide version %s\n", STEGHIDE_VERSION);
 }
 
 void Session::printSteghideHelp ()

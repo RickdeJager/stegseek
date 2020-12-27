@@ -23,6 +23,7 @@
 
 #include <sys/stat.h>
 #include <string.h>
+#include <cstring>
 
 #include "PasswordCracker.h"
 
@@ -56,10 +57,8 @@ void PasswordCracker::crack ()
 	unsigned int threads = Args.Threads.getValue() ;
 
 	// First stat the word list to get the file length
-	struct stat st ;
-	stat(Args.WordlistFn.getValue().c_str(), &st) ;
-	//TODO; This isn't accurate, since st_size is in bytes rather than words.
-	wordlistLength = st.st_size ;
+	struct stat wordlistStats ;
+	stat(Args.WordlistFn.getValue().c_str(), &wordlistStats) ;
 
 	// Initialize threads
 	std::vector<std::thread> ThreadPool ;
@@ -67,13 +66,15 @@ void PasswordCracker::crack ()
 
 	// Add a thread to keep track of metrics
 	if (metricsEnabled) {
-		ThreadPool.push_back(std::thread([this] {metrics(wordlistLength); })) ;
+		ThreadPool.push_back(std::thread([this, wordlistStats] {metrics(wordlistStats.st_size); })) ;
 	}
 
 	// Add n worker threads
-	unsigned long part = wordlistLength / threads ;
+	unsigned long part = wordlistStats.st_size / threads ;
 	for (unsigned int i = 0; i < threads; i++) {
-		ThreadPool.push_back(std::thread([this, i, part] {consume(i*part, (i+1)*part); })) ;
+		ThreadPool.push_back(std::thread([this, i, part, metricsEnabled] {
+			consume(i*part, (i+1)*part, metricsEnabled); 
+		})) ;
 	}
 
 	// Join all worker threads
@@ -90,19 +91,22 @@ void PasswordCracker::crack ()
 	}
 
 	// If we didn't find a passphrase, print a message
+	Message msg ;
 	if (!success) {
-		printf("[!] Could not find a valid passphrase.\n") ;
+		// On failure, send the message directly to stderr so it will be printed in quiet mode as well
+		fprintf(stderr, "[!] Could not find a valid passphrase.\n") ;
 	} else {
 		// Re-extract the data with the confirmed passphrase.
 		// This does mean we're throwing away one valid "embdata" object, but
 		// that's not a bad trade-off to be able to use steghide's structure
-		printf("[i] --> Found passphrase: \"%s\"\n\n", foundPassphrase.c_str()) ;
+		msg.setMessage("[i] --> Found passphrase: \"%s\"", foundPassphrase.c_str()) ;
+		msg.printMessage() ;
 		extract(foundPassphrase) ;
 	}
 }
 
 // Take jobs and crack 'em
-void PasswordCracker::consume (unsigned long i, unsigned long stop)
+void PasswordCracker::consume (unsigned long i, unsigned long stop, bool metricsEnabled)
 {
 	FILE * pWordList ;
 	pWordList = fopen(Args.WordlistFn.getValue().c_str(), "r") ;
@@ -110,6 +114,13 @@ void PasswordCracker::consume (unsigned long i, unsigned long stop)
 	fseek(pWordList, i, SEEK_SET) ;
 
 	char line[256] ;
+	// We allow for some overlap here (i.e. thread n will repeat a few passwords from thread n+1)
+	// The reason for this is that we don't know where the linebreaks are without reading the entire
+	// file first, which would hold up (n-1) threads from actually doing useful things.
+	//
+	// Instead, we start n threads at different points in the wordlist, possible in the middle of a password.
+	// this is fine, since the "previous" thread will always repeat the first password assigned to this thread.
+	//
 	while (!stopped && fgets(line, sizeof(line), pWordList) && ftell(pWordList) <= stop+sizeof(line)) {
 		// Strip \n and \r, \rn
 		line[strcspn(line, "\r\n")] = 0 ;
@@ -123,7 +134,12 @@ void PasswordCracker::consume (unsigned long i, unsigned long stop)
 			foundPassphrase = std::string(line);
 			break ;
 		}
-		attempts ++;
+
+		// Incrementing an atomic int is quite costly, so don't do it if no one cares about its value
+		if (metricsEnabled) {
+			// Add 1, since the newline was stripped, but is present in the file size
+			attempts += std::strlen(line) + 1;
+		}
 	}
 
 	fclose(pWordList) ;

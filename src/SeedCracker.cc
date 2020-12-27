@@ -64,13 +64,15 @@ void SeedCracker::crack ()
 		ThreadPool.pop_back() ;
 	}
 
-	// If we didn't find a passphrase, print a message
+	// If we didn't find a passphrase, print a message directly to stderr
 	if (!success) {
-		printf("[!] Could not find a valid seed.\n") ;
+		fprintf(stderr, "[!] Could not find a valid seed.\n") ;
 	} else {
 		// Output the found seed. At the moment this isn't particularly
 		// useful to then end-user, it's nice for debugging
-		printf("[i] --> Found seed: \"%x\"\n\n", foundResult.seed) ;
+		Message msg ;
+		msg.setMessage("[i] --> Found seed: \"%x\"", foundResult.seed) ;
+		msg.printMessage() ;
 		finish() ;
 	}
 }
@@ -151,10 +153,12 @@ bool SeedCracker::trySeed (UWORD32 seed)
 void SeedCracker::finish()
 {
 	std::string size = Utils::formatHRSize(foundResult.plainSize / 8) ;
-	printf("\nPlain size: %s (compressed)\n", size.c_str()) ;
-	printf("Encryption Algorithm: %s\n", 
-			EncryptionAlgorithm::translate(EncryptionAlgorithm::IRep(foundResult.encAlgo)).c_str()) ;
-	printf("Encryption Mode:      %s\n",
+	// Print directly to stderr s.t. the result will even be printed in quiet mode.
+	// There is no good reason to run this in quiet mode, and waiting for 5 minutes
+	// to realise you accidentically set -q would be annoying
+	fprintf(stderr, "Plain size: %s (compressed)\nEncryption Algorithm: %s\nEncryption Mode:      %s\n",
+			size.c_str(), 
+			EncryptionAlgorithm::translate(EncryptionAlgorithm::IRep(foundResult.encAlgo)).c_str(),
 			EncryptionMode::translate(EncryptionMode::IRep(foundResult.encMode)).c_str()) ;
 
 	// Data is not encrypted :D
