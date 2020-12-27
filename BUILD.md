@@ -19,19 +19,18 @@ sudo apt install libmhash-dev libmcrypt-dev libjpeg-dev zlib1g-dev
 ```
 
 ## build tools
-You will also need the "autotools" suite of build tools. Depending on your distribution, these might be bundled in a single package (such as `build-essential` on Ubuntu).  
-If there is not a bundle available, you should install the following tools:  
+The project can be build using `cmake`. You will need the following tools:
 
 * make
 * g++
-* autoconf
+* cmake
 * git
 
 
 On Ubuntu, all of these packages can be installed using the following command:
 
 ```
-sudo apt install git autoconf build-essential
+sudo apt install git build-essential cmake
 ```
 
 ## Building Stegseek
@@ -45,8 +44,9 @@ Next, enter the following commands to build and install Stegseek:
 
 ```bash
 cd stegseek
-autoreconf -i
-./configure
+mkdir -p build
+cd build
+cmake ..
 make
 sudo make install
 ```
