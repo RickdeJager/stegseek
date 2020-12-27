@@ -36,7 +36,7 @@ printf 'Bogus\n%.0s' {1..1000000} > wordlist.tmp
 echo " [1/3] correct password not present..."
 echo "       allowed to run for 2 seconds"
 echo ""
-SHOULD_FAIL=$(timeout 2s $STEGSEEK --crack -sf $DATADIR/sun.jpg -wl wordlist.tmp -xf -)
+SHOULD_FAIL=$(timeout 2s $STEGSEEK --crack -sf $DATADIR/sun.jpg -wl wordlist.tmp -xf - 2>&1)
 echo $SHOULD_FAIL
 
 if [[ ! $SHOULD_FAIL =~ "$FAILMSG" ]]; then
@@ -57,7 +57,7 @@ printf 'Bogus\n%.0s' {1..123456} >> wordlist.tmp
 echo " [2/3] correct password present..."
 echo "       allowed to run for 2 seconds"
 echo ""
-SHOULD_WORK=$(timeout 2s $STEGSEEK --crack -sf $DATADIR/sun.jpg -wl wordlist.tmp -xf -)
+SHOULD_WORK=$(timeout 2s $STEGSEEK --crack -sf $DATADIR/sun.jpg -wl wordlist.tmp -xf - 2>&1)
 echo $SHOULD_WORK
 
 if [[ ! "$SHOULD_WORK" =~ "$OKMSG" ]]; then
@@ -79,7 +79,7 @@ echo "       allowed to run for 2 seconds"
 # Add the password to the wordlist
 echo "iluv1josh" >> wordlist.tmp
 echo ""
-SHOULD_WORK=$(timeout 2s $STEGSEEK --crack -sf $DATADIR/rngcollision.jpg -wl wordlist.tmp -xf -)
+SHOULD_WORK=$(timeout 2s $STEGSEEK --crack -sf $DATADIR/rngcollision.jpg -wl wordlist.tmp -xf - 2>&1)
 echo $SHOULD_WORK
 
 
