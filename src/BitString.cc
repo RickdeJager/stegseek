@@ -22,11 +22,9 @@
 #include "BitString.h"
 #include "common.h"
 
-#ifdef USE_ZLIB
 namespace zlib {
 #include <zlib.h>
 }
-#endif // def USE_ZLIB
 
 #define BITPOS(n) (n % 8)
 #define BYTEPOS(n) (n / 8)
@@ -267,7 +265,6 @@ void BitString::appendNAry (BYTE v)
 	}
 }
 
-#ifdef USE_ZLIB
 BitString& BitString::compress (int level)
 {
 	myassert (level >= 1 && level <= 9) ;
@@ -364,7 +361,6 @@ BitString& BitString::uncompress (unsigned long idestlen)
 	delete[] destbuf ;
 	return *this ;
 }
-#endif // def USE_ZLIB
 
 bool BitString::operator== (const BitString &v) const
 {

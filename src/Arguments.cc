@@ -450,7 +450,6 @@ bool Arguments::parse_Encryption (ArgIt& curarg)
 		if (s1 == "none" && s2 == "") {
 			EncAlgo.setValue (s1) ;
 		}
-#ifdef USE_LIBMCRYPT
 		else {
 			bool s1_isalgo = false, s1_ismode = false ;
 			bool s2_isalgo = false, s2_ismode = false ;
@@ -499,12 +498,6 @@ bool Arguments::parse_Encryption (ArgIt& curarg)
 					EncAlgo.getValue().getStringRep().c_str(), EncMode.getValue().getStringRep().c_str()) ;
 			}
 		}
-#else
-		else {
-			throw SteghideError (_("steghide has been compiled without support for encryption.")) ;
-		}
-#endif // def USE_LIBMCRYPT
-
 		found = true ;
 		curarg++ ;
 	}
@@ -777,10 +770,5 @@ void Arguments::setDefaults (void)
 	GmlStartVertex.setValue (Default_GmlStartVertex, false) ;
 }
 
-#ifdef USE_LIBMCRYPT
 const EncryptionAlgorithm Arguments::Default_EncAlgo = EncryptionAlgorithm (EncryptionAlgorithm::RIJNDAEL128) ;
 const EncryptionMode Arguments::Default_EncMode = EncryptionMode (EncryptionMode::CBC) ;
-#else
-const EncryptionAlgorithm Arguments::Default_EncAlgo = EncryptionAlgorithm (EncryptionAlgorithm::NONE) ;
-const EncryptionMode Arguments::Default_EncMode = EncryptionMode (EncryptionMode::ECB) ; // is ignored
-#endif

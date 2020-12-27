@@ -206,11 +206,7 @@ CvrStgFile* CvrStgFile::readFile (const std::string& fn)
 		break ; }
 
 		case JPEG: {
-#ifdef USE_LIBJPEG
 			file = new JpegFile (BinIO) ;
-#else
-			throw SteghideError (_("can not read input file. steghide has been compiled without support for jpeg files.")) ;
-#endif
 		break ; }
 
 		default: {

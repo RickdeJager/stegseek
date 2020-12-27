@@ -134,14 +134,6 @@ void EmbData::addBits (BitString addbits)
 			NumBitsRequested = AUtils::bminus<unsigned long> (NumBitsNeeded, Reservoir.getLength()) ;
 			State = READ_NPLAINBITS ;
 
-#ifndef USE_LIBMCRYPT
-			if (EncAlgo.getIntegerRep() != EncryptionAlgorithm::NONE) {
-				throw SteghideError (_(
-							"The embedded data is encrypted but steghide has been compiled without encryption\n"
-							"support. To be able to read the embedded data, you have to install libmcrypt\n"
-							"(http://mcrypt.sourceforge.net/) and recompile steghide.")) ;
-			}
-#endif
 		break ; }
 
 		case READ_NPLAINBITS: {
@@ -151,11 +143,7 @@ void EmbData::addBits (BitString addbits)
 			
 			NPlainBits = bits.getValue (0, NBitsNPlainBits) ;
 
-#ifdef USE_LIBMCRYPT
 			NumBitsNeeded = (UWORD32) MCryptPP::getEncryptedSize (EncAlgo, EncMode, NPlainBits) ;
-#else
-			NumBitsNeeded = NPlainBits ;
-#endif
 			NumBitsRequested = AUtils::bminus<unsigned long> (NumBitsNeeded, Reservoir.getLength()) ;
 
 			State = READ_ENCRYPTED ;
@@ -167,7 +155,6 @@ void EmbData::addBits (BitString addbits)
 #endif
 
 			BitString plain ;
-#ifdef USE_LIBMCRYPT
 			if (EncAlgo.getIntegerRep() == EncryptionAlgorithm::NONE) {
 				plain = bits ;
 			}
@@ -175,9 +162,6 @@ void EmbData::addBits (BitString addbits)
 				MCryptPP crypto (EncAlgo, EncMode) ;
 				plain = crypto.decrypt (bits, Passphrase) ;
 			}
-#else
-			plain = bits ;
-#endif
 
 			plain.truncate (0, NPlainBits) ;	// cut off random padding used to achieve full number of encryption blocks
 
@@ -354,14 +338,10 @@ BitString EmbData::getBitString ()
 	main.append((UWORD16) EncMode.getIntegerRep(), EncryptionMode::IRep_size) ;
 	main.append(plain.getLength(), NBitsNPlainBits) ;
 
-#ifdef USE_LIBMCRYPT
 	if (EncAlgo.getIntegerRep() != EncryptionAlgorithm::NONE) {
 		MCryptPP crypto (EncAlgo, EncMode) ;
 		plain = crypto.encrypt (plain, Passphrase) ;
 	}
-#else
-	myassert (EncAlgo.getIntegerRep() == EncryptionAlgorithm::NONE) ;
-#endif
 
 	main.append (plain) ;
 

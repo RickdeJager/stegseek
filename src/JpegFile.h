@@ -23,8 +23,6 @@
 
 #include "common.h"
 
-#ifdef USE_LIBJPEG
-
 #include <vector>
 
 extern "C" {
@@ -86,7 +84,5 @@ class JpegFile : public CvrStgFile {
 	std::vector<SWORD16> LinDctCoeffs ;
 	std::vector<UWORD32> StegoIndices ;
 } ;
-
-#endif // def USE_LIBJPEG
 
 #endif // ndef SH_JPEGFILE_H

@@ -338,7 +338,6 @@ void BitStringTest::testCutting ()
 
 void BitStringTest::testCompression ()
 {
-#ifdef USE_ZLIB
 	{
 		BitString bs1 (std::string("a test of tests of some recurrence")) ;
 		BitString bs2 = bs1 ;
@@ -353,9 +352,6 @@ void BitStringTest::testCompression ()
 		bs1.compress(9) ;
 		addTestResult (bs1 != bs2) ;
 	}
-#else
-	addTestResult (TestSuite::NOTINSTALLED) ;
-#endif // def USE_ZLIB
 }
 
 void BitStringTest::testArity ()

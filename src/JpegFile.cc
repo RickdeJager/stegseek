@@ -20,8 +20,6 @@
 
 #include "common.h"
 
-#ifdef USE_LIBJPEG
-
 #include <cstdio>
 #include <iostream>
 
@@ -247,5 +245,3 @@ void JpegFile::printFrequencies (const std::map<SampleKey,unsigned long>& freqs)
 	}
 }
 #endif // def DEBUG
-
-#endif // def USE_LIBJPEG

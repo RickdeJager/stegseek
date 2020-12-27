@@ -20,8 +20,6 @@
 
 #include "common.h"
 
-#ifdef USE_LIBMCRYPT
-
 #ifndef SH_MCRYPTPP_H
 #define SH_MCRYPTPP_H
 
@@ -123,5 +121,3 @@ class MCryptPP {
 } ;
 
 #endif // ndef SH_MCRYPTPP_H
-
-#endif // def USE_LIBMCRYPT

@@ -1,6 +1,3 @@
-add_definitions(-DUSE_ZLIB)
-add_definitions(-DUSE_LIBMCRYPT)
-add_definitions(-DUSE_LIBJPEG)
 add_definitions(-DHAVE_DEV_URANDOM)
 add_definitions(-DHAVE_DEV_RANDOM)
 add_definitions(-DHAVE_TERMIOS_H)

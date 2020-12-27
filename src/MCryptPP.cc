@@ -20,8 +20,6 @@
 
 #include "common.h"
 
-#ifdef USE_LIBMCRYPT
-
 #include <algorithm>
 #include <cstdlib>
 #include <vector>
@@ -323,5 +321,3 @@ void *MCryptPP::s_malloc (size_t size)
 	}
 	return retval ;
 }
-
-#endif // def USE_LIBMCRYPT

@@ -205,7 +205,6 @@ class BitString {
 	 **/
 	void appendNAry (BYTE v) ;
 
-#ifdef USE_ZLIB
 	/**
 	 * compress this BitString using zlib's compress2 function
 	 * \param level the compression level (ranging from 1 (best speed) to 9 (best compression)
@@ -229,7 +228,6 @@ class BitString {
 	 * and especially that the Length % 8 is 0.
 	 **/
 	BitString& uncompress (unsigned long idestlen) ;
-#endif // def USE_ZLIB
 
 	/**
 	 * get the value of the i-th bit
