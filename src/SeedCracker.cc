@@ -103,8 +103,10 @@ bool SeedCracker::trySeed (UWORD32 seed)
 		return false ;
 	}
 	// Next, try to interpret the remaining bits
-	// enc mode + enc algo + plain size
-	const unsigned int requestedValues = 3 + 5 + 32 ;
+	// magic + enc mode + enc algo + plain size
+	// We _need_ to check the magic as well, since verifyMagic
+	// can throw false positives
+	const unsigned int requestedValues = 25 + 3 + 5 + 32 ;
 
 	// Create a "proper" selector object
 	Selector sel (numSamples, seed) ;
@@ -112,27 +114,38 @@ bool SeedCracker::trySeed (UWORD32 seed)
 	unsigned int encAlgo = 0 ;
 	unsigned int encMode = 0 ;
 	unsigned int plainSize = 0 ;
-	// We've already verified the magic (25 bits), so we can skip them
-	unsigned long sv_idx = 25*samplesPerVertex ;
-	for (unsigned long i = 0 ; i < requestedValues ; i++) {
+	unsigned long sv_idx = 0 ;
+	const int magics[25] = {
+		// Magic, "shm" in binary LE
+		1, 0, 1, 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 1, 0, 1, 1, 0, 0, 1, 1, 1, 0,
+		// Code version (0)
+		0,
+	} ;
+	for (unsigned int i = 0 ; i < requestedValues ; i++) {
 		for (unsigned int j = 0 ; j < samplesPerVertex ; j++, sv_idx++) {
 			ev = (ev + Globs.TheCvrStgFile->getEmbeddedValue (sel[sv_idx])) % EmbValueModulus;
 		}
+		// Check magic
+		if (i < 25) {
+			if (magics[i] != ev) {
+				return false ;
+			}
+		}
 		// Get enc algo
-		if (i < 5) {
-			encAlgo ^= ev << i ;
-			if (encAlgo > 23) {
+		if (25 <= i && i < 30) {
+			encAlgo ^= ev << (i - 25) ;
+			if (encAlgo > 22) {
 				return false ;
 			}
 		}
 		// Get enc mode
-		if (5 <= i && i < 8) {
-			encMode ^= ev << (i - 5) ;
+		if (30 <= i && i < 33) {
+			encMode ^= ev << (i - 30) ;
 		}
 		// get Plain size
-		if (8 <= i && i < 40) {
-			plainSize ^= ev << (i - 8) ;
-			if (plainSize * samplesPerVertex > numSamples - (25 + requestedValues) * samplesPerVertex ) {
+		if (33 <= i && i < 65) {
+			plainSize ^= ev << (i - 33) ;
+			if (plainSize * samplesPerVertex > numSamples - requestedValues * samplesPerVertex ) {
 				// This plain size wouldn't fit, so the seed must be wrong.
 				return false ;
 			}
