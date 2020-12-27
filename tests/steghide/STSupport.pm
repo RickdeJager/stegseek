@@ -24,7 +24,7 @@ use constant DATADIR => "./data/" ;
 use constant RND100 => "rnd100" ;
 
 use constant TAB => "    " ;
-use constant STEGHIDE => "../../src/stegseek" ;
+use constant STEGHIDE => "../../build/src/stegseek" ;
 use constant DEFAULTSTGFN => "stgfile" ;
 use constant DEFAULTEXTFN => "extfile" ;
 use constant DEFEMBARGBASE => (command => "--embed", f => "", "q" => "", p => "\"a passphrase\"", sf => DEFAULTSTGFN) ;

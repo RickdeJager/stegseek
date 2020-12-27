@@ -21,6 +21,8 @@ jobs:
               make -j2
     - name: Run unit tests
       run: cd build && make test
+    - name: Run (legacy) system tests
+      run: cd test/steghide && ./systemtests.pl
     - name: Run cracker tests
       run: cd tests/stegseek && ./testCracker.sh
     - name: Create a .deb package
