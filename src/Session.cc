@@ -268,6 +268,7 @@ void Session::printHelp ()
 		" -f, --force             overwrite existing files\n"
 		" -v, --verbose           display detailed information\n"
 		" -q, --quiet             hide performance metrics\n"
+		" -s, --skipdefault       don't add guesses to the wordlist (empty, filename, ...)\n"
 		"\n"
 		)) ;
 	

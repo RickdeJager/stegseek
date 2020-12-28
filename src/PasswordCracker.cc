@@ -59,7 +59,8 @@ void PasswordCracker::crack ()
 	}
 
 	// Add n worker threads
-	unsigned long part = wordlistStats.st_size / threads ;
+	// A part must have at least len 1, otherwise no words will be read when threads > size
+	unsigned long part = std::max(wordlistStats.st_size / threads, 1L) ;
 	for (unsigned int i = 0; i < threads; i++) {
 		ThreadPool.push_back(std::thread([this, i, part, metricsEnabled] {
 			consume(i*part, (i+1)*part, metricsEnabled); 
@@ -94,20 +95,26 @@ void PasswordCracker::crack ()
 // Take jobs and crack 'em
 void PasswordCracker::consume (unsigned long i, unsigned long stop, bool metricsEnabled)
 {
+	// We want one thread to try a few "fun" ctf passwords first
+	if (i == 0 && ! Args.SkipDefaultGuesses.getValue()) {
+		sillyCtfGuesses() ;
+	}
+	// Next, load the wordlist file
 	FILE * pWordList ;
 	pWordList = fopen(Args.WordlistFn.getValue().c_str(), "r") ;
 	// Skip to our section
 	fseek(pWordList, i, SEEK_SET) ;
 
+	// Dedicating 256 chars should give us a max wordlength of 64 unicode characters, worst case
 	char line[256] ;
-	// We allow for some overlap here (i.e. thread n will repeat a few passwords from thread n+1)
+	// We allow for some overlap here (i.e. thread n might repeat a password from thread n+1)
 	// The reason for this is that we don't know where the linebreaks are without reading the entire
 	// file first, which would hold up (n-1) threads from actually doing useful things.
 	//
-	// Instead, we start n threads at different points in the wordlist, possible in the middle of a password.
+	// Instead, we start n threads at different points in the wordlist, possibly in the middle of a password.
 	// this is fine, since the "previous" thread will always repeat the first password assigned to this thread.
 	//
-	while (!stopped && fgets(line, sizeof(line), pWordList) && ftell(pWordList) <= stop+sizeof(line)) {
+	while (!stopped && fgets(line, sizeof(line), pWordList)) {
 		// Strip \n and \r, \rn
 		line[strcspn(line, "\r\n")] = 0 ;
 
@@ -126,12 +133,17 @@ void PasswordCracker::consume (unsigned long i, unsigned long stop, bool metrics
 			// Add 1, since the newline was stripped, but is present in the file size
 			progress += std::strlen(line) + 1;
 		}
+
+		// If we've overshot the end of our section (by one word), we can stop
+		if (ftell(pWordList) > stop) {
+			break ;
+		}
 	}
 
 	fclose(pWordList) ;
 }
 
-bool PasswordCracker::tryPassphrase (char * Passphrase)
+bool PasswordCracker::tryPassphrase (const char * Passphrase)
 {
 	// We first check if the file magic makes sense
 	if (! verifyMagic(Passphrase)) {
@@ -192,4 +204,31 @@ void PasswordCracker::extract (std::string passphrase)
 	EmbData* emb = ext.extract() ;
 	Cracker::extract(emb) ;
 	delete(emb) ;
+}
+
+// Try some guesses that might come up in ctf's, but won't be
+// on a wordlist.
+// * empty passphrase
+// * filename as passphrase
+// * stripped filename as passphrase
+void PasswordCracker::sillyCtfGuesses ()
+{
+	std::string filename = Utils::stripDir(Args.StgFn.getValue()) ;
+	std::string strippedFilename = filename.substr(0, filename.find_last_of("."));
+	const char * guesses[] = {
+		"",
+		filename.c_str(),
+		strippedFilename.c_str(),
+	} ;
+	for (const char * line : guesses) {
+		// Try extracting with this passphrase
+		if (tryPassphrase(line))
+		{
+			// Tell the other threads that they should stop
+			stopped = true ;
+			success = true ;
+			foundPassphrase = std::string(line);
+			break ;
+		}
+	}
 }

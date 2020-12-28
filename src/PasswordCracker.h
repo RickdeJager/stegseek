@@ -40,9 +40,10 @@ class PasswordCracker : Cracker {
 	void crack (void) ;
 
 	private:
-	bool tryPassphrase (char *) ;
+	bool tryPassphrase (const char *) ;
 	void extract (std::string) ;
 	void consume (unsigned long, unsigned long, bool) ;
+	void sillyCtfGuesses () ;
 	std::ifstream wordlist ;
 	std::string foundPassphrase ;
 	unsigned long wordlistLength = 0 ;

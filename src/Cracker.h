@@ -45,11 +45,11 @@ class Cracker {
 	void crack () ;
 
 	protected:
-	void metrics (unsigned long max, char * unit) ;
+	void metrics (unsigned long max, const char * unit) ;
 	void finish () ;
 	void extract (EmbData*) ;
 	bool verifyMagic (std::string) ;
-	bool verifyMagic (char *) ;
+	bool verifyMagic (const char *) ;
 	bool verifyMagic (UWORD32) ;
 
 	// Control variables

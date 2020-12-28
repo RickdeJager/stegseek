@@ -79,6 +79,7 @@ class Arguments {
 	ArgULong		Radius ;
 	ArgFloat		Goal ;
 	ArgBool			Force ;
+	ArgBool			SkipDefaultGuesses ;
 	ArgVerbosity	Verbosity ;
 	ArgDebugCommand	DebugCommand ;
 	ArgBool			Check ;
@@ -100,6 +101,7 @@ class Arguments {
 	static const int		Default_Compression = 9 ; // slowest, but smallest
 	static const bool		Default_EmbedEmbFn = true ;
 	static const bool		Default_Force = false ;
+	static const bool		Default_SkipDefaultGuesses = false ;
 	static const VERBOSITY	Default_Verbosity = NORMAL ;
 	static const unsigned long	Default_Radius = 0 ; // there is no default radius for all file formats
 	static const unsigned int	Max_Algorithm = 3 ;

@@ -83,8 +83,10 @@ Cracker::Cracker ()
 	success = false ;
 }
 
-void Cracker::metrics (unsigned long max, char * unit)
+void Cracker::metrics (unsigned long max, const char * unit)
 {
+	// Make sure "max" is at least 1 (in case of empty wordlist)
+	max = std::max(max, 1UL) ;
 	Message msg ;
 	msg.setNewline(false) ;
 	
@@ -115,7 +117,7 @@ bool Cracker::verifyMagic (std::string Passphrase)
 	return verifyMagic(seed) ;
 }
 
-bool Cracker::verifyMagic (char * Passphrase)
+bool Cracker::verifyMagic (const char * Passphrase)
 {
 	MHASH td = mhash_init(MHASH_MD5);
 	mhash(td, Passphrase, std::strlen(Passphrase)) ;

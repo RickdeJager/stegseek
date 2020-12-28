@@ -247,6 +247,9 @@ std::vector<std::string> Arguments::parse_Arguments (ArgIt& curarg)
 		} else if (*curarg == "-f" || *curarg == "--force") {
 			std::vector<COMMAND> compatible{EMBED, EXTRACT, CRACK, SEED_CRACK} ;
 			parse_Generic_Bool(curarg, compatible, &Force, true) ;
+		} else if (*curarg == "-s" || *curarg == "--skipdefault") {
+			std::vector<COMMAND> compatible{CRACK} ;
+			parse_Generic_Bool(curarg, compatible, &SkipDefaultGuesses, true) ;
 		}
 		// If there is no generic parser available, use a specific parser
 		else {
@@ -760,6 +763,7 @@ void Arguments::setDefaults (void)
 	WordlistFn.setValue ("/usr/share/wordlists/rockyou.txt", false) ;
 	Threads.setValue (std::thread::hardware_concurrency(), false) ;
 	Force.setValue (Default_Force, false) ;
+	SkipDefaultGuesses.setValue (Default_SkipDefaultGuesses, false) ;
 	Verbosity.setValue (Default_Verbosity, false) ;
 	Radius.setValue (Default_Radius, false) ;
 	Goal.setValue (Default_Goal, false) ;
