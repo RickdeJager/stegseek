@@ -58,9 +58,10 @@ This command will tell you:
   
 If you're (very) lucky and the file was encoded without encryption, this mode will even recover the encoded file for you!  
   
-In this demo I used a very secure random password to embed a file, but disabled encryption by passing the `-e none` argument to steghide. Within a few minutes, Stegseek is able to recover the embedded file.  
+The below demo features [a challenge from X-MAS CTF 2020](https://ctftime.org/writeup/25391). A flag was hidden using a secure random password, but without encryption enabled.
+Within a few minutes, Stegseek is able to recover the embedded file without needing to guess the correct password.
 
-![](./.demo/seed.gif "Sped up by a factor of 20 for your viewing pleasure.")
+![](./.demo/seed.gif "Sped up by a factor of 10 for your viewing pleasure.")
 
 ## Available arguments
 
@@ -144,14 +145,17 @@ To test the performance of of other tools, I created several stego files with di
 | "budakid1"  | 1 000 000   |          0.06s | [p]      23m50.0s |                13m45.7s |
 | "␣␣␣␣␣␣␣1"  | 14 344 383  |          1.65s | [p]    5h41m52.5s | [p]          3h17m38.0s |
 
-<details><summary></summary>
+[p] = projected time based on previous results.  
+  
+<details><summary>(click here for fine-tuned performance)</summary>
 <p>
 In the first four examples, half of the time is spent syncing metrics between threads and displaying them. In quiet mode, StegSeek's numbers are `[0.022s, 0.022s, 0.022s, 0.022s, 1.45s]`.
 </p>
-</details>
+</details>  
   
-[p] = projected time based on previous results.  
+----
   
+
 To compare the speed of each tool, let's look at the last row of the table (otherwise Stegseek finishes before all threads have started).  
 
 At this scale Stegseek is over **12 000** times faster than Stegcracker and over **7000** times faster than Stegbrute.
@@ -170,7 +174,7 @@ improvements:
 
 #### Same test as above, but now running on a 16 thread VPS
 
-```text
+```
 root@beefy:~/testfiles# time stegseek 7spaces1.jpg rockyou.txt -q
 Stegseek version 0.5
 [i] --> Found passphrase: "       1"
@@ -181,7 +185,28 @@ user	0m12.694s
 sys	0m0.052s
 
 ```
+#### 15 GB wordlist (running on the same laptop used in the original tests)
+```
+> steghide --embed -sf steg.jpg -ef secret.txt -cf clear.jpg -f -p $(shuf -n 1 realuniq.lst)
+embedding "secret.txt" in "clear.jpg"... done
+writing stego file "steg.jpg"... done
+> time stegseek steg.jpg realuniq.lst -
+StegSeek version 0.5
+Progress: 97.83% (15354873129 bytes)           
 
+[i] --> Found passphrase: "Hossuungsstrahl"
+[i] Original filename: "secret.txt"
+[i] Extracting to stdout
+
+Now that I can stream in the file on the fly, 
+I can run the cracker with stupidly large 
+wordlists. This one is 15 GB!
+
+real	3m25,540s
+user	23m13,614s
+sys	0m10,260s
+
+```
 </p>
 </details>
 
