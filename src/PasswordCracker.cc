@@ -105,8 +105,8 @@ void PasswordCracker::consume (unsigned long i, unsigned long stop, bool metrics
 	// Skip to our section
 	fseek(pWordList, i, SEEK_SET) ;
 
-	// Dedicating 256 chars should give us a max wordlength of 64 unicode characters, worst case
-	char line[256] ;
+	// Dedicating 512 chars should give us a max wordlength of 128 unicode characters, worst case
+	char line[512] ;
 	// We allow for some overlap here (i.e. thread n might repeat a password from thread n+1)
 	// The reason for this is that we don't know where the linebreaks are without reading the entire
 	// file first, which would hold up (n-1) threads from actually doing useful things.

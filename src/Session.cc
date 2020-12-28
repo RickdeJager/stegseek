@@ -17,7 +17,7 @@
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
  * 
  * 2020:
- *  - Modified to include stegseek help and version
+ *  - Modified to include StegSeek help and version
  *
  */
 
@@ -148,7 +148,7 @@ void Session::run ()
 
 void Session::printInfo ()
 {
-	// if file format not supported: exception will be catched in main
+	// if file format not supported: exception will be caught in main
 	CvrStgFile* file = CvrStgFile::readFile (Args.CvrFn.getValue()) ;
 
 	if (Args.CvrFn.getValue() == "") {
@@ -236,7 +236,7 @@ void Session::printEncInfo ()
 
 void Session::printVersion ()
 {
-	fprintf(stderr,"Stegseek version %s\n" , VERSION);
+	fprintf(stderr,"StegSeek version %s\n" , VERSION);
 	if (Args.Verbosity.getValue() == VERBOSE) {
 		printSteghideVersion() ;
 	}
@@ -246,7 +246,7 @@ void Session::printHelp ()
 {
 	printVersion() ;
 	printf (_("\n"
-		"=== Stegseek Help ===\n"
+		"=== StegSeek Help ===\n"
 		"To crack a stegofile:\n"
 		"stegseek [stegofile.jpg] [wordlist.txt]\n"
 		"\n"
@@ -267,8 +267,8 @@ void Session::printHelp ()
 		" -t, --threads           set the number of threads. Defaults to the number of cores.\n"
 		" -f, --force             overwrite existing files\n"
 		" -v, --verbose           display detailed information\n"
-		" -q, --quiet             hide performance metrics\n"
-		" -s, --skipdefault       don't add guesses to the wordlist (empty, filename, ...)\n"
+		" -q, --quiet             hide performance metrics (can improve performance)\n"
+		" -s, --skipdefault       don't add guesses to the wordlist (empty password, filename, ...)\n"
 		"\n"
 		)) ;
 	
@@ -298,7 +298,7 @@ void Session::printSteghideHelp ()
 		" --info                  display information about a cover- or stego-file\n"
 		" --encinfo               display a list of supported encryption algorithms\n"
 		" --version               display version information\n"
-		" --license               display stegseek's license\n"
+		" --license               display StegSeek's license\n"
 		" --help                  display this usage information\n"
 
 		"\nembedding options:\n"

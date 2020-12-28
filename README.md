@@ -23,7 +23,7 @@ The following instructions walk you through the installation process. Alternativ
 On Ubuntu and other Debian-based systems, you can use the provided `.deb` package for installation:
 
 1. Download the latest [Stegseek release](https://github.com/RickdeJager/stegseek/releases)
-1. Install the `.deb` file using `sudo apt install ./stegseek_0.4.1-1.deb`  
+1. Install the `.deb` file using `sudo apt install ./stegseek_0.5-1.deb`  
   
 On other systems you will have to build Stegseek yourself. See [BUILD.md](BUILD.md) for more information.  
 
@@ -66,9 +66,9 @@ In this demo I used a very secure random password to embed a file, but disabled 
 
 Use `stegseek --help` to get the full list of available options:
 ```
-Stegseek version  0.4
+StegSeek version 0.5
 
-=== Stegseek Help ===
+=== StegSeek Help ===
 To crack a stegofile:
 stegseek [stegofile.jpg] [wordlist.txt]
 
@@ -89,10 +89,10 @@ Keyword arguments:
  -t, --threads           set the number of threads. Defaults to the number of cores.
  -f, --force             overwrite existing files
  -v, --verbose           display detailed information
- -q, --quiet             hide performance metrics
+ -q, --quiet             hide performance metrics (can improve performance)
+ -s, --skipdefault       don't add guesses to the wordlist (empty password, filename, ...)
 
 Use "stegseek --help -v" to include steghide's help.
-
 ```
 
 ## Steghide
@@ -117,19 +117,17 @@ I picked the last password in `rockyou.txt` without control characters: "␣␣�
 This password is on line `14344383` out of `14344391`  
 
 ```
-time stegseek 7spaces1.jpg rockyou.txt 
-Stegseek version 0.4
-[i] Read the entire wordlist (14344391 words), starting cracker
-[ 14231679 / 14344391 ]  (99,21%)                 
-[i] --> Found passphrase: "       1"
+time stegseek 7spaces1.jpg rockyou.txt
+StegSeek version 0.5
+Progress: 95.21% (133213740 bytes)           
 
+[i] --> Found passphrase: "       1"
 [i] Original filename: "secret.txt"
 [i] Extracting to "7spaces1.jpg.out"
 
-real	0m1,912s
-user	0m10,355s
-sys	0m0,144s
-
+real	0m1,644s
+user	0m12,847s
+sys	0m0,041s
 ```
 
 And there it is, over 14 million passwords in less than 2 seconds :heart_eyes:.
@@ -138,20 +136,25 @@ And there it is, over 14 million passwords in less than 2 seconds :heart_eyes:.
 
 To test the performance of of other tools, I created several stego files with different passwords, taken from `rockyou.txt`. I ran each of the tools with their default settings, except Stegbrute where I increased threading for a fair comparison.
 
-| password    | Line        | Stegseek v0.4 | Stegcracker 2.0.9 | Stegbrute v0.1.1 (-t 8) |
-|-------------|-------------|---------------|-------------------|-------------------------|
-| "cassandra" | 1 000       |          0.9s |              3.1s |                    0.7s |
-| "kupal"     | 10 000      |          0.9s |             14.4s |                    7.1s |
-| "sagar"     | 100 000     |          0.9s |           2m23.0s |                 1m21.9s |
-| "budakid1"  | 1 000 000   |          0.9s | [p]      23m50.0s |                13m45.7s |
-| "␣␣␣␣␣␣␣1"  | 14 344 383  |          1.9s | [p]    5h41m52.5s | [p]          3h17m38.0s |
+| password    | Line        | Stegseek v0.5  | Stegcracker 2.0.9 | Stegbrute v0.1.1 (-t 8) |
+|-------------|-------------|----------------|-------------------|-------------------------|
+| "cassandra" | 1 000       |          0.04s |              3.1s |                    0.7s |
+| "kupal"     | 10 000      |          0.04s |             14.4s |                    7.1s |
+| "sagar"     | 100 000     |          0.04s |           2m23.0s |                 1m21.9s |
+| "budakid1"  | 1 000 000   |          0.06s | [p]      23m50.0s |                13m45.7s |
+| "␣␣␣␣␣␣␣1"  | 14 344 383  |          1.65s | [p]    5h41m52.5s | [p]          3h17m38.0s |
+
+<details><summary></summary>
+<p>
+In the first four examples, half of the time is spent syncing metrics between threads and displaying them. In quiet mode, StegSeek's numbers are `[0.022s, 0.022s, 0.022s, 0.022s, 1.45s]`.
+</p>
+</details>
   
 [p] = projected time based on previous results.  
   
 To compare the speed of each tool, let's look at the last row of the table (otherwise Stegseek finishes before all threads have started).  
 
-At this scale Stegseek is over **10 000** times faster than Stegcracker and over **6000** times faster than Stegbrute.
-
+At this scale Stegseek is over **12 000** times faster than Stegcracker and over **7000** times faster than Stegbrute.
 
 # :notebook: Changelog
 
@@ -160,7 +163,27 @@ At this scale Stegseek is over **10 000** times faster than Stegcracker and over
 improvements:  
 * Uses way less memory (memory usage is no longer tied to Wordlist length)
 * Wordlist is loaded on the fly, so we can start cracking immediately.
-* Fixed high false positive rate on `--seed`
+* Fixed high false positive rate on `--seed`  
+  
+<details><summary>This version scales better with cores, which allows you to run StegSeek on stupidly overkill hardware</summary>
+<p>
+
+#### Same test as above, but now running on a 16 thread VPS
+
+```text
+root@beefy:~/testfiles# time stegseek 7spaces1.jpg rockyou.txt -q
+Stegseek version 0.5
+[i] --> Found passphrase: "       1"
+[i] Extracting to "7spaces1.jpg.out"
+
+real	0m0.837s
+user	0m12.694s
+sys	0m0.052s
+
+```
+
+</p>
+</details>
 
 ## v0.4
 2020-12-01  
