@@ -155,6 +155,13 @@ At this scale Stegseek is over **10 000** times faster than Stegcracker and over
 
 # :notebook: Changelog
 
+## v0.5
+2020-12-28  
+improvements:  
+* Uses way less memory (memory usage is no longer tied to Wordlist length)
+* Wordlist is loaded on the fly, so we can start cracking immediately.
+* Fixed high false positive rate on `--seed`
+
 ## v0.4
 2020-12-01  
 improvements:  

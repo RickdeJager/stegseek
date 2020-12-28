@@ -1,5 +1,5 @@
 /*
- * Stegseek 0.4 - a steghide cracker
+ * Stegseek 0.5 - a steghide cracker
  * Copyright (C) 2020 Rick de Jager
  * 
  * Based on the work of Stefan Hetzl <shetzl@chello.at>
@@ -34,16 +34,8 @@
 PasswordCracker::PasswordCracker ()
 {
 	VerboseMessage vrs ;
-	// read wordlist
 	vrs.setMessage (_("[v] Using wordlist file \"%s\"."), Args.WordlistFn.getValue().c_str()) ;
 	vrs.printMessage() ;
-	wordlist = std::ifstream(Args.WordlistFn.getValue().c_str()) ;
-
-	// Validate wordlist
-	if (wordlist.fail()) {
-		throw SteghideError (_("could not open the wordlist \"%s\"."), Args.WordlistFn.getValue().c_str()) ;
-	}
-
 }
 
 void PasswordCracker::crack ()
@@ -53,7 +45,9 @@ void PasswordCracker::crack ()
 
 	// First stat the word list to get the file length
 	struct stat wordlistStats ;
-	stat(Args.WordlistFn.getValue().c_str(), &wordlistStats) ;
+	if (stat(Args.WordlistFn.getValue().c_str(), &wordlistStats) != 0) {
+		throw SteghideError("could not open the wordlist \"%s\".", Args.WordlistFn.getValue().c_str()) ;
+	}
 
 	// Initialize threads
 	std::vector<std::thread> ThreadPool ;

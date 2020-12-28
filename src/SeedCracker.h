@@ -1,6 +1,6 @@
 /*
  *
- * Stegseek 0.4 - a steghide cracker
+ * Stegseek 0.5 - a steghide cracker
  * Copyright (C) 2020 Rick de Jager
  * 
  * Based on the work of Stefan Hetzl <shetzl@chello.at>
@@ -24,10 +24,8 @@
 #ifndef SH_SEEDCRACKER_H
 #define SH_SEEDCRACKER_H
 
-#include <fstream>
 #include <string>
 #include <atomic>
-#include <chrono>
 
 #include "Cracker.h"
 #include "Selector.h"

@@ -1,6 +1,6 @@
 /*
  *
- * Stegseek 0.4 - a steghide cracker
+ * Stegseek 0.5 - a steghide cracker
  * Copyright (C) 2020 Rick de Jager
  * 
  * Based on the work of Stefan Hetzl <shetzl@chello.at>
@@ -25,10 +25,8 @@
 #define SH_PASSWORDCRACKER_H
 
 #include <thread>
-#include <fstream>
 #include <string>
 #include <atomic>
-#include <chrono>
 #include <sys/stat.h>
 #include <cstring>
 
