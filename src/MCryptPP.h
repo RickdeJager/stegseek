@@ -31,11 +31,7 @@ class BitString ;
 class EncryptionAlgorithm ;
 class EncryptionMode ;
 
-#ifdef WIN32
-#define MCRYPTPP_LIBDIR	"./modules/"
-#else
 #define MCRYPTPP_LIBDIR NULL
-#endif
 
 class MCryptPP {
 	public:

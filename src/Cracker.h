@@ -45,7 +45,7 @@ class Cracker {
 	void crack () ;
 
 	protected:
-	void metrics (unsigned long max) ;
+	void metrics (unsigned long max, char * unit) ;
 	void finish () ;
 	void extract (EmbData*) ;
 	bool verifyMagic (std::string) ;
@@ -55,7 +55,7 @@ class Cracker {
 	// Control variables
 	bool success ;
 	bool stopped ;
-	std::atomic<unsigned long> attempts ;
+	std::atomic<unsigned long> progress ;
 
 	// File properties
 	unsigned short bitsperembvalue ;

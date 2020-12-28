@@ -40,8 +40,10 @@ Cracker::Cracker ()
 	// get stegofile
 	if (Args.StgFn.getValue() != "") {
 		vrs.setMessage (_("[v] Using stegofile \"%s\"."), Args.StgFn.getValue().c_str()) ;
-	} else {
+	} else if (Args.StgFn.is_set()) {
 		vrs.setMessage (_("[v] Reading stegofile from stdin.")) ;
+	} else {
+		throw SteghideError("No stegofile specified as input.") ;
 	}
 	vrs.printMessage() ;
 
@@ -57,9 +59,6 @@ Cracker::Cracker ()
 
 	// Print threading info
 	vrs.setMessage (_("[v] Running on %d threads."), Args.Threads.getValue()) ;
-	vrs.printMessage() ;
-
-	vrs.setMessage ("") ;
 	vrs.printMessage() ;
 
 	// Load the Stegfile
@@ -78,27 +77,27 @@ Cracker::Cracker ()
 		embeddedValues[i] = Globs.TheCvrStgFile->getEmbeddedValue(i) ;
 	}
 
-	// init the attempts counter
-	attempts = 0 ;
+	// init the performace counters
+	progress = 0 ;
 	stopped = false ;
 	success = false ;
 }
 
-void Cracker::metrics (unsigned long max)
+void Cracker::metrics (unsigned long max, char * unit)
 {
 	Message msg ;
 	msg.setNewline(false) ;
 	
 	do {
-		unsigned long a = attempts ;
+		unsigned long a = progress ;
 		float percentage = 100.0f * ((float) a / (float) max) ;
-		msg.setMessage("\rProgress: %.2f%%  ", percentage) ;
+		msg.setMessage("\rProgress: %.2f%% (%u %s)           ", percentage, a, unit) ;
 		msg.printMessage() ;
-		std::this_thread::sleep_for(std::chrono::milliseconds(10)) ; 
+		std::this_thread::sleep_for(std::chrono::milliseconds(20)) ; 
 	} while (!stopped) ;
-	// Print a newline before returning
+	// Print 2 newlines before returning
 	msg.setNewline(true) ;
-	msg.setMessage("") ;
+	msg.setMessage("\n") ;
 	msg.printMessage() ;
 }
 
@@ -128,9 +127,8 @@ bool Cracker::verifyMagic (char * Passphrase)
 		seed ^= hash[i] ;
 	}
 	return verifyMagic(seed) ;
-
-
 }
+
 bool Cracker::verifyMagic (UWORD32 seed)
 {
 	// Create a buf to keep track of rng collisions
@@ -192,17 +190,15 @@ void Cracker::extract (EmbData* emb)
 		outFn = Args.ExtFn.getValue() ;
 	}
 
-	Message msg ;
 	if (origFn != "") {
+		Message msg ;
 		msg.setMessage("[i] Original filename: \"%s\"", origFn.c_str()) ;
 		msg.printMessage() ;
 	}
 	if (outFn != "") {
-		msg.setMessage("[i] Extracting to \"%s\"", outFn.c_str()) ;
-		msg.printMessage() ;
+		fprintf(stderr, "[i] Extracting to \"%s\"\n", outFn.c_str()) ;
 	} else {
-		msg.setMessage("[i] Extracting to stdout") ;
-		msg.printMessage() ;
+		fprintf(stderr, "[i] Extracting to stdout\n\n") ;
 	}
 	BinaryIO io (outFn, BinaryIO::WRITE) ;
 	std::vector<BYTE> data = emb->getData() ;

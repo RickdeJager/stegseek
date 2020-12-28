@@ -20,11 +20,6 @@
  *
  */
 
-
-#include <sys/stat.h>
-#include <string.h>
-#include <cstring>
-
 #include "PasswordCracker.h"
 
 #include "error.h"
@@ -66,7 +61,7 @@ void PasswordCracker::crack ()
 
 	// Add a thread to keep track of metrics
 	if (metricsEnabled) {
-		ThreadPool.push_back(std::thread([this, wordlistStats] {metrics(wordlistStats.st_size); })) ;
+		ThreadPool.push_back(std::thread([this, wordlistStats] {metrics(wordlistStats.st_size, "bytes"); })) ;
 	}
 
 	// Add n worker threads
@@ -90,8 +85,6 @@ void PasswordCracker::crack ()
 		ThreadPool.pop_back() ;
 	}
 
-	// If we didn't find a passphrase, print a message
-	Message msg ;
 	if (!success) {
 		// On failure, send the message directly to stderr so it will be printed in quiet mode as well
 		fprintf(stderr, "[!] Could not find a valid passphrase.\n") ;
@@ -99,8 +92,7 @@ void PasswordCracker::crack ()
 		// Re-extract the data with the confirmed passphrase.
 		// This does mean we're throwing away one valid "embdata" object, but
 		// that's not a bad trade-off to be able to use steghide's structure
-		msg.setMessage("[i] --> Found passphrase: \"%s\"", foundPassphrase.c_str()) ;
-		msg.printMessage() ;
+		fprintf(stderr, "[i] --> Found passphrase: \"%s\"\n", foundPassphrase.c_str()) ;
 		extract(foundPassphrase) ;
 	}
 }
@@ -138,7 +130,7 @@ void PasswordCracker::consume (unsigned long i, unsigned long stop, bool metrics
 		// Incrementing an atomic int is quite costly, so don't do it if no one cares about its value
 		if (metricsEnabled) {
 			// Add 1, since the newline was stripped, but is present in the file size
-			attempts += std::strlen(line) + 1;
+			progress += std::strlen(line) + 1;
 		}
 	}
 

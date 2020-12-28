@@ -42,13 +42,15 @@ void SeedCracker::crack ()
 
 	// Add a thread to keep track of metrics
 	if (metricsEnabled) {
-		ThreadPool.push_back(std::thread([this] {metrics(UWORD32_MAX); })) ;
+		ThreadPool.push_back(std::thread([this] {metrics(UWORD32_MAX, "seeds"); })) ;
 	}
 
 	// Add n worker threads
 	unsigned int part = UWORD32_MAX / threads ;
 	for (unsigned int i = 0; i < threads; i++) {
-		ThreadPool.push_back(std::thread([this, i, part] {consume(i*part, (i+1)*part); })) ;
+		ThreadPool.push_back(std::thread([this, i, part, metricsEnabled] {
+			consume(i*part, (i+1)*part, metricsEnabled);
+		})) ;
 	}
 
 	// Join all worker threads
@@ -78,14 +80,11 @@ void SeedCracker::crack ()
 }
 
 // Take jobs and crack 'em
-void SeedCracker::consume (unsigned int i, unsigned int stop)
+void SeedCracker::consume (unsigned int i, unsigned int stop, bool metricsEnabled)
 {
 	while (!stopped && i < stop)
 	{
-		// Add to the perf metric
-		attempts += 1 ;
-
-		// Try extracting with this passphrase
+		// Try extracting with this seed
 		if (trySeed(i))
 		{
 			// Tell the other threads that they should stop
@@ -93,6 +92,12 @@ void SeedCracker::consume (unsigned int i, unsigned int stop)
 			success = true ;
 		}
 		i++ ;
+
+		// Incrementing an atomic int is quite costly, so don't do it if no one cares about its value
+		if (metricsEnabled) {
+			// Add to the perf metric
+			progress ++ ;
+		}
 	}
 }
 

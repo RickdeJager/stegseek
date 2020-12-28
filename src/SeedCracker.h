@@ -24,16 +24,10 @@
 #ifndef SH_SEEDCRACKER_H
 #define SH_SEEDCRACKER_H
 
-#include <thread>
-#include <mutex>
-#include <condition_variable>
-#include <iostream>
 #include <fstream>
 #include <string>
-#include <queue>
 #include <atomic>
 #include <chrono>
-#include <set>
 
 #include "Cracker.h"
 #include "Selector.h"
@@ -53,7 +47,7 @@ class SeedCracker : Cracker{
 
 	private:
 	bool trySeed (UWORD32) ;
-	void consume (unsigned int, unsigned int) ;
+	void consume (unsigned int, unsigned int, bool) ;
 	void finish () ;
 	Result foundResult ;
 } ;
