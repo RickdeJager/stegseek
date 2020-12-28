@@ -93,7 +93,7 @@ void Cracker::metrics (unsigned long max, const char * unit)
 	do {
 		unsigned long a = progress ;
 		float percentage = 100.0f * ((float) a / (float) max) ;
-		msg.setMessage("\rProgress: %.2f%% (%u %s)           ", percentage, a, unit) ;
+		msg.setMessage("\rProgress: %.2f%% (%lu %s)           ", percentage, a, unit) ;
 		msg.printMessage() ;
 		std::this_thread::sleep_for(std::chrono::milliseconds(20)) ; 
 	} while (!stopped) ;
