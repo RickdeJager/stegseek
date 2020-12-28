@@ -118,7 +118,7 @@ I picked the last password in `rockyou.txt` without control characters: "␣␣�
 This password is on line `14344383` out of `14344391`  
 
 ```
-time stegseek 7spaces1.jpg rockyou.txt
+> time stegseek 7spaces1.jpg rockyou.txt
 StegSeek version 0.5
 Progress: 95.21% (133213740 bytes)           
 
@@ -149,7 +149,11 @@ To test the performance of of other tools, I created several stego files with di
   
 <details><summary>(click here for fine-tuned performance)</summary>
 <p>
-In the first four examples, half of the time is spent syncing metrics between threads and displaying them. In quiet mode, StegSeek's numbers are `[0.022s, 0.022s, 0.022s, 0.022s, 1.45s]`.
+
+In the first four examples, half of the time is spent syncing metrics between threads and displaying them. In quiet mode, StegSeek's numbers are: 
+```
+[0.022s, 0.022s, 0.022s, 0.022s, 1.45s]
+```
 </p>
 </details>  
   

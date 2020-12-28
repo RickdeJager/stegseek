@@ -340,8 +340,8 @@ bool Arguments::parse_Threading (ArgIt& curarg)
 	bool found = false ;
 
 	if (*curarg == "-t" || *curarg == "--threads") {
-		if (Command.getValue() != CRACK) {
-			throw ArgError (_("the argument \"%s\" can only be used with the \"%s\" command."), curarg->c_str(), "crack") ;
+		if (Command.getValue() != CRACK && Command.getValue() != SEED_CRACK) {
+			throw ArgError (_("the argument \"%s\" can only be used with the \"%s\" and \"%s\" commands."), curarg->c_str(), "crack", "seed") ;
 		}
 
 		if (Threads.is_set()) {
