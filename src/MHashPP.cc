@@ -24,122 +24,107 @@
 #include <mhash.h>
 
 #include "BitString.h"
+#include "MHashPP.h"
 #include "common.h"
 #include "error.h"
-#include "MHashPP.h"
 
-MHashPP::MHashPP ()
-{
-	hashing = false ;
-	HashBytesValid = false ;
+MHashPP::MHashPP() {
+    hashing = false;
+    HashBytesValid = false;
 }
 
-MHashPP::MHashPP (hashid id)
-{
-	init (id) ;
+MHashPP::MHashPP(hashid id) { init(id); }
+
+void MHashPP::init(hashid id) {
+    if ((HashD = mhash_init(id)) == MHASH_FAILED) {
+        throw SteghideError(_("could not initialize libmhash %s algorithm."),
+                            getAlgorithmName(id).c_str());
+    }
+    hashing = true;
+    HashBytesValid = false;
 }
 
-void MHashPP::init (hashid id)
-{
-	if ((HashD = mhash_init (id)) == MHASH_FAILED) {
-		throw SteghideError (_("could not initialize libmhash %s algorithm."), getAlgorithmName(id).c_str()) ;
-	}
-	hashing = true ;
-	HashBytesValid = false ;
+const std::vector<BYTE> &MHashPP::end() {
+    myassert(hashing);
+
+    unsigned int n = getHashSize();
+    HashBytes = std::vector<BYTE>(n);
+    BYTE hash[n];
+    mhash_deinit(HashD, hash);
+    hashing = false;
+    for (unsigned int i = 0; i < n; i++) {
+        HashBytes[i] = hash[i];
+    }
+
+    HashBytesValid = true;
+    return HashBytes;
 }
 
-const std::vector<BYTE>& MHashPP::end ()
-{
-	myassert (hashing) ;
-
-	unsigned int n = getHashSize() ;
-	HashBytes = std::vector<BYTE> (n) ;
-	BYTE hash[n] ;
-	mhash_deinit (HashD, hash) ;
-	hashing = false ;
-	for (unsigned int i = 0 ; i < n ; i++) {
-		HashBytes[i] = hash[i] ;
-	}
-
-	HashBytesValid = true ;
-	return HashBytes ;
+unsigned int MHashPP::getHashSize(void) {
+    myassert(hashing);
+    return ((unsigned int)mhash_get_block_size(mhash_get_mhash_algo(HashD)));
 }
 
-unsigned int MHashPP::getHashSize (void)
-{
-	myassert (hashing) ;
-	return ((unsigned int) mhash_get_block_size (mhash_get_mhash_algo (HashD))) ;
+MHashPP &MHashPP::operator<<(std::string v) {
+    myassert(hashing);
+    mhash(HashD, v.data(), v.size());
+    return *this;
 }
 
-MHashPP& MHashPP::operator<< (std::string v)
-{
-	myassert (hashing) ;
-	mhash (HashD, v.data(), v.size()) ;
-	return *this ;
+MHashPP &MHashPP::operator<<(BitString v) {
+    myassert(hashing);
+    myassert(v.getLength() % 8 == 0);
+
+    unsigned long n = v.getLength() / 8;
+    for (unsigned int i = 0; i < n; i++) {
+        (*this) << (BYTE)v.getValue(8 * i, 8);
+    }
+
+    return *this;
 }
 
-MHashPP& MHashPP::operator<< (BitString v)
-{
-	myassert (hashing) ;
-	myassert (v.getLength() % 8 == 0) ;
-
-	unsigned long n = v.getLength() / 8 ;
-	for (unsigned int i = 0 ; i < n ; i++) {
-		(*this) << (BYTE) v.getValue (8 * i, 8) ;
-	}
-
-	return *this ;
+MHashPP &MHashPP::operator<<(BYTE v) {
+    myassert(hashing);
+    mhash(HashD, &v, 1);
+    return *this;
 }
 
-MHashPP& MHashPP::operator<< (BYTE v)
-{
-	myassert (hashing) ;
-	mhash (HashD, &v, 1) ;
-	return *this ;
+MHashPP &MHashPP::operator<<(MHashPP::Command c) {
+    switch (c) {
+    case endhash:
+        HashBytes = end();
+        break;
+
+    default:
+        myassert(0);
+        break;
+    }
+    return *this;
 }
 
-MHashPP& MHashPP::operator<< (MHashPP::Command c)
-{
-	switch (c) {
-		case endhash:
-		HashBytes = end() ;
-		break ;
-
-		default:
-		myassert (0) ;
-		break ;
-	}
-	return *this ;
+std::string MHashPP::getAlgorithmName() {
+    myassert(hashing);
+    return getAlgorithmName(mhash_get_mhash_algo(HashD));
 }
 
-std::string MHashPP::getAlgorithmName ()
-{
-	myassert (hashing) ;
-	return getAlgorithmName (mhash_get_mhash_algo (HashD)) ;
+std::string MHashPP::getAlgorithmName(hashid id) {
+    char *name = (char *)mhash_get_hash_name(id);
+    std::string retval;
+    if (name == NULL) {
+        retval = std::string("<algorithm not found>");
+    } else {
+        retval = std::string(name);
+    }
+    free(name);
+    return retval;
 }
 
-std::string MHashPP::getAlgorithmName (hashid id)
-{
-	char *name = (char*) mhash_get_hash_name (id) ;
-	std::string retval ;
-	if (name == NULL) {
-		retval = std::string ("<algorithm not found>") ;
-	}
-	else {
-		retval = std::string (name) ;
-	}
-	free (name) ;
-	return retval ;
+BitString MHashPP::getHashBits() {
+    myassert(HashBytesValid);
+    return BitString(HashBytes);
 }
 
-BitString MHashPP::getHashBits ()
-{
-	myassert (HashBytesValid) ;
-	return BitString (HashBytes) ;
-}
-
-const std::vector<BYTE>& MHashPP::getHashBytes()
-{
-	myassert (HashBytesValid) ;
-	return HashBytes ;
+const std::vector<BYTE> &MHashPP::getHashBytes() {
+    myassert(HashBytesValid);
+    return HashBytes;
 }

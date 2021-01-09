@@ -27,20 +27,20 @@
 #include "CvrStgFileTest.h"
 
 class BmpFileTest : public CvrStgFileTest {
-	public:
-	BmpFileTest (TestSuite* s) ;
+  public:
+    BmpFileTest(TestSuite *s);
 
-	void setup (void) ;
-	void cleanup (void) ;
+    void setup(void);
+    void cleanup(void);
 
-	void testSVALCalculation (void) ;
+    void testSVALCalculation(void);
 
-	private:
-	CvrStgFile *f1, *f2 ;
-	Graph *g1, *g2 ;
-	Selector *s1, *s2 ;
-	BitString *bs1, *bs2 ;
-	Globals gl1, gl2 ;
-} ;
+  private:
+    CvrStgFile *f1, *f2;
+    Graph *g1, *g2;
+    Selector *s1, *s2;
+    BitString *bs1, *bs2;
+    Globals gl1, gl2;
+};
 
 #endif // ndef SH_BMPFILETEST_H

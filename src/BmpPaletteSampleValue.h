@@ -22,8 +22,8 @@
 #define SH_BMPPALETTESAMPLEVALUE_H
 
 #include "BmpSampleValue.h"
-#include "CvrStgFile.h"
 #include "ColorPalette.h"
+#include "CvrStgFile.h"
 #include "common.h"
 
 /**
@@ -31,23 +31,24 @@
  * \brief a sample in a bmp palette (i.e. in a 1-,4- or 8-bit) file
  **/
 class BmpPaletteSampleValue : public BmpSampleValue {
-	public:
-	BmpPaletteSampleValue (BYTE i) ;
+  public:
+    BmpPaletteSampleValue(BYTE i);
 
-	SampleValue* getNearestTargetSampleValue (EmbValue t) const ;
-	std::string getName (void) const ;
+    SampleValue *getNearestTargetSampleValue(EmbValue t) const;
+    std::string getName(void) const;
 
-	BYTE getIndex (void) const { return Index ; } ;
-	BYTE getRed (void) const { return (*Palette)[Index].Red ; } ;
-	BYTE getGreen (void) const { return (*Palette)[Index].Green ; } ;
-	BYTE getBlue (void) const { return (*Palette)[Index].Blue ; } ;
+    BYTE getIndex(void) const { return Index; };
+    BYTE getRed(void) const { return (*Palette)[Index].Red; };
+    BYTE getGreen(void) const { return (*Palette)[Index].Green; };
+    BYTE getBlue(void) const { return (*Palette)[Index].Blue; };
 
-	private:
-	ColorPalette* Palette ;
-	BYTE Index ;
+  private:
+    ColorPalette *Palette;
+    BYTE Index;
 
-	EmbValue calcEValue (BYTE idx) const
-		{ return (idx % Globs.TheCvrStgFile->getEmbValueModulus()) ; } ;
-} ;
+    EmbValue calcEValue(BYTE idx) const {
+        return (idx % Globs.TheCvrStgFile->getEmbValueModulus());
+    };
+};
 
 #endif // ndef SH_BMPPALETTESAMPLEVALUE_H

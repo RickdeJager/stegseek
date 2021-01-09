@@ -22,142 +22,141 @@
 
 #include "common.h"
 
-#include "TestSuite.h"
-#include "AudioSampleValueTest.h"
-#include "AuFileTest.h"
 #include "AUtilsTest.h"
+#include "AuFileTest.h"
+#include "AudioSampleValueTest.h"
 #include "BFSAPHeuristicTest.h"
 #include "BitStringTest.h"
 #include "BmpFileTest.h"
-#include "BmpRGBSampleValueTest.h"
-#include "BmpPaletteSampleValueTest.h"
 #include "BmpOS2FileTest.h"
+#include "BmpPaletteSampleValueTest.h"
+#include "BmpRGBSampleValueTest.h"
 #include "BmpWinFileTest.h"
 #include "DFSAPHeuristicTest.h"
 #include "EdgeIteratorTest.h"
 #include "EmbDataTest.h"
-#include "WKSConstructionHeuristicTest.h"
 #include "GraphTest.h"
 #include "JpegFileTest.h"
 #include "JpegSampleValueTest.h"
-#include "MatchingTest.h"
 #include "MCryptPPTest.h"
 #include "MHashKeyGenTest.h"
 #include "MHashPPTest.h"
+#include "MatchingTest.h"
 #include "SampleValueAdjacencyListTest.h"
 #include "SelectorTest.h"
+#include "TestSuite.h"
+#include "WKSConstructionHeuristicTest.h"
 #include "WavFileTest.h"
 #include "WavPCMSampleValueTest.h"
 
-bool ArgVerbose ;
+bool ArgVerbose;
 
-int main (int argc, char *argv[])
-{
-	ArgVerbose = false ;
+int main(int argc, char *argv[]) {
+    ArgVerbose = false;
 
-	unsigned short argi = 1 ;
-	while (argi < argc) {
-		if (std::string(argv[argi]) == "-v" || std::string(argv[argi]) == "--verbose") {
-			ArgVerbose = true ;
-		}
+    unsigned short argi = 1;
+    while (argi < argc) {
+        if (std::string(argv[argi]) == "-v" || std::string(argv[argi]) == "--verbose") {
+            ArgVerbose = true;
+        }
 #ifdef DEBUG
-		else if (std::string(argv[argi]) == "--debuglevel") {
-			argi++ ;
-			unsigned int tmp = 0 ;
-			sscanf (argv[argi], "%u", &tmp) ;
-			Args.DebugLevel.setValue (tmp) ;
-		}
+        else if (std::string(argv[argi]) == "--debuglevel") {
+            argi++;
+            unsigned int tmp = 0;
+            sscanf(argv[argi], "%u", &tmp);
+            Args.DebugLevel.setValue(tmp);
+        }
 #endif
-		else {
-			std::cerr << "unknown argument: " << argv[argi] << std::endl ;
-			exit (EXIT_FAILURE) ;
-		}
-		argi++ ;
-	}
+        else {
+            std::cerr << "unknown argument: " << argv[argi] << std::endl;
+            exit(EXIT_FAILURE);
+        }
+        argi++;
+    }
 
-	TestSuite ts ;
+    TestSuite ts;
 
-	// basic classes
-	AUtilsTest at (&ts) ;
-	ts.addUnitTest (&at) ;
+    // basic classes
+    AUtilsTest at(&ts);
+    ts.addUnitTest(&at);
 
-	BitStringTest bst (&ts) ;
-	ts.addUnitTest (&bst) ;
+    BitStringTest bst(&ts);
+    ts.addUnitTest(&bst);
 
-	SelectorTest st (&ts) ;
-	ts.addUnitTest (&st) ;
+    SelectorTest st(&ts);
+    ts.addUnitTest(&st);
 
-	EmbDataTest edt (&ts) ;
-	ts.addUnitTest (&edt) ;
+    EmbDataTest edt(&ts);
+    ts.addUnitTest(&edt);
 
-	// mlibs
-	MHashPPTest mht (&ts) ;
-	ts.addUnitTest (&mht) ;
+    // mlibs
+    MHashPPTest mht(&ts);
+    ts.addUnitTest(&mht);
 
-	MHashKeyGenTest mhkgt (&ts) ;
-	ts.addUnitTest (&mhkgt) ;
+    MHashKeyGenTest mhkgt(&ts);
+    ts.addUnitTest(&mhkgt);
 
-	MCryptPPTest mct (&ts) ;
-	ts.addUnitTest (&mct) ;
+    MCryptPPTest mct(&ts);
+    ts.addUnitTest(&mct);
 
-	// SampleValues
-	AudioSampleValueTest asvt (&ts) ;
-	ts.addUnitTest (&asvt) ;
+    // SampleValues
+    AudioSampleValueTest asvt(&ts);
+    ts.addUnitTest(&asvt);
 
-	BmpRGBSampleValueTest rgbsvt (&ts) ;
-	ts.addUnitTest (&rgbsvt) ;
+    BmpRGBSampleValueTest rgbsvt(&ts);
+    ts.addUnitTest(&rgbsvt);
 
-	BmpPaletteSampleValueTest palsvt (&ts) ;
-	ts.addUnitTest (&palsvt) ;
+    BmpPaletteSampleValueTest palsvt(&ts);
+    ts.addUnitTest(&palsvt);
 
-	JpegSampleValueTest jsvt (&ts) ;
-	ts.addUnitTest (&jsvt) ;
+    JpegSampleValueTest jsvt(&ts);
+    ts.addUnitTest(&jsvt);
 
-	WavPCMSampleValueTest wavsvt (&ts) ;
-	ts.addUnitTest (&wavsvt) ;
+    WavPCMSampleValueTest wavsvt(&ts);
+    ts.addUnitTest(&wavsvt);
 
-	// CvrStgFiles
-	AuFileTest aut (&ts) ;
-	ts.addUnitTest (&aut) ;
+    // CvrStgFiles
+    AuFileTest aut(&ts);
+    ts.addUnitTest(&aut);
 
-	BmpFileTest bmpt (&ts) ;
-	ts.addUnitTest (&bmpt) ;
+    BmpFileTest bmpt(&ts);
+    ts.addUnitTest(&bmpt);
 
-	BmpOS2FileTest bmpot (&ts) ;
-	ts.addUnitTest (&bmpot) ;
+    BmpOS2FileTest bmpot(&ts);
+    ts.addUnitTest(&bmpot);
 
-	BmpWinFileTest bmpwt (&ts) ;
-	ts.addUnitTest (&bmpwt) ;
+    BmpWinFileTest bmpwt(&ts);
+    ts.addUnitTest(&bmpwt);
 
-	JpegFileTest jft (&ts) ;
-	ts.addUnitTest (&jft) ;
+    JpegFileTest jft(&ts);
+    ts.addUnitTest(&jft);
 
-	WavFileTest wt (&ts) ;
-	ts.addUnitTest (&wt) ;
+    WavFileTest wt(&ts);
+    ts.addUnitTest(&wt);
 
-	// graph-theoretic stuff
-	SampleValueAdjacencyListTest svalt (&ts) ;
-	ts.addUnitTest (&svalt) ;
+    // graph-theoretic stuff
+    SampleValueAdjacencyListTest svalt(&ts);
+    ts.addUnitTest(&svalt);
 
-	GraphTest gt (&ts) ;
-	ts.addUnitTest (&gt) ;
+    GraphTest gt(&ts);
+    ts.addUnitTest(&gt);
 
-	EdgeIteratorTest eitt (&ts) ;
-	ts.addUnitTest (&eitt) ;
+    EdgeIteratorTest eitt(&ts);
+    ts.addUnitTest(&eitt);
 
-	MatchingTest mt (&ts) ;
-	ts.addUnitTest (&mt) ;
+    MatchingTest mt(&ts);
+    ts.addUnitTest(&mt);
 
-	WKSConstructionHeuristicTest cht (&ts) ;
-	ts.addUnitTest (&cht) ;
+    WKSConstructionHeuristicTest cht(&ts);
+    ts.addUnitTest(&cht);
 
-	BFSAPHeuristicTest bfsapht (&ts) ;
-	ts.addUnitTest (&bfsapht) ;
+    BFSAPHeuristicTest bfsapht(&ts);
+    ts.addUnitTest(&bfsapht);
 
-	DFSAPHeuristicTest dfsapht (&ts) ;
-	ts.addUnitTest (&dfsapht) ;
+    DFSAPHeuristicTest dfsapht(&ts);
+    ts.addUnitTest(&dfsapht);
 
-	ts.run() ;
+    ts.run();
 
-	return (ts.getResult() ? 0 : -1) ;
+    return (ts.getResult() ? 0 : -1);
 }

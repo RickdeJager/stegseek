@@ -31,27 +31,27 @@
  * controlled, as UWORD32 is used as datatype which always is 32 bits wide).
  **/
 class PseudoRandomSource {
-	public:
-	/**
-	 * construct a PseudoRandomSource object
-	 * \param s the seed
-	 **/
-	PseudoRandomSource (UWORD32 s) : Value(s) {} ;
+  public:
+    /**
+     * construct a PseudoRandomSource object
+     * \param s the seed
+     **/
+    PseudoRandomSource(UWORD32 s) : Value(s){};
 
-	/**
-	 * get a pseudo-random value from {0,...,n-1}
-	 * \param n the range of the random value to be returned
-	 * \return a number >= 0 and <= n - 1
-	 *
-	 * After calling getValue, the next getValue call will use the next state
-	 * of the random number generator (analogous to the C rand() function)
-	 **/
-	UWORD32 getValue (UWORD32 n) ;
+    /**
+     * get a pseudo-random value from {0,...,n-1}
+     * \param n the range of the random value to be returned
+     * \return a number >= 0 and <= n - 1
+     *
+     * After calling getValue, the next getValue call will use the next state
+     * of the random number generator (analogous to the C rand() function)
+     **/
+    UWORD32 getValue(UWORD32 n);
 
-	private:
-	static const UWORD32 A = 1367208549 ;
-	static const UWORD32 C = 1 ;
-	UWORD32 Value ;
-} ;
+  private:
+    static const UWORD32 A = 1367208549;
+    static const UWORD32 C = 1;
+    UWORD32 Value;
+};
 
 #endif // ndef SH_PSEUDORANDOMSOURCE_H

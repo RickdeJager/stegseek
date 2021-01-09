@@ -22,7 +22,7 @@
 #define SH_DMDCONSTRUCTIONHEURISTIC_H
 
 #include "MatchingAlgorithm.h"
-class Vertex ;
+class Vertex;
 #include "common.h"
 
 /**
@@ -30,22 +30,21 @@ class Vertex ;
  * \brief an implementation of the "dynamic minimum degree" heuristic for contruction a matching
  **/
 class DMDConstructionHeuristic : public MatchingAlgorithm {
-	public:
-	DMDConstructionHeuristic (Graph* g, Matching* m, float goal = 100.0) ;
+  public:
+    DMDConstructionHeuristic(Graph *g, Matching *m, float goal = 100.0);
 
-	virtual ~DMDConstructionHeuristic (void) {} ;
+    virtual ~DMDConstructionHeuristic(void){};
 
-	const char* getName (void) const
-		{ return "Dynamic Minimum Degree Construction Heuristic" ; } ;
+    const char *getName(void) const { return "Dynamic Minimum Degree Construction Heuristic"; };
 
-	void run (void) ;
+    void run(void);
 
-	private:
-	static const VertexLabel MinDegNotFound = VERTEXLABEL_MAX ;
+  private:
+    static const VertexLabel MinDegNotFound = VERTEXLABEL_MAX;
 
-	std::vector<Vertex*> AvailableVertices ;
+    std::vector<Vertex *> AvailableVertices;
 
-	VertexLabel findMinDegIndex (const std::vector<Vertex*>& vertices) ;
-} ;
+    VertexLabel findMinDegIndex(const std::vector<Vertex *> &vertices);
+};
 
 #endif // ndef SH_DMDCONSTRUCTIONHEURISTIC_H

@@ -23,21 +23,18 @@
 
 #include "TestCategory.h"
 
-template<class UTType> class TestCategoryCaller : public TestCategory {
-	public:
-	typedef void (UTType::*TCMType)();
+template <class UTType> class TestCategoryCaller : public TestCategory {
+  public:
+    typedef void (UTType::*TCMType)();
 
-	TestCategoryCaller (std::string n, TestSuite* s, UTType* o, TCMType m)
-		: TestCategory(n,s), UTObject(o), TestMethod(m) {} ;
+    TestCategoryCaller(std::string n, TestSuite *s, UTType *o, TCMType m)
+        : TestCategory(n, s), UTObject(o), TestMethod(m){};
 
-	void run (void)
-	{
-		(UTObject->*TestMethod)() ;
-	}
+    void run(void) { (UTObject->*TestMethod)(); }
 
-	private:
-	UTType* UTObject ;
-	TCMType TestMethod ;
-} ;
+  private:
+    UTType *UTObject;
+    TCMType TestMethod;
+};
 
 #endif // ndef SH_TESTCALLER_H

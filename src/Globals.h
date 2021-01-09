@@ -23,8 +23,8 @@
 
 #include <cstdlib>
 
-class CvrStgFile ;
-class Graph ;
+class CvrStgFile;
+class Graph;
 
 /**
  * \class Globals
@@ -50,27 +50,24 @@ class Graph ;
  * the unit tests and non-static pointers would need too much memory.
  **/
 class Globals {
-	public:
-	Globals (CvrStgFile* f = NULL, Graph* g = NULL)
-		: TheCvrStgFile(f), TheGraph(g) {} ;
+  public:
+    Globals(CvrStgFile *f = NULL, Graph *g = NULL) : TheCvrStgFile(f), TheGraph(g){};
 
-	/// the cover-/stego- file that is operated on (set in CvrStgFile::CvrStgFile)
-	CvrStgFile* TheCvrStgFile ;
+    /// the cover-/stego- file that is operated on (set in CvrStgFile::CvrStgFile)
+    CvrStgFile *TheCvrStgFile;
 
-	/// the graph that is built upon the cover-/stego-file (set in Graph::Graph)
-	Graph* TheGraph ;
+    /// the graph that is built upon the cover-/stego-file (set in Graph::Graph)
+    Graph *TheGraph;
 
-	void operator= (const Globals& g)
-	{
-		TheCvrStgFile = g.TheCvrStgFile ; 
-		TheGraph = g.TheGraph ;
-	}
+    void operator=(const Globals &g) {
+        TheCvrStgFile = g.TheCvrStgFile;
+        TheGraph = g.TheGraph;
+    }
 
-	void reset (void)
-	{
-		TheCvrStgFile = NULL ;
-		TheGraph = NULL ;
-	}
-} ;
+    void reset(void) {
+        TheCvrStgFile = NULL;
+        TheGraph = NULL;
+    }
+};
 
 #endif // ndef SH_GLOBALS_H

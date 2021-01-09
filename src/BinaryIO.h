@@ -31,173 +31,164 @@
  * \brief provides methods for file i/o as needed by the rest of steghide
  **/
 class BinaryIO {
-	public:
-	enum MODE { READ, WRITE } ;
+  public:
+    enum MODE { READ, WRITE };
 
-	BinaryIO (void) ;
+    BinaryIO(void);
 
-	/**
-	 * construct a BinaryIO object
-	 * \param fn the filename ("" to indicate stdin/stdout)
-	 * \param m the mode (BinaryIO::READ or BinaryIO::WRITE)
-	 *
-	 * The file described by fn is opened in the given mode.
-	 **/
-	BinaryIO (const std::string& fn, MODE m) ;
+    /**
+     * construct a BinaryIO object
+     * \param fn the filename ("" to indicate stdin/stdout)
+     * \param m the mode (BinaryIO::READ or BinaryIO::WRITE)
+     *
+     * The file described by fn is opened in the given mode.
+     **/
+    BinaryIO(const std::string &fn, MODE m);
 
-	~BinaryIO (void) ;
+    ~BinaryIO(void);
 
-	/**
-	 * get the name (with path) of this file
-	 **/
-	const std::string& getName (void) const
-		{ return Name ; } ;
+    /**
+     * get the name (with path) of this file
+     **/
+    const std::string &getName(void) const { return Name; };
 
-	/**
-	 * is this file currently opened ?
-	 **/
-	bool is_open (void) const
-		{ return FileOpen ; } ;
+    /**
+     * is this file currently opened ?
+     **/
+    bool is_open(void) const { return FileOpen; };
 
-	/**
-	 * is this file a standard stream (stdin or stdout) ?
-	 **/
-	bool is_std (void) const
-		{ return (getStream() != NULL && getName() == "") ; } ;
+    /**
+     * is this file a standard stream (stdin or stdout) ?
+     **/
+    bool is_std(void) const { return (getStream() != NULL && getName() == ""); };
 
-	/**
-	 * get the current position in the current file
-	 **/
-	unsigned long getPos (void) const
-		{ return ftell(getStream()) ; } ;
+    /**
+     * get the current position in the current file
+     **/
+    unsigned long getPos(void) const { return ftell(getStream()); };
 
-	/**
-	 * is the current state of this file at the end of the file
-	 **/
-	bool eof (void) const ;
+    /**
+     * is the current state of this file at the end of the file
+     **/
+    bool eof(void) const;
 
-	/**
-	 * open the file given by fn in the mode m
-	 * \param fn a filename ("" to indicate stdin/stdout)
-	 * \param m the mode (BinaryIO::READ or BinaryIO::WRITE)
-	 **/
-	void open (const std::string& fn, MODE m) ;	
+    /**
+     * open the file given by fn in the mode m
+     * \param fn a filename ("" to indicate stdin/stdout)
+     * \param m the mode (BinaryIO::READ or BinaryIO::WRITE)
+     **/
+    void open(const std::string &fn, MODE m);
 
-	/**
-	 * close the currently open file - it is save to call close() even if is_std() is true
-	 **/
-	void close (void) ;
+    /**
+     * close the currently open file - it is save to call close() even if is_std() is true
+     **/
+    void close(void);
 
-	/**
-	 * read one byte from the file
-	 **/
-	BYTE read8 (void) ;
+    /**
+     * read one byte from the file
+     **/
+    BYTE read8(void);
 
-	/**
-	 * read two bytes from the file using little-endian byte ordering
-	 **/
-	UWORD16 read16_le (void) ;
+    /**
+     * read two bytes from the file using little-endian byte ordering
+     **/
+    UWORD16 read16_le(void);
 
-	/**
-	 * read two bytes from the file using big-endian byte ordering
-	 **/
-	UWORD16 read16_be (void) ;
+    /**
+     * read two bytes from the file using big-endian byte ordering
+     **/
+    UWORD16 read16_be(void);
 
-	/**
-	 * read four bytes from the file using little-endian byte ordering
-	 **/
-	UWORD32 read32_le (void) ;
+    /**
+     * read four bytes from the file using little-endian byte ordering
+     **/
+    UWORD32 read32_le(void);
 
-	/**
-	 * read four bytes from the file using big-endian byte ordering
-	 **/
-	UWORD32 read32_be (void) ;
+    /**
+     * read four bytes from the file using big-endian byte ordering
+     **/
+    UWORD32 read32_be(void);
 
-	/**
-	 * read n bytes (little endian byte ordering)
-	 * \param n the number of bytes to read (must be <= 4)
-	 **/
-	UWORD32 read_le (unsigned short n) ;
+    /**
+     * read n bytes (little endian byte ordering)
+     * \param n the number of bytes to read (must be <= 4)
+     **/
+    UWORD32 read_le(unsigned short n);
 
-	/**
-	 * read a string with length len from the file
-	 **/
-	std::string readstring (unsigned int len) ;
+    /**
+     * read a string with length len from the file
+     **/
+    std::string readstring(unsigned int len);
 
-	/**
-	 * write one byte to the file
-	 **/
-	void write8 (BYTE val) ;
+    /**
+     * write one byte to the file
+     **/
+    void write8(BYTE val);
 
-	/**
-	 * write two bytes to the file using little-endian byte ordering
-	 **/
-	void write16_le (UWORD16 val) ;
+    /**
+     * write two bytes to the file using little-endian byte ordering
+     **/
+    void write16_le(UWORD16 val);
 
-	/**
-	 * write two bytes to the file using big-endian byte ordering
-	 **/
-	void write16_be (UWORD16 val) ;
+    /**
+     * write two bytes to the file using big-endian byte ordering
+     **/
+    void write16_be(UWORD16 val);
 
-	/**
-	 * write four bytes to the file using little-endian byte ordering
-	 **/
-	void write32_le (UWORD32 val) ;
+    /**
+     * write four bytes to the file using little-endian byte ordering
+     **/
+    void write32_le(UWORD32 val);
 
-	/**
-	 * write four bytes to the file using big-endian byte ordering
-	 **/
-	void write32_be (UWORD32 val) ;
+    /**
+     * write four bytes to the file using big-endian byte ordering
+     **/
+    void write32_be(UWORD32 val);
 
-	/**
-	 * write n bytes of val (little endian byte ordering)
-	 * \param n the number of bytes to write (must be <= 4)
-	 * \param val the value
-	 **/
-	void write_le (UWORD32 val, unsigned short n) ;
+    /**
+     * write n bytes of val (little endian byte ordering)
+     * \param n the number of bytes to write (must be <= 4)
+     * \param val the value
+     **/
+    void write_le(UWORD32 val, unsigned short n);
 
-	void writestring (const std::string& s) ;
+    void writestring(const std::string &s);
 
-	/**
-	 * get the underlying cstdio FILE* pointer
-	 **/
-	FILE* getStream (void) const
-		{ return Stream ; } ;
+    /**
+     * get the underlying cstdio FILE* pointer
+     **/
+    FILE *getStream(void) const { return Stream; };
 
-	protected:
-	void setStream (FILE* s)
-		{ Stream = s ; } ;
+  protected:
+    void setStream(FILE *s) { Stream = s; };
 
-	void setName (const std::string& fn)
-		{ Name = fn ; } ;
+    void setName(const std::string &fn) { Name = fn; };
 
-	MODE getMode (void) const
-		{ return Mode ; } ;
+    MODE getMode(void) const { return Mode; };
 
-	void setMode (MODE m)
-		{ Mode = m ; } ;
+    void setMode(MODE m) { Mode = m; };
 
-	private:
-	std::string Name ;
-	FILE *Stream ;
-	bool FileOpen ;
-	MODE Mode ;
+  private:
+    std::string Name;
+    FILE *Stream;
+    bool FileOpen;
+    MODE Mode;
 
-	void init (void) ;
+    void init(void);
 
-	void set_open (bool o)
-		{ FileOpen = o ; } ;
+    void set_open(bool o) { FileOpen = o; };
 
-	/**
-	 * when opening a file in write mode perform various checks depending on the value of the force argument
-	 **/
-	void checkForce (const std::string& fn) const ;
+    /**
+     * when opening a file in write mode perform various checks depending on the value of the force
+     *argument
+     **/
+    void checkForce(const std::string &fn) const;
 
-	/**
-	 * check if the file described by fn exists
-	 * \return true iff a fopen call with fn as file name succeeded
-	 **/
-	bool Fileexists (const std::string& fn) const ;
-} ;
+    /**
+     * check if the file described by fn exists
+     * \return true iff a fopen call with fn as file name succeeded
+     **/
+    bool Fileexists(const std::string &fn) const;
+};
 
 #endif /* ndef SH_BINARYIO_H */

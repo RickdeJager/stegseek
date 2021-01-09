@@ -18,64 +18,60 @@
  *
  */
 
-
-#include "utcommon.h"
 #include "JpegFileTest.h"
+#include "utcommon.h"
 
-JpegFileTest::JpegFileTest (TestSuite* s)
-	: CvrStgFileTest("JpegFile", s)
-{
-	ADDTESTCATEGORY (JpegFileTest, testReadEmbedExtract) ;
-	ADDTESTCATEGORY (JpegFileTest, testReadEmbedWriteReadExtract) ;
+JpegFileTest::JpegFileTest(TestSuite *s) : CvrStgFileTest("JpegFile", s) {
+    ADDTESTCATEGORY(JpegFileTest, testReadEmbedExtract);
+    ADDTESTCATEGORY(JpegFileTest, testReadEmbedWriteReadExtract);
 }
 
-void JpegFileTest::setup ()
-{
-	UnitTest::setup() ;
+void JpegFileTest::setup() {
+    UnitTest::setup();
 
-	Globs.reset() ;
-	f1 = CvrStgFile::readFile (std::string(DATADIR) + "std.jpg") ;
-	bs1 = new BitString (std::string ("a test passphrase")) ;
-	gl1 = Globs ;
+    Globs.reset();
+    f1 = CvrStgFile::readFile(std::string(DATADIR) + "std.jpg");
+    bs1 = new BitString(std::string("a test passphrase"));
+    gl1 = Globs;
 
-	Globs.reset() ;
-	f2 = CvrStgFile::readFile (std::string(DATADIR) + "prog.jpg") ;
-	bs2 = new BitString (std::string ("another test passphrase")) ;
-	gl2 = Globs ;
+    Globs.reset();
+    f2 = CvrStgFile::readFile(std::string(DATADIR) + "prog.jpg");
+    bs2 = new BitString(std::string("another test passphrase"));
+    gl2 = Globs;
 }
 
-void JpegFileTest::cleanup ()
-{
-	UnitTest::cleanup() ;
+void JpegFileTest::cleanup() {
+    UnitTest::cleanup();
 
-	delete bs1 ; delete bs2 ;
-	delete f1 ; delete f2 ;
+    delete bs1;
+    delete bs2;
+    delete f1;
+    delete f2;
 }
 
-void JpegFileTest::testReadEmbedExtract()
-{
-	Globs = gl1 ; addTestResult (genericTestReadEmbedExtract (std::string(DATADIR) + "std.jpg", *bs1)) ;
-	Globs = gl2 ; addTestResult (genericTestReadEmbedExtract (std::string(DATADIR) + "prog.jpg", *bs2)) ;
+void JpegFileTest::testReadEmbedExtract() {
+    Globs = gl1;
+    addTestResult(genericTestReadEmbedExtract(std::string(DATADIR) + "std.jpg", *bs1));
+    Globs = gl2;
+    addTestResult(genericTestReadEmbedExtract(std::string(DATADIR) + "prog.jpg", *bs2));
 }
 
-void JpegFileTest::testReadEmbedWriteReadExtract()
-{
-	Globs = gl1 ; addTestResult (genericTestReadEmbedWriteReadExtract (std::string(DATADIR) + "std.jpg", *bs2)) ;
-	Globs = gl2 ; addTestResult (genericTestReadEmbedWriteReadExtract (std::string(DATADIR) + "prog.jpg", *bs1)) ;
+void JpegFileTest::testReadEmbedWriteReadExtract() {
+    Globs = gl1;
+    addTestResult(genericTestReadEmbedWriteReadExtract(std::string(DATADIR) + "std.jpg", *bs2));
+    Globs = gl2;
+    addTestResult(genericTestReadEmbedWriteReadExtract(std::string(DATADIR) + "prog.jpg", *bs1));
 }
 
-void JpegFileTest::testPosition()
-{
-	// TODO
+void JpegFileTest::testPosition() {
+    // TODO
 }
 
-void JpegFileTest::testReadExtractCompare ()
-{
-	// TODO
+void JpegFileTest::testReadExtractCompare() {
+    // TODO
 }
 
-void JpegFileTest::testEmbeddedValue ()
-{
+void JpegFileTest::testEmbeddedValue() {
 #if 0
 	Globs = gl1 ; addTestResult (genericTestEmbeddedValue (f1)) ;
 	Globs = gl2 ; addTestResult (genericTestEmbeddedValue (f2)) ;

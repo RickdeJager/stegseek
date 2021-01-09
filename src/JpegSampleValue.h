@@ -24,21 +24,19 @@
 #include "SampleValue.h"
 
 class JpegSampleValue : public SampleValue {
-	public:
-	JpegSampleValue (int c) ;
+  public:
+    JpegSampleValue(int c);
 
-	SampleValue* getNearestTargetSampleValue (EmbValue t) const ;
-	UWORD32 calcDistance (const SampleValue *s) const ;
-	std::string getName (void) const ;
+    SampleValue *getNearestTargetSampleValue(EmbValue t) const;
+    UWORD32 calcDistance(const SampleValue *s) const;
+    std::string getName(void) const;
 
-	SWORD16 getDctCoeff (void) const
-		{ return DctCoeff ; } ;
+    SWORD16 getDctCoeff(void) const { return DctCoeff; };
 
-	static EmbValue calcEValue (SWORD16 dctc)
-		{ return (((dctc >= 0) ? dctc : -dctc)  % 2) ; } ;
+    static EmbValue calcEValue(SWORD16 dctc) { return (((dctc >= 0) ? dctc : -dctc) % 2); };
 
-	private:
-	SWORD16 DctCoeff ;
-} ;
+  private:
+    SWORD16 DctCoeff;
+};
 
 #endif // ndef SH_JPEGSAMPLE_H

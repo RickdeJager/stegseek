@@ -21,65 +21,66 @@
 #include "WavPCMSampleValueTest.h"
 #include "utcommon.h"
 
-#include "WavPCMSampleValue.h"
 #include "CvrStgFile.h"
+#include "WavPCMSampleValue.h"
 
-WavPCMSampleValueTest::WavPCMSampleValueTest (TestSuite* s)
-	: SampleValueTest ("WavPCMSampleValue", s)
-{
-	ADDTESTCATEGORY (WavPCMSampleValueTest, testDistance) ;
-	ADDTESTCATEGORY (WavPCMSampleValueTest, testIsNeighbour) ;
+WavPCMSampleValueTest::WavPCMSampleValueTest(TestSuite *s)
+    : SampleValueTest("WavPCMSampleValue", s) {
+    ADDTESTCATEGORY(WavPCMSampleValueTest, testDistance);
+    ADDTESTCATEGORY(WavPCMSampleValueTest, testIsNeighbour);
 }
 
-void WavPCMSampleValueTest::setup ()
-{
-	UnitTest::setup() ;
+void WavPCMSampleValueTest::setup() {
+    UnitTest::setup();
 
-	Globs.reset() ;
-	f_WavPCM8 = CvrStgFile::readFile (std::string(DATADIR) + "pcm8_std.wav") ;
-	sv_WavPCM8_0 = new WavPCMSampleValue (0) ;
-	sv_WavPCM8_1 = new WavPCMSampleValue (1) ;
-	sv_WavPCM8_45 = new WavPCMSampleValue (45) ;
-	gl_WavPCM8 = Globs ;
+    Globs.reset();
+    f_WavPCM8 = CvrStgFile::readFile(std::string(DATADIR) + "pcm8_std.wav");
+    sv_WavPCM8_0 = new WavPCMSampleValue(0);
+    sv_WavPCM8_1 = new WavPCMSampleValue(1);
+    sv_WavPCM8_45 = new WavPCMSampleValue(45);
+    gl_WavPCM8 = Globs;
 
-	Globs.reset() ;
-	f_WavPCM16 = CvrStgFile::readFile (std::string(DATADIR) + "pcm16_std.wav") ;
-	sv_WavPCM16_m32768 = new WavPCMSampleValue (-32768) ;
-	sv_WavPCM16_32767 = new WavPCMSampleValue (32767) ;
-	sv_WavPCM16_0 = new WavPCMSampleValue (0) ;
-	sv_WavPCM16_15 = new WavPCMSampleValue (15) ;
-	gl_WavPCM16 = Globs ;
+    Globs.reset();
+    f_WavPCM16 = CvrStgFile::readFile(std::string(DATADIR) + "pcm16_std.wav");
+    sv_WavPCM16_m32768 = new WavPCMSampleValue(-32768);
+    sv_WavPCM16_32767 = new WavPCMSampleValue(32767);
+    sv_WavPCM16_0 = new WavPCMSampleValue(0);
+    sv_WavPCM16_15 = new WavPCMSampleValue(15);
+    gl_WavPCM16 = Globs;
 }
 
-void WavPCMSampleValueTest::cleanup ()
-{
-	UnitTest::cleanup() ;
+void WavPCMSampleValueTest::cleanup() {
+    UnitTest::cleanup();
 
-	delete f_WavPCM8 ; delete f_WavPCM16 ;
-	delete sv_WavPCM8_0 ; delete sv_WavPCM8_1 ; delete sv_WavPCM8_45 ;
-	delete sv_WavPCM16_m32768 ; delete sv_WavPCM16_32767 ; delete sv_WavPCM16_0 ; delete sv_WavPCM16_15 ;
+    delete f_WavPCM8;
+    delete f_WavPCM16;
+    delete sv_WavPCM8_0;
+    delete sv_WavPCM8_1;
+    delete sv_WavPCM8_45;
+    delete sv_WavPCM16_m32768;
+    delete sv_WavPCM16_32767;
+    delete sv_WavPCM16_0;
+    delete sv_WavPCM16_15;
 }
 
-void WavPCMSampleValueTest::testDistance ()
-{
-	Globs = gl_WavPCM8 ;
-	addTestResult (genericTestDistance (sv_WavPCM8_0, sv_WavPCM8_1, 1)) ;
-	addTestResult (genericTestDistance (sv_WavPCM8_1, sv_WavPCM8_45, 44)) ;
+void WavPCMSampleValueTest::testDistance() {
+    Globs = gl_WavPCM8;
+    addTestResult(genericTestDistance(sv_WavPCM8_0, sv_WavPCM8_1, 1));
+    addTestResult(genericTestDistance(sv_WavPCM8_1, sv_WavPCM8_45, 44));
 
-	Globs = gl_WavPCM16 ;
-	addTestResult (genericTestDistance (sv_WavPCM16_0, sv_WavPCM16_15, 15)) ;
-	addTestResult (genericTestDistance (sv_WavPCM16_15, sv_WavPCM16_32767, 32752)) ;
-	addTestResult (genericTestDistance (sv_WavPCM16_m32768, sv_WavPCM16_32767, 65535)) ;
+    Globs = gl_WavPCM16;
+    addTestResult(genericTestDistance(sv_WavPCM16_0, sv_WavPCM16_15, 15));
+    addTestResult(genericTestDistance(sv_WavPCM16_15, sv_WavPCM16_32767, 32752));
+    addTestResult(genericTestDistance(sv_WavPCM16_m32768, sv_WavPCM16_32767, 65535));
 }
 
-void WavPCMSampleValueTest::testIsNeighbour ()
-{
-	Globs = gl_WavPCM8 ;
-	addTestResult (genericTestIsNeighbour (sv_WavPCM8_0, sv_WavPCM8_1, true)) ;
-	addTestResult (genericTestIsNeighbour (sv_WavPCM8_0, sv_WavPCM8_45, false)) ;
+void WavPCMSampleValueTest::testIsNeighbour() {
+    Globs = gl_WavPCM8;
+    addTestResult(genericTestIsNeighbour(sv_WavPCM8_0, sv_WavPCM8_1, true));
+    addTestResult(genericTestIsNeighbour(sv_WavPCM8_0, sv_WavPCM8_45, false));
 
-	Globs = gl_WavPCM16 ;
-	addTestResult (genericTestIsNeighbour (sv_WavPCM16_0, sv_WavPCM16_15, true)) ;
-	addTestResult (genericTestIsNeighbour (sv_WavPCM16_m32768, sv_WavPCM16_0, false)) ;
-	addTestResult (genericTestIsNeighbour (sv_WavPCM16_m32768, sv_WavPCM16_32767, false)) ;
+    Globs = gl_WavPCM16;
+    addTestResult(genericTestIsNeighbour(sv_WavPCM16_0, sv_WavPCM16_15, true));
+    addTestResult(genericTestIsNeighbour(sv_WavPCM16_m32768, sv_WavPCM16_0, false));
+    addTestResult(genericTestIsNeighbour(sv_WavPCM16_m32768, sv_WavPCM16_32767, false));
 }

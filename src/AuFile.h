@@ -26,58 +26,57 @@
 #include "AudioData.h"
 #include "CvrStgFile.h"
 
-class BinaryIO ;
+class BinaryIO;
 
 /**
  * \class AuFile
  * \brief a CvrStgFile in Sun .au format
  **/
 class AuFile : public CvrStgFile {
-	public:
-	AuFile (BinaryIO *io) ;
-	~AuFile (void) ;
+  public:
+    AuFile(BinaryIO *io);
+    ~AuFile(void);
 
-	void read (BinaryIO *io) ;
-	void write (void) ;
+    void read(BinaryIO *io);
+    void write(void);
 
-	std::list<CvrStgFile::Property> getProperties (void) const ;
-	std::vector<MatchingAlgorithm*> getMatchingAlgorithms (Graph* g, Matching* m) const ;
+    std::list<CvrStgFile::Property> getProperties(void) const;
+    std::vector<MatchingAlgorithm *> getMatchingAlgorithms(Graph *g, Matching *m) const;
 
-	unsigned long getNumSamples (void) const
-		{ return Data->getNumSamples() ; } ;
+    unsigned long getNumSamples(void) const { return Data->getNumSamples(); };
 
-	void replaceSample (const SamplePos pos, const SampleValue* s)
-		{ return Data->replaceSample(pos, s) ; } ;
+    void replaceSample(const SamplePos pos, const SampleValue *s) {
+        return Data->replaceSample(pos, s);
+    };
 
-	SampleValue* getSampleValue (SamplePos pos) const
-		{ return Data->getSampleValue(pos) ; } ;
+    SampleValue *getSampleValue(SamplePos pos) const { return Data->getSampleValue(pos); };
 
-	private:
-	enum ENCODING { MULAW8 = 1, PCM8 = 2, PCM16 = 3 } ;
-	class AuHeader {
-		public:
-		char		id[4] ;
-		UWORD32		offset ;
-		UWORD32		size ;
-		ENCODING	encoding ;
-		UWORD32		samplerate ;
-		UWORD32		channels ;
+  private:
+    enum ENCODING { MULAW8 = 1, PCM8 = 2, PCM16 = 3 };
+    class AuHeader {
+      public:
+        char id[4];
+        UWORD32 offset;
+        UWORD32 size;
+        ENCODING encoding;
+        UWORD32 samplerate;
+        UWORD32 channels;
 
-		static const UWORD32 SizeUnknown = 0xFFFFFFFF ;
-		static const unsigned short HeaderSize = 24 ;
+        static const UWORD32 SizeUnknown = 0xFFFFFFFF;
+        static const unsigned short HeaderSize = 24;
 
-		unsigned short getBytesPerSample (void) const ;
-	} ;
+        unsigned short getBytesPerSample(void) const;
+    };
 
-	static const UWORD32 Radius_MuLaw8 = 1 ;
-	static const UWORD32 Radius_PCM8 = 1 ;
-	static const UWORD32 Radius_PCM16 = 20 ;
-	static const unsigned short SamplesPerVertex = 2 ;
-	static const EmbValue EmbValueModulus = 2 ;
+    static const UWORD32 Radius_MuLaw8 = 1;
+    static const UWORD32 Radius_PCM8 = 1;
+    static const UWORD32 Radius_PCM16 = 20;
+    static const unsigned short SamplesPerVertex = 2;
+    static const EmbValue EmbValueModulus = 2;
 
-	AuHeader Header ;
-	std::vector<BYTE> Infofield ;
-	AudioData* Data ;
-} ;
+    AuHeader Header;
+    std::vector<BYTE> Infofield;
+    AudioData *Data;
+};
 
 #endif /* ndef SH_AUFILE_H */

@@ -30,51 +30,57 @@
  * \brief a sample in a bmp rgb (i.e. 24-bit) file
  **/
 class BmpRGBSampleValue : public BmpSampleValue {
-	public:
-	BmpRGBSampleValue (BYTE r, BYTE g, BYTE b) ;
-	BmpRGBSampleValue (RGBTriple t) ;
+  public:
+    BmpRGBSampleValue(BYTE r, BYTE g, BYTE b);
+    BmpRGBSampleValue(RGBTriple t);
 
-	UWORD32 calcDistance (const SampleValue *s) const ;
-	SampleValue* getNearestTargetSampleValue (EmbValue t) const ;
-	std::string getName (void) const ;
+    UWORD32 calcDistance(const SampleValue *s) const;
+    SampleValue *getNearestTargetSampleValue(EmbValue t) const;
+    std::string getName(void) const;
 
-	BYTE getRed (void) const { return Color.Red ; } ;
-	BYTE getGreen (void) const { return Color.Green ; } ;
-	BYTE getBlue (void) const { return Color.Blue ; } ;
+    BYTE getRed(void) const { return Color.Red; };
+    BYTE getGreen(void) const { return Color.Green; };
+    BYTE getBlue(void) const { return Color.Blue; };
 
-	private:
-	RGBTriple Color ;
+  private:
+    RGBTriple Color;
 
-	UWORD32 calcKey (const RGBTriple& rgb) const
-		{ return (((UWORD32) rgb.Red << 16) | ((UWORD32) rgb.Green << 8) | ((UWORD32) rgb.Blue)) ;} ;
+    UWORD32 calcKey(const RGBTriple &rgb) const {
+        return (((UWORD32)rgb.Red << 16) | ((UWORD32)rgb.Green << 8) | ((UWORD32)rgb.Blue));
+    };
 
-	EmbValue calcEValue (const RGBTriple& rgb) const
-		// { /* for Modulus 8 */ return ((EmbValue) (((rgb.Red & 1) << 2) | ((rgb.Green & 1) << 1) | (rgb.Blue & 1))) ; } ;
-		{ /* for Modulus 4 */ return ((EmbValue) ((((rgb.Red & 1) ^ (rgb.Green & 1)) << 1) | ((rgb.Red & 1) ^ (rgb.Blue & 1)))) ; } ;
+    EmbValue calcEValue(const RGBTriple &rgb) const
+    // { /* for Modulus 8 */ return ((EmbValue) (((rgb.Red & 1) << 2) | ((rgb.Green & 1) << 1) |
+    // (rgb.Blue & 1))) ; } ;
+    { /* for Modulus 4 */
+        return ((EmbValue)((((rgb.Red & 1) ^ (rgb.Green & 1)) << 1) |
+                           ((rgb.Red & 1) ^ (rgb.Blue & 1))));
+    };
 
-	enum COLOR { RED, GREEN, BLUE } ;
-	enum DIRECTION { UP, DOWN } ;
+    enum COLOR { RED, GREEN, BLUE };
+    enum DIRECTION { UP, DOWN };
 
-	/**
-	 * add the BYTEs a and b
-	 * \return min(255, a + b)
-	 **/
-	BYTE plus (BYTE a, BYTE b) const ;
+    /**
+     * add the BYTEs a and b
+     * \return min(255, a + b)
+     **/
+    BYTE plus(BYTE a, BYTE b) const;
 
-	/**
-	 * substract the BYTE b from the BYTE a
-	 * \return max(0, a - b)
-	 **/
-	BYTE minus (BYTE a, BYTE b) const ;
+    /**
+     * substract the BYTE b from the BYTE a
+     * \return max(0, a - b)
+     **/
+    BYTE minus(BYTE a, BYTE b) const;
 
-	/**
-	 * add candidates for the nearest target sample value
-	 * \param cands the candidates vector
-	 * \param cube the color values describing the current search cube
-	 * \param fc the fixed color
-	 * \param fd the fixed side of the fixed color
-	 **/
-	void addNTSVCandidates (std::vector<RGBTriple>& cands, const BYTE cube[3][2], COLOR fc, DIRECTION fd, COLOR i1, COLOR i2, EmbValue t) const ;
-} ;
+    /**
+     * add candidates for the nearest target sample value
+     * \param cands the candidates vector
+     * \param cube the color values describing the current search cube
+     * \param fc the fixed color
+     * \param fd the fixed side of the fixed color
+     **/
+    void addNTSVCandidates(std::vector<RGBTriple> &cands, const BYTE cube[3][2], COLOR fc,
+                           DIRECTION fd, COLOR i1, COLOR i2, EmbValue t) const;
+};
 
 #endif // ndef SH_BMPRGBSAMPLEVALUE_H

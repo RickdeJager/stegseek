@@ -23,22 +23,23 @@
 
 #include "SampleValueTest.h"
 
-class CvrStgFile ;
+class CvrStgFile;
 
 class BmpRGBSampleValueTest : public SampleValueTest {
-	public:
-	BmpRGBSampleValueTest (TestSuite* s) ;
+  public:
+    BmpRGBSampleValueTest(TestSuite *s);
 
-	void setup (void) ;
-	void cleanup (void) ;
+    void setup(void);
+    void cleanup(void);
 
-	void testDistance (void) ;
-	void testIsNeighbour (void) ;
+    void testDistance(void);
+    void testIsNeighbour(void);
 
-	private:
-	CvrStgFile *f_win, *f_os2 ;
-	SampleValue *sv_0_0_0, *sv_1_1_1, *sv_0_3_4, *sv_10_10_10, *sv_12_13_14, *sv_128_128_128, *sv_210_0_120, *sv_255_255_255 ;
-	Globals gl_win, gl_os2 ;
-} ;
+  private:
+    CvrStgFile *f_win, *f_os2;
+    SampleValue *sv_0_0_0, *sv_1_1_1, *sv_0_3_4, *sv_10_10_10, *sv_12_13_14, *sv_128_128_128,
+        *sv_210_0_120, *sv_255_255_255;
+    Globals gl_win, gl_os2;
+};
 
 #endif // ndef SH_BMPRGBSAMPLEVALUETEST_H

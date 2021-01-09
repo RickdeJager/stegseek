@@ -20,10 +20,9 @@
 
 #include "PseudoRandomSource.h"
 
-UWORD32 PseudoRandomSource::getValue (UWORD32 n)
-{
-	// doing the step of the linear congruential method
-	Value = A * Value + C ;
-	// scale value to [0...1) and multiply with n
-	return (UWORD32) (((double) n) * ((double) Value / (double) 4294967296.0)) ;
+UWORD32 PseudoRandomSource::getValue(UWORD32 n) {
+    // doing the step of the linear congruential method
+    Value = A * Value + C;
+    // scale value to [0...1) and multiply with n
+    return (UWORD32)(((double)n) * ((double)Value / (double)4294967296.0));
 }

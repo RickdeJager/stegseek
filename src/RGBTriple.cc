@@ -20,20 +20,17 @@
 
 #include "RGBTriple.h"
 
-UWORD32 RGBTriple::calcDistance (const RGBTriple& t) const
-{
-	int dr = (int) Red - (int) t.Red ;
-	int dg = (int) Green - (int) t.Green ;
-	int db = (int) Blue - (int) t.Blue ;
-	return (UWORD32) (dr*dr + dg*dg + db*db) ;
+UWORD32 RGBTriple::calcDistance(const RGBTriple &t) const {
+    int dr = (int)Red - (int)t.Red;
+    int dg = (int)Green - (int)t.Green;
+    int db = (int)Blue - (int)t.Blue;
+    return (UWORD32)(dr * dr + dg * dg + db * db);
 }
 
-bool RGBTriple::operator== (const RGBTriple& t) const
-{
-	return ((Red == t.Red) && (Green == t.Green) && (Blue == t.Blue)) ;
+bool RGBTriple::operator==(const RGBTriple &t) const {
+    return ((Red == t.Red) && (Green == t.Green) && (Blue == t.Blue));
 }
 
-bool RGBTriple::operator!= (const RGBTriple& t) const
-{
-	return ((Red != t.Red) || (Green != t.Green) || (Blue != t.Blue)) ;
+bool RGBTriple::operator!=(const RGBTriple &t) const {
+    return ((Red != t.Red) || (Green != t.Green) || (Blue != t.Blue));
 }

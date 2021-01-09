@@ -23,23 +23,23 @@
 
 #include "common.h"
 
-class BinaryIO ;
+class BinaryIO;
 
 class WavChunkHeader {
-	public:
-	WavChunkHeader (void) {} ;
-	WavChunkHeader (const char *id, UWORD32 len) ;
-	WavChunkHeader (BinaryIO *io) ;
+  public:
+    WavChunkHeader(void){};
+    WavChunkHeader(const char *id, UWORD32 len);
+    WavChunkHeader(BinaryIO *io);
 
-	void read (BinaryIO *io) ;
-	void write (BinaryIO *io) const ;
+    void read(BinaryIO *io);
+    void write(BinaryIO *io) const;
 
-	UWORD32 getChunkLength (void) const { return ChunkLength ; } ;
-	const char *getChunkId (void) const { return ChunkId ; } ;
+    UWORD32 getChunkLength(void) const { return ChunkLength; };
+    const char *getChunkId(void) const { return ChunkId; };
 
-	private:
-	char ChunkId[4] ;
-	UWORD32 ChunkLength ;
-} ;
+  private:
+    char ChunkId[4];
+    UWORD32 ChunkLength;
+};
 
 #endif // ndef SH_WAVCHUNKHEADER_H

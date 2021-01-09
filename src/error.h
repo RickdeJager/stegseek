@@ -26,56 +26,56 @@
 
 #include "SteghideError.h"
 
-class BinaryIO ;
+class BinaryIO;
 
 class ArgError : public SteghideError {
-	public:
-	ArgError (const char *msgfmt, ...) ;
+  public:
+    ArgError(const char *msgfmt, ...);
 
-	void printMessage (void) const ;
-} ;
+    void printMessage(void) const;
+};
 
 class BinaryInputError : public SteghideError {
-	public:
-	enum TYPE { FILE_ERR, FILE_EOF, STDIN_ERR, STDIN_EOF } ;
+  public:
+    enum TYPE { FILE_ERR, FILE_EOF, STDIN_ERR, STDIN_EOF };
 
-	BinaryInputError (std::string fn, FILE* s) ;
+    BinaryInputError(std::string fn, FILE *s);
 
-	TYPE getType (void) ;
+    TYPE getType(void);
 
-	protected:
-	void setType (TYPE t) ;
+  protected:
+    void setType(TYPE t);
 
-	private:
-	TYPE type ;
-} ;
+  private:
+    TYPE type;
+};
 
 class BinaryOutputError : public SteghideError {
-	public:
-	enum TYPE { FILE_ERR, STDOUT_ERR } ;
+  public:
+    enum TYPE { FILE_ERR, STDOUT_ERR };
 
-	BinaryOutputError (std::string fn) ;
+    BinaryOutputError(std::string fn);
 
-	TYPE getType (void) ;
+    TYPE getType(void);
 
-	protected:
-	void setType (TYPE t) ;
+  protected:
+    void setType(TYPE t);
 
-	private:
-	TYPE type ;
-} ;
+  private:
+    TYPE type;
+};
 
 class UnSupFileFormat : public SteghideError {
-	public:
-	UnSupFileFormat (BinaryIO *io) ;
-} ;
+  public:
+    UnSupFileFormat(BinaryIO *io);
+};
 
 class NotImplementedError : public SteghideError {
-	public:
-	NotImplementedError (const char* msgfmt, ...) ;
+  public:
+    NotImplementedError(const char *msgfmt, ...);
 
-	void printMessage (void) const ;
-} ;
+    void printMessage(void) const;
+};
 
 /**
  * \class CorruptDataError
@@ -84,10 +84,10 @@ class NotImplementedError : public SteghideError {
  * A possible cause of this exception being thrown is a wrong password.
  **/
 class CorruptDataError : public SteghideError {
-	public:
-	CorruptDataError (const char* msgfmt, ...) ;
+  public:
+    CorruptDataError(const char *msgfmt, ...);
 
-	void printMessage (void) const ;
-} ;
+    void printMessage(void) const;
+};
 
 #endif

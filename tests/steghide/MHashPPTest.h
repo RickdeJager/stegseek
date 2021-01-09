@@ -28,29 +28,29 @@
 #undef protected
 
 #include "BitString.h"
-#include "UnitTest.h"
 #include "TestSuite.h"
+#include "UnitTest.h"
 
 class MHashPPTest : public UnitTest {
-	public:
-	MHashPPTest (TestSuite* s) ;
+  public:
+    MHashPPTest(TestSuite *s);
 
-	/**
-	 * test output of MHashPP class with MD5 algorithm against the test vectors given in RFC 1321
-	 **/
-	void testMD5 (void) ;
+    /**
+     * test output of MHashPP class with MD5 algorithm against the test vectors given in RFC 1321
+     **/
+    void testMD5(void);
 
-	void testCRC32 (void) ;
+    void testCRC32(void);
 
-	private:
-	/**
-	 * compute a hash using MHashPP and compare it to a reference value
-	 * \param a the hash algorithm that should be used by MHashPP
-	 * \param data the input of the hash algorithm
-	 * \param shouldbe the reference value of the result of the hash algorithm
-	 * \return true iff shouldbe is the result of the hash algorithm a applied to data by MHashPP
-	 **/
-	bool genericTestMHashPP (hashid a, BitString data, BYTE* shouldbe) ;
-} ;
+  private:
+    /**
+     * compute a hash using MHashPP and compare it to a reference value
+     * \param a the hash algorithm that should be used by MHashPP
+     * \param data the input of the hash algorithm
+     * \param shouldbe the reference value of the result of the hash algorithm
+     * \return true iff shouldbe is the result of the hash algorithm a applied to data by MHashPP
+     **/
+    bool genericTestMHashPP(hashid a, BitString data, BYTE *shouldbe);
+};
 
 #endif // ndef SH_MHASHPPTEST_H

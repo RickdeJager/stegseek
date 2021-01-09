@@ -15,7 +15,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
- * 
+ *
  * 2020:
  *  - Changed userfacing steghide mentions to stegseek
  *
@@ -26,200 +26,172 @@
 #include <iostream>
 #include <string>
 
+#include "Terminal.h"
 #include "common.h"
 #include "msg.h"
-#include "Terminal.h"
 
 //
 // class MessageBase
 //
-MessageBase::MessageBase ()
-{
-	setMessage (std::string(_("__no_message_defined__"))) ;
-	setNewline (true) ;
+MessageBase::MessageBase() {
+    setMessage(std::string(_("__no_message_defined__")));
+    setNewline(true);
 }
 
-MessageBase::MessageBase (std::string msg)
-{
-	setMessage (msg) ;
-	setNewline (true) ;
+MessageBase::MessageBase(std::string msg) {
+    setMessage(msg);
+    setNewline(true);
 }
 
-MessageBase::MessageBase (const char *msgfmt, ...)
-{
-	va_list ap ;
-	va_start (ap, msgfmt) ;
-	setMessage (msgfmt, ap) ;
-	va_end (ap) ;
-	setNewline (true) ;
+MessageBase::MessageBase(const char *msgfmt, ...) {
+    va_list ap;
+    va_start(ap, msgfmt);
+    setMessage(msgfmt, ap);
+    va_end(ap);
+    setNewline(true);
 }
 
-void MessageBase::setMessage (const char *msgfmt, ...)
-{
-	va_list ap ;
-	va_start (ap, msgfmt) ;
-	setMessage (vcompose (msgfmt, ap)) ;
-	va_end (ap) ;
+void MessageBase::setMessage(const char *msgfmt, ...) {
+    va_list ap;
+    va_start(ap, msgfmt);
+    setMessage(vcompose(msgfmt, ap));
+    va_end(ap);
 }
 
-std::string MessageBase::compose (const char *msgfmt, ...) const
-{
-	va_list ap ;
-	va_start (ap, msgfmt) ;
-	std::string retval = vcompose (msgfmt, ap) ;
-	va_end (ap) ;
-	return retval ;
+std::string MessageBase::compose(const char *msgfmt, ...) const {
+    va_list ap;
+    va_start(ap, msgfmt);
+    std::string retval = vcompose(msgfmt, ap);
+    va_end(ap);
+    return retval;
 }
 
-std::string MessageBase::vcompose (const char *msgfmt, va_list ap) const
-{
-	char *str = new char[MsgMaxSize] ;
-	vsnprintf (str, MsgMaxSize, msgfmt, ap) ;
-	std::string retval (str) ;
-	delete[] str ;
-	return retval ;
+std::string MessageBase::vcompose(const char *msgfmt, va_list ap) const {
+    char *str = new char[MsgMaxSize];
+    vsnprintf(str, MsgMaxSize, msgfmt, ap);
+    std::string retval(str);
+    delete[] str;
+    return retval;
 }
 
 //
 // class Message
 //
-Message::Message (const char *msgfmt, ...)
-	: MessageBase()
-{
-	va_list ap ;
-	va_start (ap, msgfmt) ;
-	setMessage (vcompose (msgfmt, ap)) ;
-	va_end (ap) ;
+Message::Message(const char *msgfmt, ...) : MessageBase() {
+    va_list ap;
+    va_start(ap, msgfmt);
+    setMessage(vcompose(msgfmt, ap));
+    va_end(ap);
 }
 
-void Message::printMessage () const
-{
-	if (Args.Verbosity.getValue() == NORMAL ||
-		Args.Verbosity.getValue() == VERBOSE) {
-		std::cerr << getMessage() << getNewline() ;
-	}
+void Message::printMessage() const {
+    if (Args.Verbosity.getValue() == NORMAL || Args.Verbosity.getValue() == VERBOSE) {
+        std::cerr << getMessage() << getNewline();
+    }
 }
 
 //
 // class VerboseMessage
 //
-VerboseMessage::VerboseMessage (const char *msgfmt, ...)
-	: MessageBase()
-{
-	va_list ap ;
-	va_start (ap, msgfmt) ;
-	setMessage (vcompose (msgfmt, ap)) ;
-	va_end (ap) ;
-	setNewline (true) ;
+VerboseMessage::VerboseMessage(const char *msgfmt, ...) : MessageBase() {
+    va_list ap;
+    va_start(ap, msgfmt);
+    setMessage(vcompose(msgfmt, ap));
+    va_end(ap);
+    setNewline(true);
 }
 
-void VerboseMessage::printMessage () const
-{
-	if (Args.Verbosity.getValue() == VERBOSE) {
-		std::cerr << getMessage() << getNewline() ;
-	}
+void VerboseMessage::printMessage() const {
+    if (Args.Verbosity.getValue() == VERBOSE) {
+        std::cerr << getMessage() << getNewline();
+    }
 }
 
 //
 // class Warning
 //
-Warning::Warning (const char *msgfmt, ...)
-	: MessageBase()
-{
-	va_list ap ;
-	va_start (ap, msgfmt) ;
-	setMessage (vcompose (msgfmt, ap)) ;
-	va_end (ap) ;
+Warning::Warning(const char *msgfmt, ...) : MessageBase() {
+    va_list ap;
+    va_start(ap, msgfmt);
+    setMessage(vcompose(msgfmt, ap));
+    va_end(ap);
 }
 
-void Warning::printMessage () const
-{
-	if (Args.Verbosity.getValue() != QUIET) {
-		std::cerr << "stegseek: " << _("warning:") << " " << getMessage() << getNewline() ;
-	}
+void Warning::printMessage() const {
+    if (Args.Verbosity.getValue() != QUIET) {
+        std::cerr << "stegseek: " << _("warning:") << " " << getMessage() << getNewline();
+    }
 }
 
 //
 // class CriticalWarning
 //
-CriticalWarning::CriticalWarning (const char *msgfmt, ...)
-	: MessageBase()
-{
-	va_list ap ;
-	va_start (ap, msgfmt) ;
-	setMessage (vcompose (msgfmt, ap)) ;
-	va_end (ap) ;
+CriticalWarning::CriticalWarning(const char *msgfmt, ...) : MessageBase() {
+    va_list ap;
+    va_start(ap, msgfmt);
+    setMessage(vcompose(msgfmt, ap));
+    va_end(ap);
 }
 
-void CriticalWarning::printMessage () const
-{
-	std::cerr << "stegseek: " << _("warning:") << " " << getMessage() << getNewline() ;
+void CriticalWarning::printMessage() const {
+    std::cerr << "stegseek: " << _("warning:") << " " << getMessage() << getNewline();
 }
 
 //
 // class Question
 //
-Question::Question (void)
-	: MessageBase()
-{
-	yeschar = std::string (_("y")) ;
-	nochar = std::string (_("n")) ;
+Question::Question(void) : MessageBase() {
+    yeschar = std::string(_("y"));
+    nochar = std::string(_("n"));
 }
 
-Question::Question (std::string msg)
-	: MessageBase (msg)
-{
-	yeschar = std::string (_("y")) ;
-	nochar = std::string (_("n")) ;
+Question::Question(std::string msg) : MessageBase(msg) {
+    yeschar = std::string(_("y"));
+    nochar = std::string(_("n"));
 }
 
-Question::Question (const char *msgfmt, ...)
-	: MessageBase()
-{
-	yeschar = std::string (_("y")) ;
-	nochar = std::string (_("n")) ;
+Question::Question(const char *msgfmt, ...) : MessageBase() {
+    yeschar = std::string(_("y"));
+    nochar = std::string(_("n"));
 
-	va_list ap ;
-	va_start (ap, msgfmt) ;
-	setMessage (vcompose (msgfmt, ap)) ;
-	va_end (ap) ;
+    va_list ap;
+    va_start(ap, msgfmt);
+    setMessage(vcompose(msgfmt, ap));
+    va_end(ap);
 }
 
-void Question::printMessage () const
-{
+void Question::printMessage() const {
 #ifndef HAVE_TERMIOS_H
-	Warning w (_("unknown terminal. you might need to press <Enter> after answering.")) ;
-	w.printMessage() ;
+    Warning w(_("unknown terminal. you might need to press <Enter> after answering."));
+    w.printMessage();
 #endif
-	std::cerr << getMessage() << " (" << yeschar << "/" << nochar << ") " ;
+    std::cerr << getMessage() << " (" << yeschar << "/" << nochar << ") ";
 }
 
-bool Question::getAnswer ()
-{
-	Terminal term ;
-	term.SingleKeyOn() ;
-	char input[2] ;
-	input[0] = std::cin.get() ;
-	input[1] = '\0' ;
-	bool retval = (std::string (input) == yeschar) ;
-	term.reset() ;
-	std::cerr << std::endl ;
+bool Question::getAnswer() {
+    Terminal term;
+    term.SingleKeyOn();
+    char input[2];
+    input[0] = std::cin.get();
+    input[1] = '\0';
+    bool retval = (std::string(input) == yeschar);
+    term.reset();
+    std::cerr << std::endl;
 
-	return retval ;
+    return retval;
 }
 
 //
 // debugging output
 //
 #ifdef DEBUG
-void printDebug (unsigned short level, const char *msgfmt, ...)
-{
-	if (RUNDEBUGLEVEL(level)) {
-		va_list ap ;
-		va_start (ap, msgfmt) ;
-		vfprintf (stderr, msgfmt, ap) ;
-		va_end (ap) ;
-		fprintf (stderr, "\n") ;
-	}
+void printDebug(unsigned short level, const char *msgfmt, ...) {
+    if (RUNDEBUGLEVEL(level)) {
+        va_list ap;
+        va_start(ap, msgfmt);
+        vfprintf(stderr, msgfmt, ap);
+        va_end(ap);
+        fprintf(stderr, "\n");
+    }
 }
 #endif

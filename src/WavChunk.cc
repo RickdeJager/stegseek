@@ -21,14 +21,10 @@
 #include "WavChunk.h"
 #include "WavChunkHeader.h"
 
-WavChunk::~WavChunk ()
-{
-	if (ChunkHeader != NULL) {
-		delete ChunkHeader ;
-	}
+WavChunk::~WavChunk() {
+    if (ChunkHeader != NULL) {
+        delete ChunkHeader;
+    }
 }
 
-void WavChunk::write (BinaryIO *io)
-{
-	ChunkHeader->write (io) ;
-}
+void WavChunk::write(BinaryIO *io) { ChunkHeader->write(io); }

@@ -26,13 +26,13 @@
 #include <vector>
 
 extern "C" {
-#include <stdio.h>
 #include <jpeglib.h>
+#include <stdio.h>
 }
 
-class BinaryIO ;
+class BinaryIO;
 #include "CvrStgFile.h"
-class SampleValue ;
+class SampleValue;
 
 /**
  * \class JpegFile
@@ -41,48 +41,48 @@ class SampleValue ;
  * This class uses the JPEG library by the IJG for access to jpeg files.
  **/
 class JpegFile : public CvrStgFile {
-	public:
-	JpegFile (BinaryIO* io) ;
-	~JpegFile (void) ;
+  public:
+    JpegFile(BinaryIO *io);
+    ~JpegFile(void);
 
-	void read (BinaryIO* io) ;
-	void write (void) ;
+    void read(BinaryIO *io);
+    void write(void);
 
-	std::list<CvrStgFile::Property> getProperties (void) const ;
-	std::vector<MatchingAlgorithm*> getMatchingAlgorithms (Graph* g, Matching* m) const ;
-	
-	unsigned long getNumSamples (void) const ;
-	void replaceSample (const SamplePos pos, const SampleValue* s) ;
-	SampleValue* getSampleValue (const SamplePos pos) const ;
-	EmbValue getEmbeddedValue (const SamplePos pos) const ;
+    std::list<CvrStgFile::Property> getProperties(void) const;
+    std::vector<MatchingAlgorithm *> getMatchingAlgorithms(Graph *g, Matching *m) const;
+
+    unsigned long getNumSamples(void) const;
+    void replaceSample(const SamplePos pos, const SampleValue *s);
+    SampleValue *getSampleValue(const SamplePos pos) const;
+    EmbValue getEmbeddedValue(const SamplePos pos) const;
 
 #ifdef DEBUG
-	std::map<SampleKey,unsigned long>* getFrequencies (void) ;
-	/**
-	 * SampleKey is unsigned, jpeg dct coefficients are signed data. This function is a specialization
-	 * of printFrequencies that converts the SampleKeys back to dct coefficient values before printing
-	 * them and also prints the values starting from the lowest (negative) and ending with the highest
-	 * (positive).
-	 **/
-	void printFrequencies (const std::map<SampleKey,unsigned long>& freqs) ;
+    std::map<SampleKey, unsigned long> *getFrequencies(void);
+    /**
+     * SampleKey is unsigned, jpeg dct coefficients are signed data. This function is a
+     *specialization of printFrequencies that converts the SampleKeys back to dct coefficient values
+     *before printing them and also prints the values starting from the lowest (negative) and ending
+     *with the highest (positive).
+     **/
+    void printFrequencies(const std::map<SampleKey, unsigned long> &freqs);
 #endif
 
-	private:
-	/// the number of dct coefficients per block
-	static const unsigned int CoeffPerBlock = 64 ;
+  private:
+    /// the number of dct coefficients per block
+    static const unsigned int CoeffPerBlock = 64;
 
-	static const unsigned short SamplesPerVertex = 3 ;
-	static const UWORD32 Radius = 1 ;
-	static const EmbValue EmbValueModulus = 2 ;
+    static const unsigned short SamplesPerVertex = 3;
+    static const UWORD32 Radius = 1;
+    static const EmbValue EmbValueModulus = 2;
 
-	struct jpeg_compress_struct CInfo ;
-	struct jpeg_decompress_struct DeCInfo ;
-	unsigned int* HeightInBlocks ;
-	unsigned int* WidthInBlocks ;
-	jvirt_barray_ptr* DctCoeffs ;
+    struct jpeg_compress_struct CInfo;
+    struct jpeg_decompress_struct DeCInfo;
+    unsigned int *HeightInBlocks;
+    unsigned int *WidthInBlocks;
+    jvirt_barray_ptr *DctCoeffs;
 
-	std::vector<SWORD16> LinDctCoeffs ;
-	std::vector<UWORD32> StegoIndices ;
-} ;
+    std::vector<SWORD16> LinDctCoeffs;
+    std::vector<UWORD32> StegoIndices;
+};
 
 #endif // ndef SH_JPEGFILE_H

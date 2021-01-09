@@ -23,23 +23,23 @@
 
 #include "SampleValueTest.h"
 
-class JpegSampleValue ;
-class CvrStgFile ;
+class JpegSampleValue;
+class CvrStgFile;
 
 class JpegSampleValueTest : public SampleValueTest {
-	public:
-	JpegSampleValueTest (TestSuite* s) ;
+  public:
+    JpegSampleValueTest(TestSuite *s);
 
-	void setup (void) ;
-	void cleanup (void) ;
+    void setup(void);
+    void cleanup(void);
 
-	void testDistance (void) ;
-	void testIsNeighbour (void) ;
+    void testDistance(void);
+    void testIsNeighbour(void);
 
-	private:
-	CvrStgFile *f1 ;
-	JpegSampleValue *sv_m1, *sv_0, *sv_1 ;
-	Globals gl1 ;
-} ;
+  private:
+    CvrStgFile *f1;
+    JpegSampleValue *sv_m1, *sv_0, *sv_1;
+    Globals gl1;
+};
 
 #endif // ndef SH_JPEGSAMPLEVALUETEST_H

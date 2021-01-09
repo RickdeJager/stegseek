@@ -30,24 +30,24 @@
  * \brief an implementation of the "static minimum degree" heuristic for contructing a matching
  **/
 class SMDConstructionHeuristic : public MatchingAlgorithm {
-	public:
-	SMDConstructionHeuristic (Graph* g, Matching* m, float goal = 100.0) ;
+  public:
+    SMDConstructionHeuristic(Graph *g, Matching *m, float goal = 100.0);
 
-	virtual ~SMDConstructionHeuristic (void) {} ;
+    virtual ~SMDConstructionHeuristic(void){};
 
-	const char* getName (void) const
-		{ return "Static Minimum Degree Construction Heuristic" ; } ;
+    const char *getName(void) const { return "Static Minimum Degree Construction Heuristic"; };
 
-	void run (void) ;
+    void run(void);
 
-	private:
-	class SmallerVertexDegree {
-		public:
-		bool operator() (const Vertex* v1, const Vertex* v2)
-			{ return (v1->getDegree() < v2->getDegree()) ; } ;
-	} ;
+  private:
+    class SmallerVertexDegree {
+      public:
+        bool operator()(const Vertex *v1, const Vertex *v2) {
+            return (v1->getDegree() < v2->getDegree());
+        };
+    };
 
-	std::vector<Vertex*> Vertices ;
-} ;
+    std::vector<Vertex *> Vertices;
+};
 
 #endif // ndef SH_SMDCONSTRUCTIONHEURISTIC_H

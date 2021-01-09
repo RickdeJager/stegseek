@@ -29,26 +29,25 @@
  * \brief an (abstract) sample value in a bmp file
  **/
 class BmpSampleValue : public SampleValue {
-	public:
-	BmpSampleValue (void) : SampleValue() {} ;
+  public:
+    BmpSampleValue(void) : SampleValue(){};
 
-	virtual UWORD32 calcDistance (const SampleValue *s) const ;
+    virtual UWORD32 calcDistance(const SampleValue *s) const;
 
-	/**
-	 * get the red color component
-	 **/
-	virtual unsigned char getRed (void) const = 0 ;
-	
-	/**
-	 * get the green color component
-	 **/
-	virtual unsigned char getGreen (void) const = 0 ;
-	
-	/**
-	 * get the blue color component
-	 **/
-	virtual unsigned char getBlue (void) const = 0 ;
-} ;
+    /**
+     * get the red color component
+     **/
+    virtual unsigned char getRed(void) const = 0;
 
+    /**
+     * get the green color component
+     **/
+    virtual unsigned char getGreen(void) const = 0;
+
+    /**
+     * get the blue color component
+     **/
+    virtual unsigned char getBlue(void) const = 0;
+};
 
 #endif // ndef SH_BMPSAMPLE_H

@@ -25,12 +25,12 @@
 #include <queue>
 #include <vector>
 
-class Edge ;
-class Graph ;
-class Matching ;
+class Edge;
+class Graph;
+class Matching;
 #include "MatchingAlgorithm.h"
-class ProgressOutput ;
-class Vertex ;
+class ProgressOutput;
+class Vertex;
 #include "common.h"
 
 /**
@@ -46,60 +46,62 @@ class Vertex ;
  * algorithm to choose shorter edges on average.
  **/
 class WKSConstructionHeuristic : public MatchingAlgorithm {
-	public:
-	/**
-	 * \param g the underlying graph
-	 * \param m the inital matching (should be empty)
-	 **/
-	WKSConstructionHeuristic (Graph* g, Matching* m, float goal = 100.0) ;
+  public:
+    /**
+     * \param g the underlying graph
+     * \param m the inital matching (should be empty)
+     **/
+    WKSConstructionHeuristic(Graph *g, Matching *m, float goal = 100.0);
 
-	virtual ~WKSConstructionHeuristic (void) {} ;
+    virtual ~WKSConstructionHeuristic(void){};
 
-	const char* getName (void) const
-		{ return "Weighted Karp&Sipser Construction Heuristic" ; } ;
+    const char *getName(void) const { return "Weighted Karp&Sipser Construction Heuristic"; };
 
-	void run (void) ;
+    void run(void);
 
-	/**
-	 * \class LongerShortestEdge
-	 * \brief a comparison operator
-	 *
-	 * lse(v1, v2) is true if the length of the shortest edge of v1
-	 * is greater than the length of the shortest edge of v2. If a vertex
-	 * has Degree 0, the length of its shortest edge is defined to be +Infinity.
-	 * If both v1 and v2 have degree 0, then the vertex with the greater label
-	 * is defined to have the "longer shortest edge".
-	 **/
-	class LongerShortestEdge : public std::binary_function<Vertex*,Vertex*,bool> {
-		public:
-		bool operator() (const Vertex *v1, const Vertex *v2) ;
-	} ;
+    /**
+     * \class LongerShortestEdge
+     * \brief a comparison operator
+     *
+     * lse(v1, v2) is true if the length of the shortest edge of v1
+     * is greater than the length of the shortest edge of v2. If a vertex
+     * has Degree 0, the length of its shortest edge is defined to be +Infinity.
+     * If both v1 and v2 have degree 0, then the vertex with the greater label
+     * is defined to have the "longer shortest edge".
+     **/
+    class LongerShortestEdge : public std::binary_function<Vertex *, Vertex *, bool> {
+      public:
+        bool operator()(const Vertex *v1, const Vertex *v2);
+    };
 
 #ifdef DEBUG
-	void print (unsigned short spc = 0) ;
-	void printPQ (std::priority_queue<Vertex*, std::vector<Vertex*>, LongerShortestEdge>& pq) ;
+    void print(unsigned short spc = 0);
+    void printPQ(std::priority_queue<Vertex *, std::vector<Vertex *>, LongerShortestEdge> &pq);
 #endif
 
-	private:
-	/**
-	 * get the Vertex from VerticesDeg1 that is nearest to top (with updated degrees and shortest edges)
-	 **/
-	Vertex *findVertexDeg1 (void) ;
+  private:
+    /**
+     * get the Vertex from VerticesDeg1 that is nearest to top (with updated degrees and shortest
+     *edges)
+     **/
+    Vertex *findVertexDeg1(void);
 
-	/**
-	 * get the Vertex from VerticesDegG that is nearest to top (with updated degrees and shortest edges)
-	 **/
-	Vertex *findVertexDegG (void) ;
+    /**
+     * get the Vertex from VerticesDegG that is nearest to top (with updated degrees and shortest
+     *edges)
+     **/
+    Vertex *findVertexDegG(void);
 
-	/**
-	 * copy all Neighbours of v that have degree 1 to VerticesDeg1
-	 **/
-	void checkNeighboursDeg1 (Vertex *v) ;
+    /**
+     * copy all Neighbours of v that have degree 1 to VerticesDeg1
+     **/
+    void checkNeighboursDeg1(Vertex *v);
 
-	/// contains all vertices of degree 1 - every vertex in this queue has a correct shortest edge if it still has degree 1
-	std::priority_queue<Vertex*, std::vector<Vertex*>, LongerShortestEdge> VerticesDeg1 ;
-	/// contains all vertices with degree greater than 1
-	std::priority_queue<Vertex*, std::vector<Vertex*>, LongerShortestEdge> VerticesDegG ;
-} ;
+    /// contains all vertices of degree 1 - every vertex in this queue has a correct shortest edge
+    /// if it still has degree 1
+    std::priority_queue<Vertex *, std::vector<Vertex *>, LongerShortestEdge> VerticesDeg1;
+    /// contains all vertices with degree greater than 1
+    std::priority_queue<Vertex *, std::vector<Vertex *>, LongerShortestEdge> VerticesDegG;
+};
 
 #endif // ndef SH_WKSCONSTRUCTIONHEURISTIC_H

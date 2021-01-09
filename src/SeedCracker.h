@@ -2,9 +2,9 @@
  *
  * Stegseek 0.5 - a steghide cracker
  * Copyright (C) 2020 Rick de Jager
- * 
+ *
  * Based on the work of Stefan Hetzl <shetzl@chello.at>
- * 
+ *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
  * as published by the Free Software Foundation; either version 2
@@ -24,31 +24,30 @@
 #ifndef SH_SEEDCRACKER_H
 #define SH_SEEDCRACKER_H
 
-#include <string>
 #include <atomic>
+#include <string>
 
 #include "Cracker.h"
 #include "Selector.h"
 
 struct Result {
-	unsigned int seed ;
-	unsigned int plainSize ;
-	unsigned int encAlgo ;
-	unsigned int encMode ;
+    unsigned int seed;
+    unsigned int plainSize;
+    unsigned int encAlgo;
+    unsigned int encMode;
 };
 
-class SeedCracker : Cracker{
-	public:
-	SeedCracker () {};
+class SeedCracker : Cracker {
+  public:
+    SeedCracker(){};
 
-	void crack () ;
+    void crack();
 
-	private:
-	bool trySeed (UWORD32) ;
-	void consume (unsigned int, unsigned int, bool) ;
-	void finish () ;
-	Result foundResult ;
-} ;
-
+  private:
+    bool trySeed(UWORD32);
+    void consume(unsigned int, unsigned int, bool);
+    void finish();
+    Result foundResult;
+};
 
 #endif // ndef SH_SEEDCRACKER_H

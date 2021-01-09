@@ -32,18 +32,18 @@
  * \brief provides some terminal access
  **/
 class Terminal {
-	public:
-	Terminal (void) ;
+  public:
+    Terminal(void);
 
-	void EchoOff (void) ;
-	void SingleKeyOn (void) ;
-	void reset (void) ;
+    void EchoOff(void);
+    void SingleKeyOn(void);
+    void reset(void);
 
-	private:
+  private:
 #if HAVE_TERMIOS_H
-	/// contains the attributes of the terminal when this object was constructed
-	struct termios InitAttr ;
+    /// contains the attributes of the terminal when this object was constructed
+    struct termios InitAttr;
 #endif
-} ;
+};
 
 #endif // ndef SH_TERMINAL_H

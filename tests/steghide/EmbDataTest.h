@@ -21,28 +21,28 @@
 #ifndef SH_EMBDATATEST_H
 #define SH_EMBDATATEST_H
 
-class BitString ;
+class BitString;
 #define private public
 #include "EmbData.h"
 #undef private
 
-#include "UnitTest.h"
 #include "TestSuite.h"
+#include "UnitTest.h"
 
 class EmbDataTest : public UnitTest {
-	public:
-	EmbDataTest (TestSuite* s) ;
+  public:
+    EmbDataTest(TestSuite *s);
 
-	void testEmbedding (void) ;
-	void testExtracting (void) ;
+    void testEmbedding(void);
+    void testExtracting(void);
 
-	private:
-	bool genericTestEmbedding (EmbData emb, BitString shouldbe) ;
-	/**
-	 * pass the BitString bs to emb using getNumBitsNeeded and addBits
-	 * \return true iff emb took exactly the (number of) bits from bs
-	 **/
-	bool feed_to (const BitString& bs, EmbData& emb) ;
-} ;
+  private:
+    bool genericTestEmbedding(EmbData emb, BitString shouldbe);
+    /**
+     * pass the BitString bs to emb using getNumBitsNeeded and addBits
+     * \return true iff emb took exactly the (number of) bits from bs
+     **/
+    bool feed_to(const BitString &bs, EmbData &emb);
+};
 
 #endif // ndef SH_EMBDATATEST_H

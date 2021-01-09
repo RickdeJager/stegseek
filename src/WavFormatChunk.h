@@ -21,39 +21,34 @@
 #ifndef SH_WAVFORMATCHUNK_H
 #define SH_WAVFORMATCHUNK_H
 
-#include "common.h"
 #include "WavChunk.h"
+#include "common.h"
 
-class BinaryIO ;
+class BinaryIO;
 
 class WavFormatChunk : public WavChunk {
-	public:
-	WavFormatChunk (void) :
-		WavChunk() {} ;
-	WavFormatChunk (WavChunkHeader *chh) :
-		WavChunk(chh) {} ;
-	WavFormatChunk (WavChunkHeader *chh, BinaryIO *io) :
-		WavChunk(chh) { read(io) ; } ;
+  public:
+    WavFormatChunk(void) : WavChunk(){};
+    WavFormatChunk(WavChunkHeader *chh) : WavChunk(chh){};
+    WavFormatChunk(WavChunkHeader *chh, BinaryIO *io) : WavChunk(chh) { read(io); };
 
-	void read (BinaryIO *io) ;
-	void write (BinaryIO *io) ;
+    void read(BinaryIO *io);
+    void write(BinaryIO *io);
 
-	UWORD16 getFormatTag (void) const
-		{ return FormatTag ; } ;
+    UWORD16 getFormatTag(void) const { return FormatTag; };
 
-	UWORD16 getBitsPerSample (void) const
-		{ return BitsPerSample ; } ;
+    UWORD16 getBitsPerSample(void) const { return BitsPerSample; };
 
-	static const UWORD16 FormatPCM = 0x0001 ;
+    static const UWORD16 FormatPCM = 0x0001;
 
-	private:
-	UWORD16 FormatTag ;
-	UWORD16 Channels ;
-	UWORD32 SamplesPerSec ;
-	UWORD32 AvgBytesPerSec ;
-	UWORD16 BlockAlign ;
-	UWORD16 BitsPerSample ;
-	UWORD16 AdditionalSize ;
-} ;
+  private:
+    UWORD16 FormatTag;
+    UWORD16 Channels;
+    UWORD32 SamplesPerSec;
+    UWORD32 AvgBytesPerSec;
+    UWORD16 BlockAlign;
+    UWORD16 BitsPerSample;
+    UWORD16 AdditionalSize;
+};
 
 #endif // ndef SH_WAVCHUNKFORMAT_H

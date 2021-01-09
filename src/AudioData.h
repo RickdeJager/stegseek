@@ -24,7 +24,7 @@
 #include <vector>
 
 #include "AudioSampleValue.h"
-class BinaryIO ;
+class BinaryIO;
 #include "CvrStgObject.h"
 
 /**
@@ -35,135 +35,132 @@ class BinaryIO ;
  * of audio data, i.e. all different instances of AudioDataImpl.
  **/
 class AudioData : public CvrStgObject {
-	public:
-	/// constant that can be used as parameter to read and write to indicate that there is no limit
-	static const UWORD32 NoLimit = 0 ;
+  public:
+    /// constant that can be used as parameter to read and write to indicate that there is no limit
+    static const UWORD32 NoLimit = 0;
 
-	virtual void read (BinaryIO* io, UWORD32 n = NoLimit) = 0 ;
-	virtual void write (BinaryIO* io, UWORD32 n = NoLimit) = 0 ;
-} ;
+    virtual void read(BinaryIO *io, UWORD32 n = NoLimit) = 0;
+    virtual void write(BinaryIO *io, UWORD32 n = NoLimit) = 0;
+};
 
 /**
  * \class AudioDataImpl
  * \brief implementation of the AudioData-Interface
  **/
-template<AUDIOSAMPLETYPE Type, class ValueType, class SampleValueType = AudioSampleValue<Type,ValueType> >
+template <AUDIOSAMPLETYPE Type, class ValueType,
+          class SampleValueType = AudioSampleValue<Type, ValueType>>
 class AudioDataImpl : public AudioData {
-	public:
-	AudioDataImpl (CvrStgFile* f) : TheCvrStgFile(f) {} ;
-	virtual ~AudioDataImpl (void) {} ;
+  public:
+    AudioDataImpl(CvrStgFile *f) : TheCvrStgFile(f){};
+    virtual ~AudioDataImpl(void){};
 
-	void read (BinaryIO* io, UWORD32 n = AudioData::NoLimit) ;
-	void write (BinaryIO* io, UWORD32 n = AudioData::NoLimit) ;
+    void read(BinaryIO *io, UWORD32 n = AudioData::NoLimit);
+    void write(BinaryIO *io, UWORD32 n = AudioData::NoLimit);
 
-	unsigned long getNumSamples (void) const ;
-	SampleValue* getSampleValue (const SamplePos pos) const ;
-	void replaceSample (const SamplePos pos, const SampleValue* s) ;
+    unsigned long getNumSamples(void) const;
+    SampleValue *getSampleValue(const SamplePos pos) const;
+    void replaceSample(const SamplePos pos, const SampleValue *s);
 
-	private:
-	std::vector<ValueType> Data ;
-	CvrStgFile* TheCvrStgFile ;
+  private:
+    std::vector<ValueType> Data;
+    CvrStgFile *TheCvrStgFile;
 
-	ValueType readValue (BinaryIO* io) const ;
-	void writeValue (BinaryIO* io, ValueType v) const ;
-} ;
+    ValueType readValue(BinaryIO *io) const;
+    void writeValue(BinaryIO *io, ValueType v) const;
+};
 
 #include "error.h"
 
-template<AUDIOSAMPLETYPE Type, class ValueType, class SampleValueType>
-void AudioDataImpl<Type,ValueType,SampleValueType>::read (BinaryIO* io, UWORD32 n)
-{
-	try {
-		if (n == NoLimit) {
-			Data.clear() ;
-			while (!io->eof()) {
-				Data.push_back (readValue(io)) ;
-			}
-		}
-		else {
-			Data.resize (n) ;
-			for (UWORD32 i = 0 ; i < n ; i++) {
-				Data[i] = readValue(io) ;
-			}
-		}
-	}
-	catch (BinaryInputError e) {
-		switch (e.getType()) {
-			case BinaryInputError::FILE_ERR:
-			{
-				throw SteghideError (_("an error occurred while reading the audio data from the file \"%s\"."), io->getName().c_str()) ;
-				break ;
-			}
+template <AUDIOSAMPLETYPE Type, class ValueType, class SampleValueType>
+void AudioDataImpl<Type, ValueType, SampleValueType>::read(BinaryIO *io, UWORD32 n) {
+    try {
+        if (n == NoLimit) {
+            Data.clear();
+            while (!io->eof()) {
+                Data.push_back(readValue(io));
+            }
+        } else {
+            Data.resize(n);
+            for (UWORD32 i = 0; i < n; i++) {
+                Data[i] = readValue(io);
+            }
+        }
+    } catch (BinaryInputError e) {
+        switch (e.getType()) {
+        case BinaryInputError::FILE_ERR: {
+            throw SteghideError(
+                _("an error occurred while reading the audio data from the file \"%s\"."),
+                io->getName().c_str());
+            break;
+        }
 
-			case BinaryInputError::FILE_EOF:
-			{
-				throw SteghideError (_("premature end of file \"%s\" while reading audio data."), io->getName().c_str()) ;
-				break ;
-			}
+        case BinaryInputError::FILE_EOF: {
+            throw SteghideError(_("premature end of file \"%s\" while reading audio data."),
+                                io->getName().c_str());
+            break;
+        }
 
-			case BinaryInputError::STDIN_ERR:
-			{
-				throw SteghideError (_("an error occurred while reading the audio data from standard input.")) ;
-				break ;
-			}
+        case BinaryInputError::STDIN_ERR: {
+            throw SteghideError(
+                _("an error occurred while reading the audio data from standard input."));
+            break;
+        }
 
-			case BinaryInputError::STDIN_EOF:
-			{
-				throw SteghideError (_("premature end of data from standard input while reading audio data.")) ;
-				break ;
-			}
-		}
-	}
+        case BinaryInputError::STDIN_EOF: {
+            throw SteghideError(
+                _("premature end of data from standard input while reading audio data."));
+            break;
+        }
+        }
+    }
 }
 
-template<AUDIOSAMPLETYPE Type, class ValueType, class SampleValueType>
-void AudioDataImpl<Type,ValueType,SampleValueType>::write (BinaryIO* io, UWORD32 n)
-{
-	try {
-		if (n == NoLimit) {
-			n = Data.size() ;
-		}
-		for (UWORD32 i = 0 ; i < n ; i++) {
-			writeValue (io, Data[i]) ;
-		}
-	}
-	catch (BinaryOutputError e) {
-		switch (e.getType()) {
-			case BinaryOutputError::FILE_ERR:
-			{
-				throw SteghideError (_("an error occurred while writing the audio data to the file \"%s\"."), io->getName().c_str()) ;
-				break ;
-			}
+template <AUDIOSAMPLETYPE Type, class ValueType, class SampleValueType>
+void AudioDataImpl<Type, ValueType, SampleValueType>::write(BinaryIO *io, UWORD32 n) {
+    try {
+        if (n == NoLimit) {
+            n = Data.size();
+        }
+        for (UWORD32 i = 0; i < n; i++) {
+            writeValue(io, Data[i]);
+        }
+    } catch (BinaryOutputError e) {
+        switch (e.getType()) {
+        case BinaryOutputError::FILE_ERR: {
+            throw SteghideError(
+                _("an error occurred while writing the audio data to the file \"%s\"."),
+                io->getName().c_str());
+            break;
+        }
 
-			case BinaryOutputError::STDOUT_ERR:
-			{
-				throw SteghideError (_("an error occurred while writing the audio data to standard output.")) ;
-				break ;
-			}
-		}
-	}
+        case BinaryOutputError::STDOUT_ERR: {
+            throw SteghideError(
+                _("an error occurred while writing the audio data to standard output."));
+            break;
+        }
+        }
+    }
 }
 
-template<AUDIOSAMPLETYPE Type, class ValueType, class SampleValueType>
-unsigned long AudioDataImpl<Type,ValueType,SampleValueType>::getNumSamples (void) const
-{
-	return Data.size() ;
+template <AUDIOSAMPLETYPE Type, class ValueType, class SampleValueType>
+unsigned long AudioDataImpl<Type, ValueType, SampleValueType>::getNumSamples(void) const {
+    return Data.size();
 }
 
-template<AUDIOSAMPLETYPE Type, class ValueType, class SampleValueType>
-SampleValue* AudioDataImpl<Type,ValueType,SampleValueType>::getSampleValue (const SamplePos pos) const
-{
-	myassert (pos < Data.size()) ;
-	return ((SampleValue*) new SampleValueType (Data[pos])) ;
+template <AUDIOSAMPLETYPE Type, class ValueType, class SampleValueType>
+SampleValue *
+AudioDataImpl<Type, ValueType, SampleValueType>::getSampleValue(const SamplePos pos) const {
+    myassert(pos < Data.size());
+    return ((SampleValue *)new SampleValueType(Data[pos]));
 }
 
-template<AUDIOSAMPLETYPE Type, class ValueType, class SampleValueType>
-void AudioDataImpl<Type,ValueType,SampleValueType>::replaceSample (const SamplePos pos, const SampleValue* s)
-{
-	const SampleValueType* sample = dynamic_cast<const SampleValueType*> (s) ;
-	myassert (sample) ;
-	myassert (pos < Data.size()) ;
-	Data[pos] = sample->getValue() ;
+template <AUDIOSAMPLETYPE Type, class ValueType, class SampleValueType>
+void AudioDataImpl<Type, ValueType, SampleValueType>::replaceSample(const SamplePos pos,
+                                                                    const SampleValue *s) {
+    const SampleValueType *sample = dynamic_cast<const SampleValueType *>(s);
+    myassert(sample);
+    myassert(pos < Data.size());
+    Data[pos] = sample->getValue();
 }
 
 #endif // ndef SH_AUDIODATA_H

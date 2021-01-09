@@ -22,10 +22,10 @@
 #define SH_UTCOMMON_H
 
 #define DATADIR "./data/"
-#define REMOVE	"rm -f"
-#define COMPARE	"cmp -s"
+#define REMOVE "rm -f"
+#define COMPARE "cmp -s"
 #define COPY "cp"
 
-extern bool ArgVerbose ;
+extern bool ArgVerbose;
 
 #endif // ndef SH_UTCOMMON_H

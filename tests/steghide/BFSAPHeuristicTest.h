@@ -21,32 +21,32 @@
 #ifndef SH_BFSAPHEURISTICTEST_H
 #define SH_BFSAPHEURISTICTEST_H
 
-class BFSAPHeuristic ;
-class BitString ;
-class CvrStgFile ;
-class Matching ;
-class Selector ;
+class BFSAPHeuristic;
+class BitString;
+class CvrStgFile;
+class Matching;
+class Selector;
 
-#include "UnitTest.h"
 #include "TestSuite.h"
+#include "UnitTest.h"
 
 class BFSAPHeuristicTest : public UnitTest {
-	public:
-	BFSAPHeuristicTest (TestSuite* s) ;
+  public:
+    BFSAPHeuristicTest(TestSuite *s);
 
-	void setup (void) ;
-	void cleanup (void) ;
+    void setup(void);
+    void cleanup(void);
 
-	void testAlgorithm (void) ;
+    void testAlgorithm(void);
 
-	private:
-	BitString *bs1, *bs2, *bs3, *bs4, *bs5 ;
-	CvrStgFile *f1, *f2, *f3, *f4, *f5 ;
-	Selector *s1, *s2, *s3, *s4, *s5 ;
-	Graph *g1, *g2, *g3, *g4, *g5 ;
-	Matching *m1, *m2, *m3, *m4, *m5 ;
-	BFSAPHeuristic *aph1, *aph2, *aph3, *aph4, *aph5 ;
-	Globals gl1, gl2, gl3, gl4, gl5 ;
-} ;
+  private:
+    BitString *bs1, *bs2, *bs3, *bs4, *bs5;
+    CvrStgFile *f1, *f2, *f3, *f4, *f5;
+    Selector *s1, *s2, *s3, *s4, *s5;
+    Graph *g1, *g2, *g3, *g4, *g5;
+    Matching *m1, *m2, *m3, *m4, *m5;
+    BFSAPHeuristic *aph1, *aph2, *aph3, *aph4, *aph5;
+    Globals gl1, gl2, gl3, gl4, gl5;
+};
 
 #endif // ndef SH_BFSAPHEURISTICTEST_H

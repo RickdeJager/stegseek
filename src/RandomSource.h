@@ -24,58 +24,58 @@
 #include <cstdio>
 #include <vector>
 
-class BitString ;
+class BitString;
 
 /**
  * \class RandomSource
  * \brief objects of this class are used as a source of random (non reproduceable) data
  **/
 class RandomSource {
-	public:
-	RandomSource (void) ;
-	~RandomSource (void) ;
+  public:
+    RandomSource(void);
+    ~RandomSource(void);
 
-	/**
-	 * get a random byte
-	 * \return a random byte
-	 **/
-	BYTE getByte (void) ;
+    /**
+     * get a random byte
+     * \return a random byte
+     **/
+    BYTE getByte(void);
 
-	/**
-	 * get n random bytes
-	 * \param n the number of requested random bytes
-	 * \return n random bytes
-	 **/
-	std::vector<BYTE> getBytes (unsigned int n) ;
+    /**
+     * get n random bytes
+     * \param n the number of requested random bytes
+     * \return n random bytes
+     **/
+    std::vector<BYTE> getBytes(unsigned int n);
 
-	/**
-	 * get n random bits
-	 * \param n the number of requested random bits
-	 * \return a BitString containing n random bits
-	 **/
-	BitString getBits (unsigned int n) ;
+    /**
+     * get n random bits
+     * \param n the number of requested random bits
+     * \return a BitString containing n random bits
+     **/
+    BitString getBits(unsigned int n);
 
-	/**
-	 * get a boolean value
-	 * \return true of false with equal probability
-	 **/
-	bool getBool (void) ;
+    /**
+     * get a boolean value
+     * \return true of false with equal probability
+     **/
+    bool getBool(void);
 
-	/**
-	 * get a random value
-	 * \param n the range of the random value to be returned
-	 * \return a random number in {0,...,n-1}
-	 **/
-	unsigned long getValue (unsigned long n) ;
+    /**
+     * get a random value
+     * \param n the range of the random value to be returned
+     * \return a random number in {0,...,n-1}
+     **/
+    unsigned long getValue(unsigned long n);
 
-	private:
-	unsigned int RandomBytePos ;
-	BYTE RandomByte ;
-	/**
-	 * determines the random input - is either opened file pointer to
-	 * /dev/urandom or NULL (the rand() function is then used as random source)
-	 **/
-	FILE *RandomInput ;
-} ;
+  private:
+    unsigned int RandomBytePos;
+    BYTE RandomByte;
+    /**
+     * determines the random input - is either opened file pointer to
+     * /dev/urandom or NULL (the rand() function is then used as random source)
+     **/
+    FILE *RandomInput;
+};
 
 #endif // ndef SH_RANDOMSOURCE_H

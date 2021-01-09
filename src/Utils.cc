@@ -22,37 +22,34 @@
 
 #include "Utils.h"
 
-std::string Utils::formatHRSize (unsigned long size)
-{
-	float s = (float) size ;
+std::string Utils::formatHRSize(unsigned long size) {
+    float s = (float)size;
 
-	std::string unit = "Byte(s)" ;
-	if (s > 1024.0) {
-		s /= 1024.0 ;
-		unit = "KB" ;
-	}
-	if (s > 1024.0) {
-		s /= 1024.0 ;
-		unit = "MB" ;
-	}
-	if (s > 1024.0) {
-		s /= 1024.0 ;
-		unit = "GB" ;
-	}
+    std::string unit = "Byte(s)";
+    if (s > 1024.0) {
+        s /= 1024.0;
+        unit = "KB";
+    }
+    if (s > 1024.0) {
+        s /= 1024.0;
+        unit = "MB";
+    }
+    if (s > 1024.0) {
+        s /= 1024.0;
+        unit = "GB";
+    }
 
-	char buf[15] ;
-	sprintf (buf, "%.1f %s", s, unit.c_str()) ;
-	return std::string (buf) ;
+    char buf[15];
+    sprintf(buf, "%.1f %s", s, unit.c_str());
+    return std::string(buf);
 }
 
-std::string Utils::stripDir (std::string s)
-{
-	unsigned int start = 0 ;
-	if ((start = s.find_last_of ("/\\")) == std::string::npos) {
-		start = 0 ;
-	}
-	else {
-		start += 1 ;
-	}
-	return s.substr (start, std::string::npos) ;
+std::string Utils::stripDir(std::string s) {
+    unsigned int start = 0;
+    if ((start = s.find_last_of("/\\")) == std::string::npos) {
+        start = 0;
+    } else {
+        start += 1;
+    }
+    return s.substr(start, std::string::npos);
 }

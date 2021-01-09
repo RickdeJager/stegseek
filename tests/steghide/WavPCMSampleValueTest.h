@@ -23,22 +23,23 @@
 
 #include "SampleValueTest.h"
 
-class CvrStgFile ;
+class CvrStgFile;
 
 class WavPCMSampleValueTest : public SampleValueTest {
-	public:
-	WavPCMSampleValueTest (TestSuite* s) ;
+  public:
+    WavPCMSampleValueTest(TestSuite *s);
 
-	void setup (void) ;
-	void cleanup (void) ;
+    void setup(void);
+    void cleanup(void);
 
-	void testDistance (void) ;
-	void testIsNeighbour (void) ;
+    void testDistance(void);
+    void testIsNeighbour(void);
 
-	private:
-	CvrStgFile *f_WavPCM8, *f_WavPCM16 ;
-	SampleValue *sv_WavPCM8_0, *sv_WavPCM8_1, *sv_WavPCM8_45, *sv_WavPCM16_m32768, *sv_WavPCM16_32767, *sv_WavPCM16_0, *sv_WavPCM16_15 ;
-	Globals gl_WavPCM8, gl_WavPCM16 ;
-} ;
+  private:
+    CvrStgFile *f_WavPCM8, *f_WavPCM16;
+    SampleValue *sv_WavPCM8_0, *sv_WavPCM8_1, *sv_WavPCM8_45, *sv_WavPCM16_m32768,
+        *sv_WavPCM16_32767, *sv_WavPCM16_0, *sv_WavPCM16_15;
+    Globals gl_WavPCM8, gl_WavPCM16;
+};
 
 #endif // ndef SH_WAVPCMSAMPLEVALUETEST_H

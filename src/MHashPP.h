@@ -25,68 +25,69 @@
 
 #include "common.h"
 
-class BitString ;
+class BitString;
 
 class MHashPP {
-	public:
-	enum Command { endhash } ;
+  public:
+    enum Command { endhash };
 
-	MHashPP (void) ;
-	MHashPP (hashid a) ;
+    MHashPP(void);
+    MHashPP(hashid a);
 
-	void init (hashid a) ;
+    void init(hashid a);
 
-	const std::vector<BYTE>& end (void) ;
+    const std::vector<BYTE> &end(void);
 
-	/**
-	 * feed the std::string v to the hashing algorithm
-	 * \param v the std::string to be feeded to the hashing algorithm (without '\0' at the end)
-	 **/
-	MHashPP& operator<< (std::string v) ;
+    /**
+     * feed the std::string v to the hashing algorithm
+     * \param v the std::string to be feeded to the hashing algorithm (without '\0' at the end)
+     **/
+    MHashPP &operator<<(std::string v);
 
-	/**
-	 * feed the BitString v to the hashing algorithm
-	 * \param v the BitString to be feeded to the hashing algorithm (v.getLength() % 8 == 0 must hold)
-	 **/
-	MHashPP& operator<< (BitString v) ;
+    /**
+     * feed the BitString v to the hashing algorithm
+     * \param v the BitString to be feeded to the hashing algorithm (v.getLength() % 8 == 0 must
+     *hold)
+     **/
+    MHashPP &operator<<(BitString v);
 
-	/**
-	 * feed the byte v to the hashing algorithm
-	 * \param v the byte to be feeded to the hashing algorithm
-	 **/
-	MHashPP& operator<< (BYTE v) ;
+    /**
+     * feed the byte v to the hashing algorithm
+     * \param v the byte to be feeded to the hashing algorithm
+     **/
+    MHashPP &operator<<(BYTE v);
 
-	/**
-	 * interpret the command c
-	 * \param c a command (member of MHashPP::Command)
-	 **/
-	MHashPP& operator<< (Command c) ;
+    /**
+     * interpret the command c
+     * \param c a command (member of MHashPP::Command)
+     **/
+    MHashPP &operator<<(Command c);
 
-	/**
-	 * get the hash bits
-	 * \return the hash value of the data that has been passed via <<
-	 **/
-	BitString getHashBits (void) ;
+    /**
+     * get the hash bits
+     * \return the hash value of the data that has been passed via <<
+     **/
+    BitString getHashBits(void);
 
-	const std::vector<BYTE>& getHashBytes (void) ;
+    const std::vector<BYTE> &getHashBytes(void);
 
-	/**
-	 * get the hash size
-	 * \return the size of the value returned by getHashBits in bytes
-	 **/
-	unsigned int getHashSize (void) ;
+    /**
+     * get the hash size
+     * \return the size of the value returned by getHashBits in bytes
+     **/
+    unsigned int getHashSize(void);
 
-	private:
-	/// true iff HashD contains a legal hash descriptor and data can be passed via <<
-	bool hashing ;
-	MHASH HashD ;
+  private:
+    /// true iff HashD contains a legal hash descriptor and data can be passed via <<
+    bool hashing;
+    MHASH HashD;
 
-	/// true iff HashBytes contains a valid hash value
-	bool HashBytesValid ;
-	std::vector<BYTE> HashBytes ;
+    /// true iff HashBytes contains a valid hash value
+    bool HashBytesValid;
+    std::vector<BYTE> HashBytes;
 
-	std::string getAlgorithmName (void) ;
-	static std::string getAlgorithmName (hashid id) ;
-} ;
+    std::string getAlgorithmName(void);
+    static std::string getAlgorithmName(hashid id);
+};
 
 #endif // ndef SH_MHASHPP_H

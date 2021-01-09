@@ -22,46 +22,48 @@
 
 #include "Graph.h"
 
-#include "utcommon.h"
 #include "BmpFileTest.h"
+#include "utcommon.h"
 
-BmpFileTest::BmpFileTest (TestSuite* s)
-	: CvrStgFileTest("BmpFile", s)
-{
-	ADDTESTCATEGORY (BmpFileTest, testSVALCalculation) ;
+BmpFileTest::BmpFileTest(TestSuite *s) : CvrStgFileTest("BmpFile", s) {
+    ADDTESTCATEGORY(BmpFileTest, testSVALCalculation);
 }
 
-void BmpFileTest::setup ()
-{
-	UnitTest::setup() ;
+void BmpFileTest::setup() {
+    UnitTest::setup();
 
-	Globs.reset() ;
-	f1 = CvrStgFile::readFile (std::string(DATADIR) + "win3x24_std.bmp") ;
-	bs1 = new BitString (std::string ("this BitString will be embedded")) ;
-	s1 = new Selector (bs1->getLength() * f1->getSamplesPerVertex(), std::string ("a passphrase")) ;
-	g1 = new Graph (f1, *bs1, *s1) ;
-	gl1 = Globs ;
+    Globs.reset();
+    f1 = CvrStgFile::readFile(std::string(DATADIR) + "win3x24_std.bmp");
+    bs1 = new BitString(std::string("this BitString will be embedded"));
+    s1 = new Selector(bs1->getLength() * f1->getSamplesPerVertex(), std::string("a passphrase"));
+    g1 = new Graph(f1, *bs1, *s1);
+    gl1 = Globs;
 
-	Globs.reset() ;
-	f2 = CvrStgFile::readFile (std::string(DATADIR) + "os21x24_std.bmp") ;
-	bs2 = new BitString (std::string ("this BitString will be embedded too")) ;
-	s2 = new Selector (bs2->getLength() * f2->getSamplesPerVertex(), std::string ("another passphrase")) ;
-	g2 = new Graph (f2, *bs2, *s2) ;
-	gl2 = Globs ;
+    Globs.reset();
+    f2 = CvrStgFile::readFile(std::string(DATADIR) + "os21x24_std.bmp");
+    bs2 = new BitString(std::string("this BitString will be embedded too"));
+    s2 = new Selector(bs2->getLength() * f2->getSamplesPerVertex(),
+                      std::string("another passphrase"));
+    g2 = new Graph(f2, *bs2, *s2);
+    gl2 = Globs;
 }
 
-void BmpFileTest::cleanup ()
-{
-	UnitTest::cleanup() ;
+void BmpFileTest::cleanup() {
+    UnitTest::cleanup();
 
-	delete g1 ; delete g2 ;
-	delete s1 ; delete s2 ;
-	delete bs1 ; delete bs2 ;
-	delete f1 ; delete f2 ;
+    delete g1;
+    delete g2;
+    delete s1;
+    delete s2;
+    delete bs1;
+    delete bs2;
+    delete f1;
+    delete f2;
 }
 
-void BmpFileTest::testSVALCalculation ()
-{
-	Globs = gl1 ; addTestResult (genericTestSVALCalculation (f1, g1)) ;
-	Globs = gl2 ; addTestResult (genericTestSVALCalculation (f2, g2)) ;
+void BmpFileTest::testSVALCalculation() {
+    Globs = gl1;
+    addTestResult(genericTestSVALCalculation(f1, g1));
+    Globs = gl2;
+    addTestResult(genericTestSVALCalculation(f2, g2));
 }

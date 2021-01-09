@@ -24,10 +24,10 @@
 #include <list>
 
 #include "Edge.h"
-class Graph ;
+class Graph;
 #include "SampleOccurence.h"
-class SampleValue ;
-class Vertex ;
+class SampleValue;
+class Vertex;
 
 /**
  * \class EdgeIterator
@@ -49,110 +49,111 @@ class Vertex ;
  * This means that it must be set correctly before using any method of an EdgeIterator object.
  **/
 class EdgeIterator {
-	public:
-	enum ITERATIONMODE {
-		SAMPLEOCCURENCE,	// incrementing increments to next sample occurence (possibly of the same sample value) thus using every edge of the source vertex
-		SAMPLEVALUE		// incrementing increments to the next sample value thus not using all edges in general
-	} ;
+  public:
+    enum ITERATIONMODE {
+        SAMPLEOCCURENCE, // incrementing increments to next sample occurence (possibly of the same
+                         // sample value) thus using every edge of the source vertex
+        SAMPLEVALUE // incrementing increments to the next sample value thus not using all edges in
+                    // general
+    };
 
-	/**
-	 * the default contructor - does not create a valid object
-	 **/
-	EdgeIterator (void) ;
+    /**
+     * the default contructor - does not create a valid object
+     **/
+    EdgeIterator(void);
 
-	/**
-	 * \param v the source vertex
-	 **/
-	EdgeIterator (Vertex *v, ITERATIONMODE m = SAMPLEOCCURENCE) ;
+    /**
+     * \param v the source vertex
+     **/
+    EdgeIterator(Vertex *v, ITERATIONMODE m = SAMPLEOCCURENCE);
 
-	/**
-	 * the copy constructor
-	 **/
-	EdgeIterator (const EdgeIterator& eit) ;
+    /**
+     * the copy constructor
+     **/
+    EdgeIterator(const EdgeIterator &eit);
 
-	~EdgeIterator (void) ;
+    ~EdgeIterator(void);
 
-	/**
-	 * get the current edge
-	 * \return the edge that is described by the current status of this EdgeIterator
-	 **/
-	const Edge* operator* (void) const
-		{ return ((Finished) ? NULL : &CurrentEdge) ; }
+    /**
+     * get the current edge
+     * \return the edge that is described by the current status of this EdgeIterator
+     **/
+    const Edge *operator*(void) const { return ((Finished) ? NULL : &CurrentEdge); }
 
-	/**
-	 * set this iterator to next edge
-	 **/
-	void operator++ (void) ;
+    /**
+     * set this iterator to next edge
+     **/
+    void operator++(void);
 
-	/**
-	 * set this iterator to first (shortest) edge of vertex v
-	 * \param v new vertex (don't change if it is NULL)
-	 **/
-	void reset (Vertex* v, ITERATIONMODE m = SAMPLEOCCURENCE) ;
+    /**
+     * set this iterator to first (shortest) edge of vertex v
+     * \param v new vertex (don't change if it is NULL)
+     **/
+    void reset(Vertex *v, ITERATIONMODE m = SAMPLEOCCURENCE);
 
-	/**
-	 * reset this iterator to first (shortest) edge
-	 **/
-	void reset (ITERATIONMODE m = SAMPLEOCCURENCE) ;
+    /**
+     * reset this iterator to first (shortest) edge
+     **/
+    void reset(ITERATIONMODE m = SAMPLEOCCURENCE);
 
-	/**
-	 * \return true iff this EdgeIterator points to the end of the list of edges of SrcVertex
-	 **/
-	bool isFinished (void) const
-		{ return Finished ; } ;
+    /**
+     * \return true iff this EdgeIterator points to the end of the list of edges of SrcVertex
+     **/
+    bool isFinished(void) const { return Finished; };
 
-	/**
-	 * get the label of the partner vertex
-	 * \return the label of the vertex that builds the edge returned by operator* together with SrcVertex
-	 **/
-	VertexLabel getPartnerVertexLabel (void) const
-		{ return SampleOccurenceIt->getVertex()->getLabel() ; } ;
+    /**
+     * get the label of the partner vertex
+     * \return the label of the vertex that builds the edge returned by operator* together with
+     *SrcVertex
+     **/
+    VertexLabel getPartnerVertexLabel(void) const {
+        return SampleOccurenceIt->getVertex()->getLabel();
+    };
 
-	static UWORD32 getMaxNumEdges (void)
-		{ return MaxNumEdges ; } ;
+    static UWORD32 getMaxNumEdges(void) { return MaxNumEdges; };
 
-	static void setMaxNumEdges (UWORD32 mne)
-		{ MaxNumEdges = mne ; } ;
+    static void setMaxNumEdges(UWORD32 mne) { MaxNumEdges = mne; };
 
-	void print (unsigned short spc = 0) const ;
+    void print(unsigned short spc = 0) const;
 
-	private:
-	/// the current edge (is returned by operator*)
-	Edge CurrentEdge ;
+  private:
+    /// the current edge (is returned by operator*)
+    Edge CurrentEdge;
 
-	/// mode of iteration
-	ITERATIONMODE Mode ;
+    /// mode of iteration
+    ITERATIONMODE Mode;
 
-	/// contains (for every sample value) an index to the current opposite neighbour
-	unsigned long* SVALIndices ;
+    /// contains (for every sample value) an index to the current opposite neighbour
+    unsigned long *SVALIndices;
 
-	/// the maximum number of edges the EdgeIterator should iterate through
-	static UWORD32 MaxNumEdges ;
+    /// the maximum number of edges the EdgeIterator should iterate through
+    static UWORD32 MaxNumEdges;
 
-	/// the index/number of the edge that is currently returned by operator*
-	UWORD32 EdgeIndex ;
+    /// the index/number of the edge that is currently returned by operator*
+    UWORD32 EdgeIndex;
 
-	/// is true iff there are no more edges for this source vertex
-	bool Finished ;
+    /// is true iff there are no more edges for this source vertex
+    bool Finished;
 
-	/**
-	 * contains the iterator pointing to the sample occurence that constitutes
-	 * the edge together with SourceVertex/SourceSamleValueIndex
-	 **/
-	std::list<SampleOccurence>::const_iterator SampleOccurenceIt ;
+    /**
+     * contains the iterator pointing to the sample occurence that constitutes
+     * the edge together with SourceVertex/SourceSamleValueIndex
+     **/
+    std::list<SampleOccurence>::const_iterator SampleOccurenceIt;
 
-	/**
-	 * find the shortest edge, starting the search at SVOppNeighsIndices[0...k]
-	 * set the private variables accordingly
-	 * is only called to find a new destination sample value, i.e. if one of the
-	 * SVOppNeighsIndices[i] is changed
-	 **/
-	void findNextEdge (void) ;
+    /**
+     * find the shortest edge, starting the search at SVOppNeighsIndices[0...k]
+     * set the private variables accordingly
+     * is only called to find a new destination sample value, i.e. if one of the
+     * SVOppNeighsIndices[i] is changed
+     **/
+    void findNextEdge(void);
 
-	/**
-	 * \return true iff there is a sample with value sv that is part of an edge starting at SrcVertex
-	 **/
-	bool isDestSampleValueOK (const SampleValue *sv) ;
-} ;
+    /**
+     * \return true iff there is a sample with value sv that is part of an edge starting at
+     *SrcVertex
+     **/
+    bool isDestSampleValueOK(const SampleValue *sv);
+};
 
 #endif // ndef SH_EDGEITERATOR_H

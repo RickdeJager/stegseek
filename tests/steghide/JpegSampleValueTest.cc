@@ -21,45 +21,41 @@
 #include "JpegSampleValueTest.h"
 #include "utcommon.h"
 
-#include "JpegSampleValue.h"
 #include "CvrStgFile.h"
+#include "JpegSampleValue.h"
 
-JpegSampleValueTest::JpegSampleValueTest (TestSuite* s)
-	: SampleValueTest ("JpegSampleValue", s)
-{
-	ADDTESTCATEGORY (JpegSampleValueTest, testDistance) ;
-	ADDTESTCATEGORY (JpegSampleValueTest, testIsNeighbour) ;
+JpegSampleValueTest::JpegSampleValueTest(TestSuite *s) : SampleValueTest("JpegSampleValue", s) {
+    ADDTESTCATEGORY(JpegSampleValueTest, testDistance);
+    ADDTESTCATEGORY(JpegSampleValueTest, testIsNeighbour);
 }
 
-void JpegSampleValueTest::setup ()
-{
-	UnitTest::setup() ;
+void JpegSampleValueTest::setup() {
+    UnitTest::setup();
 
-	Globs.reset() ;
-	f1 = CvrStgFile::readFile (std::string(DATADIR) + "std.jpg") ;
-	sv_m1 = new JpegSampleValue (-1) ;
-	sv_0 = new JpegSampleValue (0) ;
-	sv_1 = new JpegSampleValue (1) ;
-	gl1 = Globs ;
+    Globs.reset();
+    f1 = CvrStgFile::readFile(std::string(DATADIR) + "std.jpg");
+    sv_m1 = new JpegSampleValue(-1);
+    sv_0 = new JpegSampleValue(0);
+    sv_1 = new JpegSampleValue(1);
+    gl1 = Globs;
 }
 
-void JpegSampleValueTest::cleanup ()
-{
-	UnitTest::cleanup() ;
-	delete f1 ;
-	delete sv_m1 ; delete sv_0 ; delete sv_1 ;
+void JpegSampleValueTest::cleanup() {
+    UnitTest::cleanup();
+    delete f1;
+    delete sv_m1;
+    delete sv_0;
+    delete sv_1;
 }
 
-void JpegSampleValueTest::testDistance ()
-{
-	Globs = gl1 ;
-	addTestResult (genericTestDistance (sv_0, sv_1, 1)) ;
-	addTestResult (genericTestDistance (sv_m1, sv_1, 2)) ;
+void JpegSampleValueTest::testDistance() {
+    Globs = gl1;
+    addTestResult(genericTestDistance(sv_0, sv_1, 1));
+    addTestResult(genericTestDistance(sv_m1, sv_1, 2));
 }
 
-void JpegSampleValueTest::testIsNeighbour ()
-{
-	Globs = gl1 ;
-	addTestResult (genericTestIsNeighbour (sv_m1, sv_0, true)) ;
-	addTestResult (genericTestIsNeighbour (sv_1, sv_m1, false)) ;
+void JpegSampleValueTest::testIsNeighbour() {
+    Globs = gl1;
+    addTestResult(genericTestIsNeighbour(sv_m1, sv_0, true));
+    addTestResult(genericTestIsNeighbour(sv_1, sv_m1, false));
 }

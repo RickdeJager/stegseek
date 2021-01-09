@@ -23,27 +23,25 @@
 
 #include <string>
 
-class TestSuite ;
+class TestSuite;
 
 class Test {
-	public:
-	Test (void) : Name(std::string("unnamed test")), Suite(NULL) {} ;
-	Test (const std::string& n) : Name(n), Suite(NULL) {} ;
-	Test (const std::string& n, TestSuite* s) : Name(n), Suite(s) {} ;
+  public:
+    Test(void) : Name(std::string("unnamed test")), Suite(NULL){};
+    Test(const std::string &n) : Name(n), Suite(NULL){};
+    Test(const std::string &n, TestSuite *s) : Name(n), Suite(s){};
 
-	virtual ~Test (void) {} ;
+    virtual ~Test(void){};
 
-	const std::string& getName (void)
-		{ return Name ; } ;
+    const std::string &getName(void) { return Name; };
 
-	TestSuite* getSuite (void)
-		{ return Suite ; } ;
+    TestSuite *getSuite(void) { return Suite; };
 
-	virtual void run (void) = 0 ;
+    virtual void run(void) = 0;
 
-	private:
-	std::string Name ;
-	TestSuite* Suite ;
-} ;
+  private:
+    std::string Name;
+    TestSuite *Suite;
+};
 
 #endif // ndef SH_TEST_H

@@ -23,9 +23,9 @@
 
 #include "AudioSampleValue.h"
 
-typedef AudioSampleValue<AuMuLaw,BYTE> AuMuLawSampleValue ;
-typedef AudioSampleValue<AuPCM8,SBYTE> AuPCM8SampleValue ;
-typedef AudioSampleValue<AuPCM16,SWORD16> AuPCM16SampleValue ;
-typedef AudioSampleValue<AuPCM32,SWORD32> AuPCM32SampleValue ;
+typedef AudioSampleValue<AuMuLaw, BYTE> AuMuLawSampleValue;
+typedef AudioSampleValue<AuPCM8, SBYTE> AuPCM8SampleValue;
+typedef AudioSampleValue<AuPCM16, SWORD16> AuPCM16SampleValue;
+typedef AudioSampleValue<AuPCM32, SWORD32> AuPCM32SampleValue;
 
 #endif // ndef SH_AUSAMPLEVALUES_H

@@ -24,28 +24,24 @@
 #include "Vertex.h"
 
 class SampleOccurence {
-	public:
-	SampleOccurence (Vertex *v, unsigned short i)
-		: TheVertex(v), Index(i) {} ;
+  public:
+    SampleOccurence(Vertex *v, unsigned short i) : TheVertex(v), Index(i){};
 
-	Vertex *getVertex (void) const
-		{ return TheVertex ; } ;
+    Vertex *getVertex(void) const { return TheVertex; };
 
-	void setVertex (Vertex* v)
-		{ TheVertex = v ; } ;
+    void setVertex(Vertex *v) { TheVertex = v; };
 
-	unsigned short getIndex (void) const
-		{ return Index ; } ;
+    unsigned short getIndex(void) const { return Index; };
 
-	void setIndex (unsigned short i)
-		{ Index = i ; } ;
+    void setIndex(unsigned short i) { Index = i; };
 
-	bool operator== (const SampleOccurence& soc) const
-		{ return ((TheVertex->getLabel() == soc.TheVertex->getLabel()) && (Index == soc.Index)) ; } ;
+    bool operator==(const SampleOccurence &soc) const {
+        return ((TheVertex->getLabel() == soc.TheVertex->getLabel()) && (Index == soc.Index));
+    };
 
-	private:
-	Vertex *TheVertex ;
-	unsigned short Index ;
-} ;
+  private:
+    Vertex *TheVertex;
+    unsigned short Index;
+};
 
 #endif // ndef SH_SAMPLEOCCURENCE_H

@@ -24,18 +24,18 @@
 #include "BitString.h"
 #include "MHashKeyGen.h"
 
-#include "UnitTest.h"
 #include "TestSuite.h"
+#include "UnitTest.h"
 
 class MHashKeyGenTest : public UnitTest {
-	public:
-	MHashKeyGenTest (TestSuite* s) ;
+  public:
+    MHashKeyGenTest(TestSuite *s);
 
-	private:
+  private:
 #if 0
 	// TODO - implement this unit test
 	bool genericTestReference () ;
 #endif
-} ;
+};
 
 #endif // ndef SH_MHASHKEYGENTEST_H

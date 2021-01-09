@@ -21,33 +21,33 @@
 #ifndef SH_WKSCONSTRUCTIONHEURISTICTEST_H
 #define SH_WKSCONSTRUCTIONHEURISTICTEST_H
 
-class BitString ;
-class WKSConstructionHeuristic ;
-class CvrStgFile ;
-class Graph ;
-class Matching ;
-class Selector ;
+class BitString;
+class WKSConstructionHeuristic;
+class CvrStgFile;
+class Graph;
+class Matching;
+class Selector;
 
-#include "UnitTest.h"
 #include "TestSuite.h"
+#include "UnitTest.h"
 
 class WKSConstructionHeuristicTest : public UnitTest {
-	public:
-	WKSConstructionHeuristicTest (TestSuite* s) ;
+  public:
+    WKSConstructionHeuristicTest(TestSuite *s);
 
-	void setup (void) ;
-	void cleanup (void) ;
+    void setup(void);
+    void cleanup(void);
 
-	void testAlgorithm (void) ;
+    void testAlgorithm(void);
 
-	private:
-	BitString *bs1, *bs2, *bs3 ;
-	CvrStgFile *f1, *f2, *f3 ;
-	Selector *s1, *s2, *s3 ;
-	Graph *g1, *g2, *g3 ;
-	WKSConstructionHeuristic *ch1, *ch2, *ch3 ;
-	Matching *m1, *m2, *m3 ;
-	Globals gl1, gl2, gl3 ;
-} ;
+  private:
+    BitString *bs1, *bs2, *bs3;
+    CvrStgFile *f1, *f2, *f3;
+    Selector *s1, *s2, *s3;
+    Graph *g1, *g2, *g3;
+    WKSConstructionHeuristic *ch1, *ch2, *ch3;
+    Matching *m1, *m2, *m3;
+    Globals gl1, gl2, gl3;
+};
 
 #endif // ndef SH_WKSCONSTRUCTIONHEURISTICTEST_H

@@ -26,26 +26,26 @@
 #include <mhash.h>
 
 class MHashKeyGen {
-	public:
-	MHashKeyGen (void) ;
-	MHashKeyGen (keygenid kgalgo, hashid halgo, unsigned int keysize) ;
-	~MHashKeyGen (void) ;
+  public:
+    MHashKeyGen(void);
+    MHashKeyGen(keygenid kgalgo, hashid halgo, unsigned int keysize);
+    ~MHashKeyGen(void);
 
-	void setKeySize (unsigned int KeySize) ;
-	void setKeyGenAlgorithm (keygenid algo) ;
-	void setHashAlgorithm (hashid hashalgo) ;
-	void setHashAlgorithms (std::vector<hashid> hashalgos) ;
-	void setSalt (std::vector<unsigned char> salt) ;
+    void setKeySize(unsigned int KeySize);
+    void setKeyGenAlgorithm(keygenid algo);
+    void setHashAlgorithm(hashid hashalgo);
+    void setHashAlgorithms(std::vector<hashid> hashalgos);
+    void setSalt(std::vector<unsigned char> salt);
 
-	std::vector<unsigned char> createKey (std::string password) ;
+    std::vector<unsigned char> createKey(std::string password);
 
-	private:
-	bool ready ;
-	keygenid Algorithm ;
-	KEYGEN AlgorithmData ;
-	unsigned int KeySize ;
+  private:
+    bool ready;
+    keygenid Algorithm;
+    KEYGEN AlgorithmData;
+    unsigned int KeySize;
 
-	void *s_malloc (size_t size) ;
-} ;
+    void *s_malloc(size_t size);
+};
 
 #endif // ndef SH_MHASHKEYGEN_H

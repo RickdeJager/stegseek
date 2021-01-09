@@ -24,73 +24,69 @@
 #include "DummyFile.h"
 #include "DummySampleValue.h"
 
-DummyFile::DummyFile (UWORD16 s, std::vector<std::vector<bool> >* svam)
-	: SampleValueAdjacencyMatrix(svam)
-{
-	Samples.resize (s) ;
-	for (UWORD16 i = 0 ; i < s ; i++) {
-		Samples[i] = i ;
-	}
-	setSamplesPerVertex (SamplesPerVertex) ;
-	setEmbValueModulus (EmbValueModulus) ;
-	setRadius (0) ; // undefined, neighbourhood relatin decided by svam
+DummyFile::DummyFile(UWORD16 s, std::vector<std::vector<bool>> *svam)
+    : SampleValueAdjacencyMatrix(svam) {
+    Samples.resize(s);
+    for (UWORD16 i = 0; i < s; i++) {
+        Samples[i] = i;
+    }
+    setSamplesPerVertex(SamplesPerVertex);
+    setEmbValueModulus(EmbValueModulus);
+    setRadius(0); // undefined, neighbourhood relatin decided by svam
 }
 
-std::list<CvrStgFile::Property> DummyFile::getProperties () const
-{
-	std::list<CvrStgFile::Property> retval ;
-	retval.push_back (CvrStgFile::Property (_("format"), "dummy")) ;
-	return retval ;
+std::list<CvrStgFile::Property> DummyFile::getProperties() const {
+    std::list<CvrStgFile::Property> retval;
+    retval.push_back(CvrStgFile::Property(_("format"), "dummy"));
+    return retval;
 }
 
-unsigned long DummyFile::getNumSamples () const
-{
-	return Samples.size() ;
+unsigned long DummyFile::getNumSamples() const { return Samples.size(); }
+
+SampleValue *DummyFile::getSampleValue(const SamplePos pos) const {
+    return (SampleValue *)(new DummySampleValue(Samples[pos]));
 }
 
-SampleValue* DummyFile::getSampleValue (const SamplePos pos) const
-{
-	return (SampleValue*) (new DummySampleValue (Samples[pos])) ;
+void DummyFile::replaceSample(const SamplePos pos, const SampleValue *s) {
+    myassert(pos < Samples.size());
+    DummySampleValue *sample = (DummySampleValue *)s;
+    Samples[pos] = sample->getValue();
 }
 
-void DummyFile::replaceSample (const SamplePos pos, const SampleValue* s)
-{
-	myassert (pos < Samples.size()) ;
-	DummySampleValue *sample = (DummySampleValue*) s ;
-	Samples[pos] = sample->getValue() ;
-}
+void DummyFile::createGraph(std::vector<std::list<UWORD16>> &adjlist, BitString **bs,
+                            CvrStgFile **f, Selector **s) {
+    unsigned int numvertices = adjlist.size();
 
-void DummyFile::createGraph (std::vector<std::list<UWORD16> >& adjlist, BitString** bs, CvrStgFile** f, Selector** s)
-{
-	unsigned int numvertices = adjlist.size() ;
+    // eliminate duplicated edges from adjlist (only allow v_i -> ...,v_j,... with
+    // j > i)
+    for (UWORD16 srcv = 0; srcv < numvertices; srcv++) {
+        for (std::list<UWORD16>::iterator destv = adjlist[srcv].begin();
+             destv != adjlist[srcv].end(); destv++) {
+            if (srcv > (*destv)) {
+                adjlist[srcv].erase(destv);
+            }
+        }
+    }
 
-	// eliminate duplicated edges from adjlist (only allow v_i -> ...,v_j,... with j > i)
-	for (UWORD16 srcv = 0 ; srcv < numvertices ; srcv++) {
-		for (std::list<UWORD16>::iterator destv = adjlist[srcv].begin() ; destv != adjlist[srcv].end() ; destv++) {
-			if (srcv > (*destv)) {
-				adjlist[srcv].erase (destv) ;
-			}
-		}
-	}
+    // allocate memory for SampleValue Adjacency-Matrix
+    std::vector<std::vector<bool>> *svam = new std::vector<std::vector<bool>>(2 * numvertices);
+    for (UWORD16 srcv = 0; srcv < numvertices; srcv++) {
+        (*svam)[2 * srcv] = std::vector<bool>(2 * numvertices);
+        (*svam)[2 * srcv + 1] = std::vector<bool>(2 * numvertices);
+    }
 
-	// allocate memory for SampleValue Adjacency-Matrix
-	std::vector<std::vector<bool> >* svam = new std::vector<std::vector<bool> > (2 * numvertices) ;
-	for (UWORD16 srcv = 0 ; srcv < numvertices ; srcv++) {
-		(*svam)[2*srcv] = std::vector<bool> (2 * numvertices) ;
-		(*svam)[2*srcv + 1] = std::vector<bool> (2 * numvertices) ;
-	}
+    // fill SampleValue Adjacency-Matrix
+    for (UWORD16 srcv = 0; srcv < numvertices; srcv++) {
+        UWORD16 srcsv = 2 * srcv;
+        for (std::list<UWORD16>::const_iterator destv = adjlist[srcv].begin();
+             destv != adjlist[srcv].end(); destv++) {
+            UWORD16 destsv = 2 * (*destv) + 1;
+            (*svam)[srcsv][destsv] = true;
+            (*svam)[destsv][srcsv] = true;
+        }
+    }
 
-	// fill SampleValue Adjacency-Matrix
-	for (UWORD16 srcv = 0 ; srcv < numvertices ; srcv++) {
-		UWORD16 srcsv = 2 * srcv ;
-		for (std::list<UWORD16>::const_iterator destv = adjlist[srcv].begin() ; destv != adjlist[srcv].end() ; destv++) {
-			UWORD16 destsv = 2 * (*destv) + 1 ;
-			(*svam)[srcsv][destsv] = true ;
-			(*svam)[destsv][srcsv] = true ;
-		}
-	}
-
-	(*f) = (CvrStgFile*) new DummyFile (2 * numvertices, svam) ;
-	(*bs) = new BitString ((unsigned long) numvertices) ; // zeros only
-	(*s) = new Selector (2 * numvertices) ; // identity permutation
+    (*f) = (CvrStgFile *)new DummyFile(2 * numvertices, svam);
+    (*bs) = new BitString((unsigned long)numvertices); // zeros only
+    (*s) = new Selector(2 * numvertices);              // identity permutation
 }

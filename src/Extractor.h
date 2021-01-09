@@ -24,20 +24,20 @@
 #include <string>
 
 class Extractor {
-	public:
-	Extractor (std::string stgfn, std::string pp)
-		: StegoFileName(stgfn), Passphrase(pp), passphraseSet(true) {} ;
+  public:
+    Extractor(std::string stgfn, std::string pp)
+        : StegoFileName(stgfn), Passphrase(pp), passphraseSet(true){};
 
-	Extractor (std::string stgfn, UWORD32 seed)
-		: StegoFileName(stgfn), seed(seed), passphraseSet(false) {} ;
+    Extractor(std::string stgfn, UWORD32 seed)
+        : StegoFileName(stgfn), seed(seed), passphraseSet(false){};
 
-	EmbData* extract (void) ;
+    EmbData *extract(void);
 
-	private:
-	std::string StegoFileName ;
-	std::string Passphrase ;
-	bool passphraseSet ;
-	UWORD32 seed ;
-} ;
+  private:
+    std::string StegoFileName;
+    std::string Passphrase;
+    bool passphraseSet;
+    UWORD32 seed;
+};
 
 #endif // ndef SH_EXTRACTOR_H

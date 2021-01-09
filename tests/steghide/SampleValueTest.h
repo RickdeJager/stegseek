@@ -25,38 +25,38 @@
 
 #include "UnitTest.h"
 
-class SampleValue ;
+class SampleValue;
 
 class SampleValueTest : public UnitTest {
-	public:
-	SampleValueTest (std::string n, TestSuite* s) : UnitTest(n, s) {} ;
+  public:
+    SampleValueTest(std::string n, TestSuite *s) : UnitTest(n, s){};
 
-	protected:
-	/**
-	 * generic distance test
-	 * \param s1 a sample value
-	 * \param s2 another sample value
-	 * \param dist this should be the distance between s1 and s2
-	 * \return true iff distance is commutative and return dist
-	 **/
-	bool genericTestDistance (SampleValue* s1, SampleValue* s2, UWORD32 dist) ;
+  protected:
+    /**
+     * generic distance test
+     * \param s1 a sample value
+     * \param s2 another sample value
+     * \param dist this should be the distance between s1 and s2
+     * \return true iff distance is commutative and return dist
+     **/
+    bool genericTestDistance(SampleValue *s1, SampleValue *s2, UWORD32 dist);
 
-	/**
-	 * generic neighbourhood test
-	 * \param s1 a sample value
-	 * \param s2 another sample value
-	 * \param res true iff they are neighbours
-	 * \return true iff calling isNeighbour (with reflexivity) equals res
-	 **/
-	bool genericTestIsNeighbour (SampleValue* s1, SampleValue* s2, bool res) ;
+    /**
+     * generic neighbourhood test
+     * \param s1 a sample value
+     * \param s2 another sample value
+     * \param res true iff they are neighbours
+     * \return true iff calling isNeighbour (with reflexivity) equals res
+     **/
+    bool genericTestIsNeighbour(SampleValue *s1, SampleValue *s2, bool res);
 
-	/**
-	 * generic evalue test
-	 * \param s a sample value
-	 * \param ev an embedded value
-	 * \return true iff s->getEmbeddedValue() == ev
-	 **/
-	bool genericTestEValue (SampleValue* s, EmbValue ev) ;
-} ;
+    /**
+     * generic evalue test
+     * \param s a sample value
+     * \param ev an embedded value
+     * \return true iff s->getEmbeddedValue() == ev
+     **/
+    bool genericTestEValue(SampleValue *s, EmbValue ev);
+};
 
 #endif // ndef SH_SAMPLEVALUETEST_H

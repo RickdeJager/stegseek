@@ -34,24 +34,21 @@
  * some wrappers for exisiting methods.
  **/
 class ColorPalette : public std::vector<RGBTriple> {
-	public:
-	/**
-	 * get the size, i.e. the number of entries of this color palette
-	 **/
-	unsigned int getSize (void) const
-		{ return size() ; } ;
+  public:
+    /**
+     * get the size, i.e. the number of entries of this color palette
+     **/
+    unsigned int getSize(void) const { return size(); };
 
-	/**
-	 * add (a copy of) rgb to the end of this color palette
-	 **/
-	void addEntry (RGBTriple rgb)
-		{ push_back (rgb) ; } ;
+    /**
+     * add (a copy of) rgb to the end of this color palette
+     **/
+    void addEntry(RGBTriple rgb) { push_back(rgb); };
 
-	/**
-	 * add the color r/g/b to the end of this color palette
-	 **/
-	void addEntry (BYTE r, BYTE g, BYTE b)
-		{ push_back (RGBTriple (r, g, b)) ; } ;
-} ;
+    /**
+     * add the color r/g/b to the end of this color palette
+     **/
+    void addEntry(BYTE r, BYTE g, BYTE b) { push_back(RGBTriple(r, g, b)); };
+};
 
 #endif // ndef SH_COLORPALETTE_H

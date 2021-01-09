@@ -18,105 +18,80 @@
  *
  */
 
-#include "common.h"
 #include "EncryptionAlgorithm.h"
+#include "common.h"
 
-EncryptionAlgorithm::EncryptionAlgorithm ()
-{
-	setValue (NONE) ;
+EncryptionAlgorithm::EncryptionAlgorithm() { setValue(NONE); }
+
+EncryptionAlgorithm::EncryptionAlgorithm(EncryptionAlgorithm::IRep irep) { setValue(irep); }
+
+EncryptionAlgorithm::EncryptionAlgorithm(std::string srep) { setValue(translate(srep)); }
+
+void EncryptionAlgorithm::setValue(EncryptionAlgorithm::IRep irep) { Value = irep; }
+
+std::string EncryptionAlgorithm::getStringRep() const { return translate(Value); }
+
+EncryptionAlgorithm::IRep EncryptionAlgorithm::getIntegerRep() const { return Value; }
+
+bool EncryptionAlgorithm::isValidStringRep(std::string srep) {
+    bool retval = false;
+    for (unsigned int i = 0; i < NumValues; i++) {
+        if (Translations[i].srep == srep) {
+            retval = true;
+        }
+    }
+    return retval;
 }
 
-EncryptionAlgorithm::EncryptionAlgorithm (EncryptionAlgorithm::IRep irep)
-{
-	setValue (irep) ;
+bool EncryptionAlgorithm::isValidIntegerRep(unsigned int irep) { return (irep < NumValues); }
+
+std::string EncryptionAlgorithm::translate(EncryptionAlgorithm::IRep irep) {
+    std::string retval;
+    bool found = false;
+    for (unsigned int i = 0; i < NumValues; i++) {
+        if (Translations[i].irep == irep) {
+            retval = std::string(Translations[i].srep);
+            found = true;
+        }
+    }
+    myassert(found);
+    return retval;
 }
 
-EncryptionAlgorithm::EncryptionAlgorithm (std::string srep)
-{
-	setValue (translate (srep)) ;
-}
-
-void EncryptionAlgorithm::setValue (EncryptionAlgorithm::IRep irep)
-{
-	Value = irep ;
-}
-
-std::string EncryptionAlgorithm::getStringRep () const
-{
-	return translate(Value) ;
-}
-
-EncryptionAlgorithm::IRep EncryptionAlgorithm::getIntegerRep () const
-{
-	return Value ;
-}
-
-bool EncryptionAlgorithm::isValidStringRep (std::string srep)
-{
-	bool retval = false ;
-	for (unsigned int i = 0 ; i < NumValues ; i++) {
-		if (Translations[i].srep == srep) {
-			retval = true ;
-		}
-	}
-	return retval ;
-}
-
-bool EncryptionAlgorithm::isValidIntegerRep (unsigned int irep)
-{
-	return (irep < NumValues) ;
-}
-
-std::string EncryptionAlgorithm::translate (EncryptionAlgorithm::IRep irep)
-{
-	std::string retval ;
-	bool found = false ;
-	for (unsigned int i = 0 ; i < NumValues ; i++) {
-		if (Translations[i].irep == irep) {
-			retval = std::string (Translations[i].srep) ;
-			found = true ;
-		}
-	}
-	myassert (found) ;
-	return retval ;
-}
-
-EncryptionAlgorithm::IRep EncryptionAlgorithm::translate (std::string srep)
-{
-	IRep retval = NONE ;
-	bool found = false ;
-	for (unsigned int i = 0 ; i < NumValues ; i++) {
-		if (Translations[i].srep == srep) {
-			retval = Translations[i].irep ;
-			found = true ;
-		}
-	}
-	myassert (found) ;
-	return retval ;
+EncryptionAlgorithm::IRep EncryptionAlgorithm::translate(std::string srep) {
+    IRep retval = NONE;
+    bool found = false;
+    for (unsigned int i = 0; i < NumValues; i++) {
+        if (Translations[i].srep == srep) {
+            retval = Translations[i].irep;
+            found = true;
+        }
+    }
+    myassert(found);
+    return retval;
 }
 
 const EncryptionAlgorithm::Translation EncryptionAlgorithm::Translations[] = {
-	{ NONE, "none" },
-	{ TWOFISH, "twofish" },
-	{ RIJNDAEL128, "rijndael-128" },
-	{ RIJNDAEL192, "rijndael-192" },
-	{ RIJNDAEL256, "rijndael-256" },
-	{ SAFERPLUS, "saferplus" },
-	{ RC2, "rc2" },
-	{ XTEA, "xtea" },
-	{ SERPENT, "serpent" },
-	{ SAFERSK64, "safer-sk64" },
-	{ SAFERSK128, "safer-sk128" },
-	{ CAST256, "cast-256" },
-	{ LOKI97, "loki97" },
-	{ GOST, "gost" },
-	{ THREEWAY, "threeway" },
-	{ CAST128, "cast-128" },
-	{ BLOWFISH, "blowfish" },
-	{ DES, "des" },
-	{ TRIPLEDES, "tripledes" },
-	{ ENIGMA, "enigma" },
-	{ ARCFOUR, "arcfour" },
-	{ PANAMA, "panama" },
-	{ WAKE, "wake" }
-} ;
+    {NONE, "none"},
+    {TWOFISH, "twofish"},
+    {RIJNDAEL128, "rijndael-128"},
+    {RIJNDAEL192, "rijndael-192"},
+    {RIJNDAEL256, "rijndael-256"},
+    {SAFERPLUS, "saferplus"},
+    {RC2, "rc2"},
+    {XTEA, "xtea"},
+    {SERPENT, "serpent"},
+    {SAFERSK64, "safer-sk64"},
+    {SAFERSK128, "safer-sk128"},
+    {CAST256, "cast-256"},
+    {LOKI97, "loki97"},
+    {GOST, "gost"},
+    {THREEWAY, "threeway"},
+    {CAST128, "cast-128"},
+    {BLOWFISH, "blowfish"},
+    {DES, "des"},
+    {TRIPLEDES, "tripledes"},
+    {ENIGMA, "enigma"},
+    {ARCFOUR, "arcfour"},
+    {PANAMA, "panama"},
+    {WAKE, "wake"}};

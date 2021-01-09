@@ -25,30 +25,30 @@
 #include "common.h"
 
 class DummySampleValue : public SampleValue {
-	public:
-	DummySampleValue (UWORD16 v)
-		: SampleValue(), Value(v)
-		{ EValue = (v % 2) ; Key = v ; } ;
+  public:
+    DummySampleValue(UWORD16 v) : SampleValue(), Value(v) {
+        EValue = (v % 2);
+        Key = v;
+    };
 
-	UWORD16 getValue (void) const
-		{ return Value ; } ;
+    UWORD16 getValue(void) const { return Value; };
 
-	/**
-	 * calculate the distance as | Value - s->Value |
-	 **/
-	UWORD32 calcDistance (const SampleValue* s) const ;
+    /**
+     * calculate the distance as | Value - s->Value |
+     **/
+    UWORD32 calcDistance(const SampleValue *s) const;
 
-	/**
-	 * return from the contents of the SampleValueAdjacencyMatrix in the DummyFile
-	 **/
-	bool isNeighbour (const SampleValue* s) const ;
+    /**
+     * return from the contents of the SampleValueAdjacencyMatrix in the DummyFile
+     **/
+    bool isNeighbour(const SampleValue *s) const;
 
-	SampleValue* getNearestTargetSampleValue (EmbValue t) const ;
+    SampleValue *getNearestTargetSampleValue(EmbValue t) const;
 
-	std::string getName (void) const ;
+    std::string getName(void) const;
 
-	private:
-	UWORD16 Value ;
-} ;
+  private:
+    UWORD16 Value;
+};
 
 #endif // ndef SH_DUMMYSAMPLEVALUE_H

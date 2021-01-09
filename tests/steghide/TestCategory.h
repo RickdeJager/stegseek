@@ -24,8 +24,8 @@
 #include "Test.h"
 
 class TestCategory : public Test {
-	public:
-	TestCategory (const std::string& n, TestSuite* s) : Test(n, s) {} ;
-} ;
+  public:
+    TestCategory(const std::string &n, TestSuite *s) : Test(n, s){};
+};
 
 #endif // ndef SH_TESTCATEGORY_H

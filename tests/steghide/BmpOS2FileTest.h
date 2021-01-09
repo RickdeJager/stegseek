@@ -26,23 +26,23 @@
 #include "CvrStgFileTest.h"
 
 class BmpOS2FileTest : public CvrStgFileTest {
-	public:
-	BmpOS2FileTest (TestSuite* s) ;
+  public:
+    BmpOS2FileTest(TestSuite *s);
 
-	void setup (void) ;
-	void cleanup (void) ;
+    void setup(void);
+    void cleanup(void);
 
-	void testReadWrite (void) ;
-	void testReadEmbedExtract (void) ;
-	void testReadEmbedWriteReadExtract (void) ;
-	void testPosition (void) ;
-	void testReadExtractCompare (void) ;
-	void testEmbeddedValue (void) ;
+    void testReadWrite(void);
+    void testReadEmbedExtract(void);
+    void testReadEmbedWriteReadExtract(void);
+    void testPosition(void);
+    void testReadExtractCompare(void);
+    void testEmbeddedValue(void);
 
-	private:
-	BitString *bs1, *bs2, *bs3, *bs4 ;
-	CvrStgFile *f1, *f2, *f3, *f4 ;
-	Globals gl1, gl2, gl3, gl4 ;
-} ;
+  private:
+    BitString *bs1, *bs2, *bs3, *bs4;
+    CvrStgFile *f1, *f2, *f3, *f4;
+    Globals gl1, gl2, gl3, gl4;
+};
 
 #endif // ndef SH_BMPOS2FILETEST_H

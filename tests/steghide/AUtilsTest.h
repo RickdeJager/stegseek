@@ -23,17 +23,17 @@
 
 #include "AUtils.h"
 
-#include "UnitTest.h"
 #include "TestSuite.h"
+#include "UnitTest.h"
 
 class AUtilsTest : public UnitTest {
-	public:
-	AUtilsTest (TestSuite* s) ;
+  public:
+    AUtilsTest(TestSuite *s);
 
-	void testLog2 (void) ;
+    void testLog2(void);
 
-	private:
-	bool genericTestLog2 (int n, double res) ;
-} ;
+  private:
+    bool genericTestLog2(int n, double res);
+};
 
 #endif // ndef SH_AUTILSTEST_H

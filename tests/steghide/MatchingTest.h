@@ -26,30 +26,30 @@
 #include "Matching.h"
 #undef private
 #undef protected
-class BitString ;
-class CvrStgFile ;
-class Selector ;
+class BitString;
+class CvrStgFile;
+class Selector;
 
-#include "UnitTest.h"
 #include "TestSuite.h"
+#include "UnitTest.h"
 
 class MatchingTest : public UnitTest {
-	public:
-	MatchingTest (TestSuite* s) ;
+  public:
+    MatchingTest(TestSuite *s);
 
-	void setup (void) ;
-	void cleanup (void) ;
+    void setup(void);
+    void cleanup(void);
 
-	void testAddRemoveEdge (void) ;
-	void testAugmentingPath (void) ;
+    void testAddRemoveEdge(void);
+    void testAugmentingPath(void);
 
-	private:
-	BitString *bs1, *bs2 ;
-	CvrStgFile *f1, *f2 ;
-	Selector *s1, *s2 ;
-	Graph *g1, *g2 ;
-	Matching *m1, *m2 ;
-	Globals gl1, gl2 ;
-} ;
+  private:
+    BitString *bs1, *bs2;
+    CvrStgFile *f1, *f2;
+    Selector *s1, *s2;
+    Graph *g1, *g2;
+    Matching *m1, *m2;
+    Globals gl1, gl2;
+};
 
 #endif // ndef SH_MATCHINGTEST_H

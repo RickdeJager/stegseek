@@ -24,32 +24,30 @@
 #include "common.h"
 
 class RGBTriple {
-	public:
-	RGBTriple (void)
-		: Red(0), Green(0), Blue(0) {} ;
-	RGBTriple (BYTE r, BYTE g, BYTE b)
-		: Red(r), Green(g), Blue(b) {} ;
+  public:
+    RGBTriple(void) : Red(0), Green(0), Blue(0){};
+    RGBTriple(BYTE r, BYTE g, BYTE b) : Red(r), Green(g), Blue(b){};
 
-	/**
-	 * get the squared distance in the RGB cube between this triple and the triple t
-	 * \param t another RGB triple
-	 * \return the square of the euclidean distance between this and t
-	 **/
-	UWORD32 calcDistance (const RGBTriple& t) const ;
+    /**
+     * get the squared distance in the RGB cube between this triple and the triple t
+     * \param t another RGB triple
+     * \return the square of the euclidean distance between this and t
+     **/
+    UWORD32 calcDistance(const RGBTriple &t) const;
 
-	/**
-	 * returns true iff this triple and t are equal (i.e. have the same rgb values)
-	 **/
-	bool operator== (const RGBTriple& t) const ;
+    /**
+     * returns true iff this triple and t are equal (i.e. have the same rgb values)
+     **/
+    bool operator==(const RGBTriple &t) const;
 
-	/**
-	 * return true iff this triple and t are not equal (i.e. have different rgb values)
-	 **/
-	bool operator!= (const RGBTriple& t) const ;
+    /**
+     * return true iff this triple and t are not equal (i.e. have different rgb values)
+     **/
+    bool operator!=(const RGBTriple &t) const;
 
-	BYTE Red ;
-	BYTE Green ;
-	BYTE Blue ;
-} ;
+    BYTE Red;
+    BYTE Green;
+    BYTE Blue;
+};
 
 #endif // ndef SH_RGBTRIPLE_H

@@ -23,7 +23,7 @@
 
 #include "common.h"
 
-class SampleValue ;
+class SampleValue;
 
 /**
  * \class CvrStgObject
@@ -38,30 +38,33 @@ class SampleValue ;
  * Sample...the smallest data unit in a file (e.g. a RGB triple, a DCT coefficient)
  **/
 class CvrStgObject {
-	public:
-	/**
-	 * get the number of samples in this CvrStgObject
-	 **/
-	virtual unsigned long getNumSamples (void) const = 0 ;
+  public:
+    /**
+     * get the number of samples in this CvrStgObject
+     **/
+    virtual unsigned long getNumSamples(void) const = 0;
 
-	/**
-	 * get the sample at position pos
-	 * \param pos the position of a sample (must be in 0...getNumSamples()-1)
-	 * \return the sample at the given position
-	 *
-	 * The sample object is created in this function and should be deleted by the caller.
-	 * The derived class should check the condition(s) given above in its Implementation of this function.
-	 **/
-	virtual SampleValue* getSampleValue (const SamplePos pos) const = 0 ;
+    /**
+     * get the sample at position pos
+     * \param pos the position of a sample (must be in 0...getNumSamples()-1)
+     * \return the sample at the given position
+     *
+     * The sample object is created in this function and should be deleted by the caller.
+     * The derived class should check the condition(s) given above in its Implementation of this
+     *function.
+     **/
+    virtual SampleValue *getSampleValue(const SamplePos pos) const = 0;
 
-	/**
-	 * replace a sample thus (possibly) altering the value of the bit returned by SampleValue->getBit()
-	 * \param pos the position of the sample (must be in 0...getNumSamples()-1)
-	 * \param s the sample value that should replace the current sample value (must be of correct type for this CvrStgObject)
-	 *
-	 * The derived class should check the condition(s) given above in its Implementation of this function.
-	 **/
-	virtual void replaceSample (const SamplePos pos, const SampleValue* s) = 0 ;
-} ;
+    /**
+     * replace a sample thus (possibly) altering the value of the bit returned by
+     *SampleValue->getBit() \param pos the position of the sample (must be in 0...getNumSamples()-1)
+     * \param s the sample value that should replace the current sample value (must be of correct
+     *type for this CvrStgObject)
+     *
+     * The derived class should check the condition(s) given above in its Implementation of this
+     *function.
+     **/
+    virtual void replaceSample(const SamplePos pos, const SampleValue *s) = 0;
+};
 
-#endif //ndef SH_CVRSTGOBJECT_H
+#endif // ndef SH_CVRSTGOBJECT_H

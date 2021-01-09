@@ -21,27 +21,26 @@
 #ifndef SH_MATCHINGALGORITHM_H
 #define SH_MATCHINGALGORITHM_H
 
-class Graph ;
-class Matching ;
+class Graph;
+class Matching;
 
 class MatchingAlgorithm {
-	public:
-	MatchingAlgorithm (Graph* g, Matching* m, float goal) ;
-	virtual ~MatchingAlgorithm (void) {} ;
+  public:
+    MatchingAlgorithm(Graph *g, Matching *m, float goal);
+    virtual ~MatchingAlgorithm(void){};
 
-	virtual void run (void) = 0 ;
+    virtual void run(void) = 0;
 
-	Matching* getMatching (void) const
-		{ return TheMatching ; } ;
+    Matching *getMatching(void) const { return TheMatching; };
 
-	void setGoal (float goal) ;
+    void setGoal(float goal);
 
-	virtual const char* getName (void) const = 0 ;
+    virtual const char *getName(void) const = 0;
 
-	protected:
-	Graph* TheGraph ;
-	Matching* TheMatching ;
-	unsigned long CardinalityGoal ;
-} ;
+  protected:
+    Graph *TheGraph;
+    Matching *TheMatching;
+    unsigned long CardinalityGoal;
+};
 
 #endif // ndef SH_MATCHINGALGORITHM

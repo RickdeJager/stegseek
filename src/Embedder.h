@@ -22,40 +22,40 @@
 #define SH_EMBEDDER_H
 
 #include "BitString.h"
-class Edge ;
-class CvrStgFile ;
-class Graph ;
-class Matching ;
-class ProgressOutput ;
-class Vertex ;
+class Edge;
+class CvrStgFile;
+class Graph;
+class Matching;
+class ProgressOutput;
+class Vertex;
 
 class Embedder {
-	public:
-	Embedder (void) ;
+  public:
+    Embedder(void);
 
-	~Embedder (void) ;
+    ~Embedder(void);
 
-	void embed (void) ;
+    void embed(void);
 
-	private:
-	static const unsigned int Default_NConstrHeur = 1 ;
+  private:
+    static const unsigned int Default_NConstrHeur = 1;
 
-	BitString ToEmbed ;
+    BitString ToEmbed;
 
-	/**
-	 * do the matching algorithms
-	 **/
-	const Matching* calculateMatching (ProgressOutput* prout) ;
+    /**
+     * do the matching algorithms
+     **/
+    const Matching *calculateMatching(ProgressOutput *prout);
 
-	/**
-	 * embed the two bits represented by the two vertices adjacent to e
-	 **/
-	void embedEdge (Edge *e) ;
+    /**
+     * embed the two bits represented by the two vertices adjacent to e
+     **/
+    void embedEdge(Edge *e);
 
-	/**
-	 * embed the bit represented by the Vertex v
-	 **/
-	void embedExposedVertex (Vertex *v) ;
-} ;
+    /**
+     * embed the bit represented by the Vertex v
+     **/
+    void embedExposedVertex(Vertex *v);
+};
 
 #endif // ndef SH_EMBEDDER_H

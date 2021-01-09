@@ -21,48 +21,50 @@
 #ifndef SH_TESTSUITE_H
 #define SH_TESTSUITE_H
 
+#include <iostream>
 #include <string>
 #include <vector>
-#include <iostream>
 
 #include "Test.h"
 #include "UnitTest.h"
 
 class TestSuite : public Test {
-	public:
-	enum TESTRESULT {	NOTINSTALLED,	// when something that is needed for the test is not installed on the current system
-						KNOWNEXCEPTION,
-						UNKNOWNEXCEPTION } ;
+  public:
+    enum TESTRESULT {
+        NOTINSTALLED, // when something that is needed for the test is not installed on the current
+                      // system
+        KNOWNEXCEPTION,
+        UNKNOWNEXCEPTION
+    };
 
-	TestSuite (void) ;
+    TestSuite(void);
 
-	void addUnitTest (UnitTest* ut) ;
+    void addUnitTest(UnitTest *ut);
 
-	void run (void) ;
+    void run(void);
 
-	/**
-	 * \return true iff all tests were ok
-	 **/
-	bool getResult (void)
-		{ return SuiteOk ; } ;
+    /**
+     * \return true iff all tests were ok
+     **/
+    bool getResult(void) { return SuiteOk; };
 
-	// used during testing
-	void startUnit (std::string n) ;
-	void endUnit (std::string n) ;
-	void startCategory (std::string n) ;
-	void endCategory (std::string n) ;
-	void addTestResult (bool r) ;
-	void addTestResult (TESTRESULT r) ;
+    // used during testing
+    void startUnit(std::string n);
+    void endUnit(std::string n);
+    void startCategory(std::string n);
+    void endCategory(std::string n);
+    void addTestResult(bool r);
+    void addTestResult(TESTRESULT r);
 
-	private:
-	std::vector<UnitTest*> UnitTests ;
+  private:
+    std::vector<UnitTest *> UnitTests;
 
-	std::string runningUnit ;
-	std::string runningCategory ;
-	bool runningCategoryOk ;
-	bool SuiteOk ;
-	unsigned short TestNumber ;
-	std::ostream* OutStream ;
-} ;
+    std::string runningUnit;
+    std::string runningCategory;
+    bool runningCategoryOk;
+    bool SuiteOk;
+    unsigned short TestNumber;
+    std::ostream *OutStream;
+};
 
 #endif // ndef SH_TESTSUITE_H

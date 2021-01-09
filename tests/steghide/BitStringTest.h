@@ -27,27 +27,28 @@
 #undef private
 #undef protected
 
-#include "UnitTest.h"
 #include "TestSuite.h"
+#include "UnitTest.h"
 
 class BitStringTest : public UnitTest {
-	public:
-	BitStringTest (TestSuite* s) ;
+  public:
+    BitStringTest(TestSuite *s);
 
-	void setup (void) ;
-	void cleanup (void) ;
+    void setup(void);
+    void cleanup(void);
 
-	void testBitInputOutput (void) ;
-	void testLength (void) ;
-	void testDatatypeInput (void) ;
-	void testDatatypeOutput (void) ;
-	void testEquality (void) ;
-	void testCutting (void) ;
-	void testCompression (void) ;
-	void testArity (void) ;
+    void testBitInputOutput(void);
+    void testLength(void);
+    void testDatatypeInput(void);
+    void testDatatypeOutput(void);
+    void testEquality(void);
+    void testCutting(void);
+    void testCompression(void);
+    void testArity(void);
 
-	private:
-	BitString *bs_0, *bs_1, *bs_10, *bs_001, *bs_100, *bs_1010, *bs_1110, *bs_01011, *bs_10010, *bs_10101110, *bs_101011101 ;
-} ;
+  private:
+    BitString *bs_0, *bs_1, *bs_10, *bs_001, *bs_100, *bs_1010, *bs_1110, *bs_01011, *bs_10010,
+        *bs_10101110, *bs_101011101;
+};
 
 #endif // ndef SH_BITSTRINGTEST_H

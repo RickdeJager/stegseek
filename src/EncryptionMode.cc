@@ -18,90 +18,59 @@
  *
  */
 
-#include "common.h"
 #include "EncryptionMode.h"
+#include "common.h"
 
-EncryptionMode::EncryptionMode ()
-{
-	setValue (ECB) ;
+EncryptionMode::EncryptionMode() { setValue(ECB); }
+
+EncryptionMode::EncryptionMode(EncryptionMode::IRep irep) { setValue(irep); }
+
+EncryptionMode::EncryptionMode(std::string srep) { setValue(translate(srep)); }
+
+void EncryptionMode::setValue(EncryptionMode::IRep irep) { Value = irep; }
+
+std::string EncryptionMode::getStringRep() const { return translate(Value); }
+
+EncryptionMode::IRep EncryptionMode::getIntegerRep() const { return Value; }
+
+bool EncryptionMode::isValidStringRep(std::string srep) {
+    bool retval = false;
+    for (unsigned int i = 0; i < NumValues; i++) {
+        if (Translations[i].srep == srep) {
+            retval = true;
+        }
+    }
+    return retval;
 }
 
-EncryptionMode::EncryptionMode (EncryptionMode::IRep irep)
-{
-	setValue (irep) ;
+bool EncryptionMode::isValidIntegerRep(unsigned int irep) { return (irep < NumValues); }
+
+std::string EncryptionMode::translate(EncryptionMode::IRep irep) {
+    std::string retval;
+    bool found = false;
+    for (unsigned int i = 0; i < NumValues; i++) {
+        if (Translations[i].irep == irep) {
+            retval = std::string(Translations[i].srep);
+            found = true;
+        }
+    }
+    myassert(found);
+    return retval;
 }
 
-EncryptionMode::EncryptionMode (std::string srep)
-{
-	setValue (translate (srep)) ;
-}
-
-void EncryptionMode::setValue (EncryptionMode::IRep irep)
-{
-	Value = irep ;
-}
-
-std::string EncryptionMode::getStringRep () const
-{
-	return translate(Value) ;
-}
-
-EncryptionMode::IRep EncryptionMode::getIntegerRep () const
-{
-	return Value ;
-}
-
-bool EncryptionMode::isValidStringRep (std::string srep)
-{
-	bool retval = false ;
-	for (unsigned int i = 0 ; i < NumValues ; i++) {
-		if (Translations[i].srep == srep) {
-			retval = true ;
-		}
-	}
-	return retval ;
-}
-
-bool EncryptionMode::isValidIntegerRep (unsigned int irep)
-{
-	return (irep < NumValues) ;
-}
-
-std::string EncryptionMode::translate (EncryptionMode::IRep irep)
-{
-	std::string retval ;
-	bool found = false ;
-	for (unsigned int i = 0 ; i < NumValues ; i++) {
-		if (Translations[i].irep == irep) {
-			retval = std::string (Translations[i].srep) ;
-			found = true ;
-		}
-	}
-	myassert (found) ;
-	return retval ;
-}
-
-EncryptionMode::IRep EncryptionMode::translate (std::string srep)
-{
-	IRep retval = ECB ;
-	bool found = false ;
-	for (unsigned int i = 0 ; i < NumValues ; i++) {
-		if (Translations[i].srep == srep) {
-			retval = Translations[i].irep ;
-			found = true ;
-		}
-	}
-	myassert (found) ;
-	return retval ;
+EncryptionMode::IRep EncryptionMode::translate(std::string srep) {
+    IRep retval = ECB;
+    bool found = false;
+    for (unsigned int i = 0; i < NumValues; i++) {
+        if (Translations[i].srep == srep) {
+            retval = Translations[i].irep;
+            found = true;
+        }
+    }
+    myassert(found);
+    return retval;
 }
 
 const EncryptionMode::Translation EncryptionMode::Translations[] = {
-	{ ECB, "ecb" },
-	{ CBC, "cbc" },
-	{ OFB, "ofb" },
-	{ CFB, "cfb" },
-	{ NOFB, "nofb" },
-	{ NCFB, "ncfb" },
-	{ CTR, "ctr" },
-	{ STREAM, "stream" }
-} ;
+    {ECB, "ecb"},   {CBC, "cbc"},   {OFB, "ofb"}, {CFB, "cfb"},
+    {NOFB, "nofb"}, {NCFB, "ncfb"}, {CTR, "ctr"}, {STREAM, "stream"}};

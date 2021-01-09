@@ -23,22 +23,23 @@
 
 #include "SampleValueTest.h"
 
-class CvrStgFile ;
+class CvrStgFile;
 
 class AudioSampleValueTest : public SampleValueTest {
-	public:
-	AudioSampleValueTest (TestSuite* s) ;
+  public:
+    AudioSampleValueTest(TestSuite *s);
 
-	void setup (void) ;
-	void cleanup (void) ;
+    void setup(void);
+    void cleanup(void);
 
-	void testDistance (void) ;
-	void testIsNeighbour (void) ;
+    void testDistance(void);
+    void testIsNeighbour(void);
 
-	private:
-	CvrStgFile *f_AuMuLaw, *f_AuPCM16 ;
-	SampleValue *sv_AuMuLaw_0, *sv_AuMuLaw_1, *sv_AuMuLaw_45, *sv_AuPCM16_m32768, *sv_AuPCM16_32767, *sv_AuPCM16_0, *sv_AuPCM16_15 ;
-	Globals gl_AuMuLaw, gl_AuPCM16 ;
-} ;
+  private:
+    CvrStgFile *f_AuMuLaw, *f_AuPCM16;
+    SampleValue *sv_AuMuLaw_0, *sv_AuMuLaw_1, *sv_AuMuLaw_45, *sv_AuPCM16_m32768, *sv_AuPCM16_32767,
+        *sv_AuPCM16_0, *sv_AuPCM16_15;
+    Globals gl_AuMuLaw, gl_AuPCM16;
+};
 
 #endif // ndef SH_AUDIOSAMPLEVALUETEST_H

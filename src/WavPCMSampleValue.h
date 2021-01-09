@@ -25,31 +25,31 @@
 
 #include "SampleValue.h"
 
-class CvrStgFile ;
+class CvrStgFile;
 
 class WavPCMSampleValue : public SampleValue {
-	public:
-	WavPCMSampleValue (int v) ;
+  public:
+    WavPCMSampleValue(int v);
 
-	SampleValue* getNearestTargetSampleValue (EmbValue t) const ;
-	UWORD32 calcDistance (const SampleValue *s) const ;
-	std::string getName (void) const ;
+    SampleValue *getNearestTargetSampleValue(EmbValue t) const;
+    UWORD32 calcDistance(const SampleValue *s) const;
+    std::string getName(void) const;
 
-	int getValue (void) const
-		{ return Value ; } ;
+    int getValue(void) const { return Value; };
 
-	private:
-	int Value ;
-	int MaxValue ;
-	int MinValue ;
+  private:
+    int Value;
+    int MaxValue;
+    int MinValue;
 
-	EmbValue calcEValue (int v) const
-		{ return (v & 1) ; }
-} ;
+    EmbValue calcEValue(int v) const { return (v & 1); }
+};
 
-class WavPCMSmaller : public std::binary_function<WavPCMSampleValue*,WavPCMSampleValue*,bool> {
-	public:
-	bool operator() (const WavPCMSampleValue *v, const WavPCMSampleValue *w) { return v->getValue() < w->getValue() ; } ;
-} ;
+class WavPCMSmaller : public std::binary_function<WavPCMSampleValue *, WavPCMSampleValue *, bool> {
+  public:
+    bool operator()(const WavPCMSampleValue *v, const WavPCMSampleValue *w) {
+        return v->getValue() < w->getValue();
+    };
+};
 
 #endif // ndef SH_WAVSAMPLE_H

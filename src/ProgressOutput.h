@@ -30,48 +30,47 @@
  * \brief prints the progress to stdout
  **/
 class ProgressOutput {
-	public:
-	/**
-	 * create an empty ProgressOutput object
-	 **/
-	ProgressOutput (void) ;
+  public:
+    /**
+     * create an empty ProgressOutput object
+     **/
+    ProgressOutput(void);
 
-	/**
-	 * create a ProgressOutput object
-	 * \param m the message to be displayed
-	 **/
-	ProgressOutput (const std::string& m) ;
+    /**
+     * create a ProgressOutput object
+     * \param m the message to be displayed
+     **/
+    ProgressOutput(const std::string &m);
 
-	void setMessage (const std::string& m)
-		{ Message = m ; } ;
+    void setMessage(const std::string &m) { Message = m; };
 
-	void setMessage (const char *msgfmt, ...) ;
+    void setMessage(const char *msgfmt, ...);
 
-	/**
-	 * update the output (taking update frequency into account) with rate as percentage
-	 **/
-	void update (float rate) ;
+    /**
+     * update the output (taking update frequency into account) with rate as percentage
+     **/
+    void update(float rate);
 
-	/**
-	 * update the output appending "done" and a newline (no rate nor average weight)
-	 **/
-	void done (void) const ;
+    /**
+     * update the output appending "done" and a newline (no rate nor average weight)
+     **/
+    void done(void) const;
 
-	/**
-	 * update the output appending rate, [average edge weight], "done" and a newline
-	 * \param rate the rate of matched vertices
-	 * \param avgweight the average edge weight (is not printed if not given)
-	 **/
-	void done (float rate, float avgweight = NoAvgWeight) const ;
+    /**
+     * update the output appending rate, [average edge weight], "done" and a newline
+     * \param rate the rate of matched vertices
+     * \param avgweight the average edge weight (is not printed if not given)
+     **/
+    void done(float rate, float avgweight = NoAvgWeight) const;
 
-	static constexpr float NoAvgWeight = -1.0 ;
+    static constexpr float NoAvgWeight = -1.0;
 
-	protected:
-	std::string vcompose (const char *msgfmt, va_list ap) const ;
+  protected:
+    std::string vcompose(const char *msgfmt, va_list ap) const;
 
-	private:
-	std::string Message ;
-	time_t LastUpdate ;
-} ;
+  private:
+    std::string Message;
+    time_t LastUpdate;
+};
 
 #endif // ndef SH_PROGRESSOUTPUT_H

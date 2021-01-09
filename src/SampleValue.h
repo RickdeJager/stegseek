@@ -26,7 +26,7 @@
 
 #include "common.h"
 
-class CvrStgFile ;
+class CvrStgFile;
 
 /**
  * \class SampleValue
@@ -44,7 +44,7 @@ class CvrStgFile ;
  *
  * s1 and s2 are called neighbours if s1->isNeighbour(s2) is true
  *
- * s1->getKey() == s2->getKey() iff s1 == s2 
+ * s1->getKey() == s2->getKey() iff s1 == s2
  *
  * s1 == s2 implies s1->getDistance(s2) == 0
  * BUT: s1->getDistance(s2) == 0 does not imply s1 == s2
@@ -59,113 +59,105 @@ class CvrStgFile ;
  * before using any method of a SampleValue (or derived) object.
  **/
 class SampleValue {
-	public:
-	SampleValue (void) ;
+  public:
+    SampleValue(void);
 
-	virtual ~SampleValue (void) ;
+    virtual ~SampleValue(void);
 
-	/**
-	 * get the nearest (with the least distance to this sample value) sample value whose
-	 * embedded value equals the specified target
-	 * \param t the target embedded value
-	 *
-	 * If two or more target sample values have equal distance each of them should be
-	 * returned with equal probability.
-	 *
-	 * The returned SampleValue object should be deleted by the callser.
-	 **/
-	virtual SampleValue* getNearestTargetSampleValue (EmbValue t) const = 0 ;
+    /**
+     * get the nearest (with the least distance to this sample value) sample value whose
+     * embedded value equals the specified target
+     * \param t the target embedded value
+     *
+     * If two or more target sample values have equal distance each of them should be
+     * returned with equal probability.
+     *
+     * The returned SampleValue object should be deleted by the callser.
+     **/
+    virtual SampleValue *getNearestTargetSampleValue(EmbValue t) const = 0;
 
-	/**
-	 * calculate the distance between the sample value s and this sample value
-	 * \param s a sample value of the same type as this
-	 * \return the distance
-	 **/
-	virtual UWORD32 calcDistance (const SampleValue *s) const = 0 ;
+    /**
+     * calculate the distance between the sample value s and this sample value
+     * \param s a sample value of the same type as this
+     * \return the distance
+     **/
+    virtual UWORD32 calcDistance(const SampleValue *s) const = 0;
 
-	/**
-	 * return a short name uniquely identifying this sample value
-	 **/
-	virtual std::string getName (void) const = 0 ;
+    /**
+     * return a short name uniquely identifying this sample value
+     **/
+    virtual std::string getName(void) const = 0;
 
-	/**
-	 * is the sample value s a neighbour of this sample value ?
-	 * \return true iff this and s are neighbours
-	 *
-	 * This is implemented as (calcDistance() <= Radius) but may be overridden by
-	 * derived classes.
-	 **/
-	virtual bool isNeighbour (const SampleValue* s) const ;
+    /**
+     * is the sample value s a neighbour of this sample value ?
+     * \return true iff this and s are neighbours
+     *
+     * This is implemented as (calcDistance() <= Radius) but may be overridden by
+     * derived classes.
+     **/
+    virtual bool isNeighbour(const SampleValue *s) const;
 
-	/**
-	 * get the value that is embedded in this sample value (must be >=0 and <EmbValueModulus)
-	 * \return the embedded value
-	 **/
-	EmbValue getEmbeddedValue (void) const
-		{ return EValue ; } ;
+    /**
+     * get the value that is embedded in this sample value (must be >=0 and <EmbValueModulus)
+     * \return the embedded value
+     **/
+    EmbValue getEmbeddedValue(void) const { return EValue; };
 
-	/**
-	 * get the key for this sample
-	 * \return a key which must be different for two different samples values.
-	 **/
-	UWORD32 getKey (void) const
-		{ return Key ; } ;
+    /**
+     * get the key for this sample
+     * \return a key which must be different for two different samples values.
+     **/
+    UWORD32 getKey(void) const { return Key; };
 
-	/**
-	 * two sample values are equal iff their keys are equal
-	 **/
-	bool operator== (const SampleValue& sv) const { return (getKey() == sv.getKey()) ; } ;
-	bool operator!= (const SampleValue& sv) const { return (getKey() != sv.getKey()) ; } ;
+    /**
+     * two sample values are equal iff their keys are equal
+     **/
+    bool operator==(const SampleValue &sv) const { return (getKey() == sv.getKey()); };
+    bool operator!=(const SampleValue &sv) const { return (getKey() != sv.getKey()); };
 
-	bool operator< (const SampleValue& sv) const { return (getKey() < sv.getKey()) ; } ;
+    bool operator<(const SampleValue &sv) const { return (getKey() < sv.getKey()); };
 
-	UWORD32 getNumEdges (EmbValue t) const { return NumEdges[t] ; } ;
-	void setNumEdges (EmbValue t, UWORD32 ne) { NumEdges[t] = ne ; } ;
-	void incNumEdges (EmbValue t) ;
-	void decNumEdges (EmbValue t) ;
+    UWORD32 getNumEdges(EmbValue t) const { return NumEdges[t]; };
+    void setNumEdges(EmbValue t, UWORD32 ne) { NumEdges[t] = ne; };
+    void incNumEdges(EmbValue t);
+    void decNumEdges(EmbValue t);
 
-	void setLabel (unsigned long l) { Label = l ; } ;
-	unsigned long getLabel (void) const { return Label ; } ;
+    void setLabel(unsigned long l) { Label = l; };
+    unsigned long getLabel(void) const { return Label; };
 
-	void print (unsigned short spc = 0) const ;
+    void print(unsigned short spc = 0) const;
 
-	protected:
-	/// the bit that is embedded in this sample value - must be set in constructor of derived class
-	EmbValue EValue ;
+  protected:
+    /// the bit that is embedded in this sample value - must be set in constructor of derived class
+    EmbValue EValue;
 
-	/// the key of this sample value - must be different for two different sample values - must be set in constructor of derived class
-	UWORD32 Key ;
+    /// the key of this sample value - must be different for two different sample values - must be
+    /// set in constructor of derived class
+    UWORD32 Key;
 
-	private:
-	unsigned long Label ;
+  private:
+    unsigned long Label;
 
-	/**
-	 * NumEdges[t] contains the number of edges that are added to a vertex if
-	 * this sample value with corresponding target value t is added to the vertex
-	 **/
-	UWORD32* NumEdges ;
-} ;
+    /**
+     * NumEdges[t] contains the number of edges that are added to a vertex if
+     * this sample value with corresponding target value t is added to the vertex
+     **/
+    UWORD32 *NumEdges;
+};
 
-struct SampleValuesEqual : public std::binary_function<SampleValue*, SampleValue*, bool> {
-	bool operator() (const SampleValue* s1, const SampleValue *s2) const
-	{
-		return (*s1 == *s2) ;
-	}
-} ;
+struct SampleValuesEqual : public std::binary_function<SampleValue *, SampleValue *, bool> {
+    bool operator()(const SampleValue *s1, const SampleValue *s2) const { return (*s1 == *s2); }
+};
 
-struct SampleValuesLess : public std::binary_function<SampleValue*, SampleValue*, bool> {
-	bool operator() (const SampleValue* s1, const SampleValue *s2) const
-	{
-		return (*s1 < *s2) ;
-	}
-} ;
+struct SampleValuesLess : public std::binary_function<SampleValue *, SampleValue *, bool> {
+    bool operator()(const SampleValue *s1, const SampleValue *s2) const { return (*s1 < *s2); }
+};
 
-struct SampleValueHash : public std::unary_function<SampleValue*,size_t> {
-	size_t operator() (const SampleValue* s) const
-	{
-		std::hash<UWORD32> h ;
-		return h(s->getKey()) ;
-	}
-} ;
+struct SampleValueHash : public std::unary_function<SampleValue *, size_t> {
+    size_t operator()(const SampleValue *s) const {
+        std::hash<UWORD32> h;
+        return h(s->getKey());
+    }
+};
 
 #endif // ndef SH_CVRSTGSAMPLE_H

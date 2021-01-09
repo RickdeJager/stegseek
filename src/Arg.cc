@@ -20,16 +20,14 @@
 
 #include "Arg.h"
 
-template<class T> Arg<T>::Arg (T v, bool setbyuser)
-{
-	set = false ;
-	setValue (v, setbyuser) ;
+template <class T> Arg<T>::Arg(T v, bool setbyuser) {
+    set = false;
+    setValue(v, setbyuser);
 }
 
-template<class T> void Arg<T>::setValue (T v, bool setbyuser)
-{
-	Value = v ;
-	if (setbyuser) {
-		set = true ;
-	}
+template <class T> void Arg<T>::setValue(T v, bool setbyuser) {
+    Value = v;
+    if (setbyuser) {
+        set = true;
+    }
 }

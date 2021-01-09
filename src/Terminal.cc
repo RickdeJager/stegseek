@@ -20,53 +20,49 @@
 
 #include <unistd.h>
 
+#include "Terminal.h"
 #include "common.h"
 #include "error.h"
-#include "Terminal.h"
 
 #ifdef HAVE_TERMIOS_H
-Terminal::Terminal ()
-{
-	if ((tcgetattr (STDIN_FILENO, &InitAttr)) != 0) {
-		throw SteghideError (_("could not get terminal attributes.")) ;
-	}
+Terminal::Terminal() {
+    if ((tcgetattr(STDIN_FILENO, &InitAttr)) != 0) {
+        throw SteghideError(_("could not get terminal attributes."));
+    }
 }
 
-void Terminal::EchoOff ()
-{
-	struct termios curattr ;
-	if ((tcgetattr (STDIN_FILENO, &curattr)) != 0) {
-		throw SteghideError (_("could not get terminal attributes.")) ;
-	}
-	
-	curattr.c_lflag &= ~ECHO ;
+void Terminal::EchoOff() {
+    struct termios curattr;
+    if ((tcgetattr(STDIN_FILENO, &curattr)) != 0) {
+        throw SteghideError(_("could not get terminal attributes."));
+    }
 
-	if ((tcsetattr (STDIN_FILENO, TCSAFLUSH, &curattr)) != 0) {
-		throw SteghideError (_("could not set terminal attributes.")) ;
-	}
+    curattr.c_lflag &= ~ECHO;
+
+    if ((tcsetattr(STDIN_FILENO, TCSAFLUSH, &curattr)) != 0) {
+        throw SteghideError(_("could not set terminal attributes."));
+    }
 }
 
-void Terminal::SingleKeyOn ()
-{
-	struct termios curattr ;
-	if ((tcgetattr (STDIN_FILENO, &curattr)) != 0) {
-		throw SteghideError (_("could not get terminal attributes.")) ;
-	}
+void Terminal::SingleKeyOn() {
+    struct termios curattr;
+    if ((tcgetattr(STDIN_FILENO, &curattr)) != 0) {
+        throw SteghideError(_("could not get terminal attributes."));
+    }
 
-	curattr.c_lflag &= ~ICANON ;
-	curattr.c_cc[VTIME] = 0 ;
-	curattr.c_cc[VMIN] = 1 ;
+    curattr.c_lflag &= ~ICANON;
+    curattr.c_cc[VTIME] = 0;
+    curattr.c_cc[VMIN] = 1;
 
-	if ((tcsetattr (STDIN_FILENO, TCSAFLUSH, &curattr)) != 0) {
-		throw SteghideError (_("could not set terminal attributes.")) ;
-	}
+    if ((tcsetattr(STDIN_FILENO, TCSAFLUSH, &curattr)) != 0) {
+        throw SteghideError(_("could not set terminal attributes."));
+    }
 }
 
-void Terminal::reset ()
-{
-	if ((tcsetattr (STDIN_FILENO, TCSANOW, &InitAttr)) != 0) {
-		throw SteghideError (_("could not set terminal attributes.")) ;
-	}
+void Terminal::reset() {
+    if ((tcsetattr(STDIN_FILENO, TCSANOW, &InitAttr)) != 0) {
+        throw SteghideError(_("could not set terminal attributes."));
+    }
 }
 #else
 // TODO - do something that makes more sense - especially on Windows systems

@@ -31,41 +31,46 @@
  * \brief an adjacency list-like data structur for sample values
  **/
 class SampleValueAdjacencyList {
-	public:
-	/**
-	 * construct a SampleValueAdjacencyList with numsvs rows
-	 **/
-	SampleValueAdjacencyList (SampleValueLabel numsvs) ;
+  public:
+    /**
+     * construct a SampleValueAdjacencyList with numsvs rows
+     **/
+    SampleValueAdjacencyList(SampleValueLabel numsvs);
 
-	std::vector<SampleValue*>& operator[] (const SampleValueLabel lbl)
-		{ return AdjacencyList[lbl] ; } ;
+    std::vector<SampleValue *> &operator[](const SampleValueLabel lbl) {
+        return AdjacencyList[lbl];
+    };
 
-	std::vector<SampleValue*>& operator[] (const SampleValue* sv)
-		{ return AdjacencyList[sv->getLabel()] ; } ;
+    std::vector<SampleValue *> &operator[](const SampleValue *sv) {
+        return AdjacencyList[sv->getLabel()];
+    };
 
-	unsigned long getNumRows (void) const
-		{ return AdjacencyList.size() ; } ;
+    unsigned long getNumRows(void) const { return AdjacencyList.size(); };
 
-	/**
-	 * check if every row contains the same set of sample values
-	 **/
-	bool operator== (const SampleValueAdjacencyList& sval) ;
+    /**
+     * check if every row contains the same set of sample values
+     **/
+    bool operator==(const SampleValueAdjacencyList &sval);
 
-	/**
-	 * sort the list in a way that the first entry of a row has the least distance to source sample value
-	 **/
-	void sort (void) ;
+    /**
+     * sort the list in a way that the first entry of a row has the least distance to source sample
+     *value
+     **/
+    void sort(void);
 
-	private:
-	std::vector<std::vector<SampleValue*> > AdjacencyList ;
+  private:
+    std::vector<std::vector<SampleValue *>> AdjacencyList;
 
-	void quicksort (std::vector<SampleValue*>& oppneighs, UWORD32* distances, unsigned int l, unsigned int r) ;
-	/**
-	 * partition oppneighs/distances into those with distances less than and those with distances greater than and equal to x
-	 * \return the index in oppneighs/distances that separates the two
-	 **/
-	unsigned int partition (std::vector<SampleValue*>& oppneighs, UWORD32* distances, unsigned int l, unsigned int r, UWORD32 x) ;
-	void swap (std::vector<SampleValue*>& oppneighs, UWORD32* distances, unsigned int i, unsigned int j) ;
-} ;
+    void quicksort(std::vector<SampleValue *> &oppneighs, UWORD32 *distances, unsigned int l,
+                   unsigned int r);
+    /**
+     * partition oppneighs/distances into those with distances less than and those with distances
+     *greater than and equal to x \return the index in oppneighs/distances that separates the two
+     **/
+    unsigned int partition(std::vector<SampleValue *> &oppneighs, UWORD32 *distances,
+                           unsigned int l, unsigned int r, UWORD32 x);
+    void swap(std::vector<SampleValue *> &oppneighs, UWORD32 *distances, unsigned int i,
+              unsigned int j);
+};
 
 #endif // ndef SH_SAMPLEVALUEADJACENCYLIST_H

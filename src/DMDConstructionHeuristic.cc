@@ -24,47 +24,44 @@
 #include "Matching.h"
 #include "Vertex.h"
 
-DMDConstructionHeuristic::DMDConstructionHeuristic (Graph* g, Matching* m, float goal)
-	: MatchingAlgorithm (g, m, goal)
-{
-	AvailableVertices = std::vector<Vertex*> (g->getNumVertices()) ;
-	for (VertexLabel l = 0 ; l < g->getNumVertices() ; l++) {
-		AvailableVertices[l] = g->getVertex(l) ;
-	}
+DMDConstructionHeuristic::DMDConstructionHeuristic(Graph *g, Matching *m, float goal)
+    : MatchingAlgorithm(g, m, goal) {
+    AvailableVertices = std::vector<Vertex *>(g->getNumVertices());
+    for (VertexLabel l = 0; l < g->getNumVertices(); l++) {
+        AvailableVertices[l] = g->getVertex(l);
+    }
 }
 
-void DMDConstructionHeuristic::run (void)
-{
-	VertexLabel mdi = MinDegNotFound ;
-	while ((mdi = findMinDegIndex (AvailableVertices)) != MinDegNotFound) {
-		Vertex* v1 = AvailableVertices[mdi] ;
-		v1->updateShortestEdge() ;
-		Edge* e = v1->getShortestEdge() ;
-		Vertex* v2 = e->getOtherVertex(v1) ;
+void DMDConstructionHeuristic::run(void) {
+    VertexLabel mdi = MinDegNotFound;
+    while ((mdi = findMinDegIndex(AvailableVertices)) != MinDegNotFound) {
+        Vertex *v1 = AvailableVertices[mdi];
+        v1->updateShortestEdge();
+        Edge *e = v1->getShortestEdge();
+        Vertex *v2 = e->getOtherVertex(v1);
 
-		TheMatching->addEdge(*e) ;
+        TheMatching->addEdge(*e);
 
-		v1->markDeleted() ;
-		v2->markDeleted() ;
-		AvailableVertices[v1->getLabel()] = NULL ;
-		AvailableVertices[v2->getLabel()] = NULL ;
-	}
+        v1->markDeleted();
+        v2->markDeleted();
+        AvailableVertices[v1->getLabel()] = NULL;
+        AvailableVertices[v2->getLabel()] = NULL;
+    }
 
-	TheGraph->unmarkDeletedAllVertices() ;
+    TheGraph->unmarkDeletedAllVertices();
 }
 
-VertexLabel DMDConstructionHeuristic::findMinDegIndex (const std::vector<Vertex*>& vertices)
-{
-	VertexLabel mdi = MinDegNotFound ;
-	UWORD32 mindeg = UWORD32_MAX ;
-	for (VertexLabel l = 0 ; l < vertices.size() ; l++) {
-		if (vertices[l] != NULL) {
-			UWORD32 curdeg = vertices[l]->getDegree() ;
-			if (0 < curdeg && curdeg < mindeg) {
-				mdi = l ;
-				mindeg = curdeg ;
-			}
-		}
-	}
-	return mdi ;
+VertexLabel DMDConstructionHeuristic::findMinDegIndex(const std::vector<Vertex *> &vertices) {
+    VertexLabel mdi = MinDegNotFound;
+    UWORD32 mindeg = UWORD32_MAX;
+    for (VertexLabel l = 0; l < vertices.size(); l++) {
+        if (vertices[l] != NULL) {
+            UWORD32 curdeg = vertices[l]->getDegree();
+            if (0 < curdeg && curdeg < mindeg) {
+                mdi = l;
+                mindeg = curdeg;
+            }
+        }
+    }
+    return mdi;
 }

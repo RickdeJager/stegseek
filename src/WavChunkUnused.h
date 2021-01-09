@@ -21,26 +21,23 @@
 #ifndef SH_WAVCHUNKUNUSED_H
 #define SH_WAVCHUNKUNUSED_H
 
-#include "common.h"
 #include "WavChunk.h"
+#include "common.h"
 
-class BinaryIO ;
-class WavChunkHeader ;
+class BinaryIO;
+class WavChunkHeader;
 
 class WavChunkUnused : public WavChunk {
-	public:
-	WavChunkUnused (void) :
-		WavChunk() {} ;
-	WavChunkUnused (WavChunkHeader *chh) :
-		WavChunk(chh) {} ;
-	WavChunkUnused (WavChunkHeader *chh, BinaryIO *io) :
-		WavChunk(chh) { read(io) ; } ;
+  public:
+    WavChunkUnused(void) : WavChunk(){};
+    WavChunkUnused(WavChunkHeader *chh) : WavChunk(chh){};
+    WavChunkUnused(WavChunkHeader *chh, BinaryIO *io) : WavChunk(chh) { read(io); };
 
-	void read (BinaryIO *io) ;
-	void write (BinaryIO *io) ;
+    void read(BinaryIO *io);
+    void write(BinaryIO *io);
 
-	private:
-	std::vector<BYTE> Data ;
-} ;
+  private:
+    std::vector<BYTE> Data;
+};
 
 #endif // ndef SH_WAVCHUNKUNUSED_H

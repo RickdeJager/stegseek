@@ -21,21 +21,20 @@
 #ifndef SH_WAVCHUNK_H
 #define SH_WAVCHUNK_H
 
-class BinaryIO ;
-class WavChunkHeader ;
+class BinaryIO;
+class WavChunkHeader;
 
 class WavChunk {
-	public:
-	WavChunk (void) {} ;
-	WavChunk (WavChunkHeader *chh) :
-		ChunkHeader(chh) {} ;
-	virtual ~WavChunk (void) ;
+  public:
+    WavChunk(void){};
+    WavChunk(WavChunkHeader *chh) : ChunkHeader(chh){};
+    virtual ~WavChunk(void);
 
-	virtual void read (BinaryIO *io) = 0 ;
-	virtual void write (BinaryIO *io) ;
+    virtual void read(BinaryIO *io) = 0;
+    virtual void write(BinaryIO *io);
 
-	protected:
-	WavChunkHeader *ChunkHeader ;
-} ;
+  protected:
+    WavChunkHeader *ChunkHeader;
+};
 
 #endif // ndef SH_WAVCHUNK_H

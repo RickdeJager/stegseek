@@ -15,7 +15,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
- * 
+ *
  * 2020:
  *  - Changed steghide branding to stegseek.
  *
@@ -26,26 +26,16 @@
 #include "SteghideError.h"
 #include "common.h"
 
-SteghideError::SteghideError (void)
-	: MessageBase(_("error, exiting. (no error message defined)."))
-{
+SteghideError::SteghideError(void)
+    : MessageBase(_("error, exiting. (no error message defined).")) {}
+
+SteghideError::SteghideError(std::string msg) : MessageBase(msg) {}
+
+SteghideError::SteghideError(const char *msgfmt, ...) : MessageBase() {
+    va_list ap;
+    va_start(ap, msgfmt);
+    setMessage(vcompose(msgfmt, ap));
+    va_end(ap);
 }
 
-SteghideError::SteghideError(std::string msg)
-	: MessageBase(msg)
-{
-}
-
-SteghideError::SteghideError (const char *msgfmt, ...)
-	: MessageBase()
-{
-	va_list ap ;
-	va_start (ap, msgfmt) ;
-	setMessage (vcompose (msgfmt, ap)) ;
-	va_end (ap) ;
-}
-
-void SteghideError::printMessage () const
-{
-	std::cerr << "stegseek: " << getMessage() << std::endl ;
-}
+void SteghideError::printMessage() const { std::cerr << "stegseek: " << getMessage() << std::endl; }

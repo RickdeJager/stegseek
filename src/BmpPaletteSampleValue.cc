@@ -18,46 +18,41 @@
  *
  */
 
-#include "BmpFile.h"
 #include "BmpPaletteSampleValue.h"
+#include "BmpFile.h"
 #include "ColorPalette.h"
 
-BmpPaletteSampleValue::BmpPaletteSampleValue (unsigned char i)
-	: BmpSampleValue(), Index(i)
-{
-	const BmpFile* bmpfile = dynamic_cast<const BmpFile*> (Globs.TheCvrStgFile) ;
-	myassert (bmpfile) ;
-	Palette = bmpfile->getPalette() ;
-	Key = ((unsigned long) getIndex() << 24) | ((unsigned long) getRed() << 16) |
-		  ((unsigned long) getGreen() << 8) | ((unsigned long) getBlue()) ;
-	EValue = calcEValue(getIndex()) ;
+BmpPaletteSampleValue::BmpPaletteSampleValue(unsigned char i) : BmpSampleValue(), Index(i) {
+    const BmpFile *bmpfile = dynamic_cast<const BmpFile *>(Globs.TheCvrStgFile);
+    myassert(bmpfile);
+    Palette = bmpfile->getPalette();
+    Key = ((unsigned long)getIndex() << 24) | ((unsigned long)getRed() << 16) |
+          ((unsigned long)getGreen() << 8) | ((unsigned long)getBlue());
+    EValue = calcEValue(getIndex());
 }
 
-SampleValue* BmpPaletteSampleValue::getNearestTargetSampleValue (EmbValue t) const
-{
-	BmpPaletteSampleValue* sv_mindist = NULL ;
-	UWORD32 mindist = UWORD32_MAX ;
-	for (unsigned int i = 0 ; i < Palette->getSize() ; i++) {
-		if (calcEValue(i) == t) {
-			BmpPaletteSampleValue* destsv = new BmpPaletteSampleValue (i) ;
-			UWORD32 curdist = calcDistance (destsv) ;
-			if (curdist < mindist) {
-				delete sv_mindist ;
-				sv_mindist = destsv ;
-				mindist = curdist ;
-			}
-			else {
-				delete destsv ;
-			}
-		}
-	}
-	myassert (sv_mindist != NULL) ;
-	return ((SampleValue*) sv_mindist) ;
+SampleValue *BmpPaletteSampleValue::getNearestTargetSampleValue(EmbValue t) const {
+    BmpPaletteSampleValue *sv_mindist = NULL;
+    UWORD32 mindist = UWORD32_MAX;
+    for (unsigned int i = 0; i < Palette->getSize(); i++) {
+        if (calcEValue(i) == t) {
+            BmpPaletteSampleValue *destsv = new BmpPaletteSampleValue(i);
+            UWORD32 curdist = calcDistance(destsv);
+            if (curdist < mindist) {
+                delete sv_mindist;
+                sv_mindist = destsv;
+                mindist = curdist;
+            } else {
+                delete destsv;
+            }
+        }
+    }
+    myassert(sv_mindist != NULL);
+    return ((SampleValue *)sv_mindist);
 }
 
-std::string BmpPaletteSampleValue::getName () const
-{
-	char buf[128] ;
-	sprintf (buf, "i%ur%ug%ub%u", getIndex(), getRed(), getGreen(), getBlue()) ;
-	return std::string (buf) ;
+std::string BmpPaletteSampleValue::getName() const {
+    char buf[128];
+    sprintf(buf, "i%ur%ug%ub%u", getIndex(), getRed(), getGreen(), getBlue());
+    return std::string(buf);
 }

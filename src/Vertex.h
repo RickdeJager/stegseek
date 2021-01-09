@@ -24,9 +24,9 @@
 #include "CvrStgFile.h"
 #include "common.h"
 
-class Edge ;
-class SampleOccurence ;
-class SampleValue ;
+class Edge;
+class SampleOccurence;
+class SampleValue;
 
 /**
  * \class Vertex
@@ -41,101 +41,100 @@ class SampleValue ;
  * This means that it must be set correctly before using any method of a Vertex object.
  **/
 class Vertex {
-	public:
-	/**
-	 * construct a new vertex object
-	 * \param l the vertex label for this vertex
-	 * \param sposs the array (with length g->getSamplesPerVertex()) of the positions of the samples
-	 * \param svalues the array (with length g->getSamplesPerVertex()) of (unique (!)) pointers to the sample values
-	 * \param t the target value for the whole vertex - the value that should be returned by getEmbeddedValue() after the embedding
-	 **/
-	Vertex (VertexLabel l, SamplePos* sposs, SampleValue** svalues, EmbValue t) ;
+  public:
+    /**
+     * construct a new vertex object
+     * \param l the vertex label for this vertex
+     * \param sposs the array (with length g->getSamplesPerVertex()) of the positions of the samples
+     * \param svalues the array (with length g->getSamplesPerVertex()) of (unique (!)) pointers to
+     *the sample values \param t the target value for the whole vertex - the value that should be
+     *returned by getEmbeddedValue() after the embedding
+     **/
+    Vertex(VertexLabel l, SamplePos *sposs, SampleValue **svalues, EmbValue t);
 
-	~Vertex (void) ;
+    ~Vertex(void);
 
-	/**
-	 * get the i-th sample position
-	 * \param i an index of a sample in this vertex (must be < TheCvrStgFile->getNumSamplesPerVertex())
-	 * \return the position of the sample in the associated cvrstgfile
-	 **/
-	SamplePos getSamplePos (unsigned short i) const
-		{ return SamplePositions[i] ; } ;
+    /**
+     * get the i-th sample position
+     * \param i an index of a sample in this vertex (must be <
+     *TheCvrStgFile->getNumSamplesPerVertex()) \return the position of the sample in the associated
+     *cvrstgfile
+     **/
+    SamplePos getSamplePos(unsigned short i) const { return SamplePositions[i]; };
 
-	/**
-	 * get the i-th sample value
-	 * \param i an index of a sample in this vertex (must be < TheCvrStgFile->getNumSamplesPerVertex())
-	 * \return the value of the sample in the associated cvrstgfile
-	 **/
-	SampleValue* getSampleValue (unsigned short i) const
-		{ return SampleValues[i] ; } ;
+    /**
+     * get the i-th sample value
+     * \param i an index of a sample in this vertex (must be <
+     *TheCvrStgFile->getNumSamplesPerVertex()) \return the value of the sample in the associated
+     *cvrstgfile
+     **/
+    SampleValue *getSampleValue(unsigned short i) const { return SampleValues[i]; };
 
-	/**
-	 * get the degree of this vertex
-	 **/
-	UWORD32 getDegree (void) const ;
+    /**
+     * get the degree of this vertex
+     **/
+    UWORD32 getDegree(void) const;
 
-	/**
-	 * get the shortest edge of this vertex
-	 **/
-	Edge *getShortestEdge (void) const
-		{ return ShortestEdge ; } ;
+    /**
+     * get the shortest edge of this vertex
+     **/
+    Edge *getShortestEdge(void) const { return ShortestEdge; };
 
-	/**
-	 * find shortest edge of this vertex and save result to ShortestEdge
-	 **/
-	void updateShortestEdge (void) ;
+    /**
+     * find shortest edge of this vertex and save result to ShortestEdge
+     **/
+    void updateShortestEdge(void);
 
-	/**
-	 * if this vertex is valid, mark it as deleted
-	 **/
-	void markDeleted (void) ;
+    /**
+     * if this vertex is valid, mark it as deleted
+     **/
+    void markDeleted(void);
 
-	/**
-	 * if this vertex is marked as deleted, undo this
-	 **/
-	void unmarkDeleted (void) ;
+    /**
+     * if this vertex is marked as deleted, undo this
+     **/
+    void unmarkDeleted(void);
 
-	VertexLabel getLabel (void) const
-		{ return Label ; } ;
+    VertexLabel getLabel(void) const { return Label; };
 
-	void setLabel (VertexLabel l)
-		{ Label = l ; } ;
+    void setLabel(VertexLabel l) { Label = l; };
 
-	void setSampleOccurenceIt (unsigned short i, std::list<SampleOccurence>::iterator it)
-		{ SampleOccurenceIts[i] = it ; }
+    void setSampleOccurenceIt(unsigned short i, std::list<SampleOccurence>::iterator it) {
+        SampleOccurenceIts[i] = it;
+    }
 
-	EmbValue getEmbeddedValue (void) const ;
+    EmbValue getEmbeddedValue(void) const;
 
-	EmbValue getTargetValue (unsigned short i) const
-		{ return TargetValues[i] ; } ;
+    EmbValue getTargetValue(unsigned short i) const { return TargetValues[i]; };
 
-	void print (unsigned short spc = 0) const ;
-	void printEdges (void) const ;
+    void print(unsigned short spc = 0) const;
+    void printEdges(void) const;
 
-	private:
-	/// the vertex label of this vertex
-	VertexLabel Label ;
+  private:
+    /// the vertex label of this vertex
+    VertexLabel Label;
 
-	/// the sample positions of the samples described by this vertex in the CvrStgFile
-	SamplePos* SamplePositions ;
+    /// the sample positions of the samples described by this vertex in the CvrStgFile
+    SamplePos *SamplePositions;
 
-	/// the sample values at the SamplePositions
-	SampleValue** SampleValues ;
+    /// the sample values at the SamplePositions
+    SampleValue **SampleValues;
 
-	/// the target values for the sample values (exactly one of them has to be reached (and the other left unchanged) to embed this vertex)
-	EmbValue* TargetValues ;
+    /// the target values for the sample values (exactly one of them has to be reached (and the
+    /// other left unchanged) to embed this vertex)
+    EmbValue *TargetValues;
 
-	/// point to entries in std::lists of sample occurences in the graph
-	std::list<SampleOccurence>::iterator* SampleOccurenceIts ;
+    /// point to entries in std::lists of sample occurences in the graph
+    std::list<SampleOccurence>::iterator *SampleOccurenceIts;
 
-	/// the shortest edge of this vertex (as calculated by updateShortestEdge)
-	Edge *ShortestEdge ;
+    /// the shortest edge of this vertex (as calculated by updateShortestEdge)
+    Edge *ShortestEdge;
 
-	/// true iff this vertex is not deleted
-	bool valid ;
+    /// true iff this vertex is not deleted
+    bool valid;
 
-	/// the number of loop edges (loop edges are not valid edges)
-	unsigned short SelfDegree ;
-} ;
+    /// the number of loop edges (loop edges are not valid edges)
+    unsigned short SelfDegree;
+};
 
 #endif // ndef SH_VERTEX_H

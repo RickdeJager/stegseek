@@ -15,7 +15,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
- * 
+ *
  * 2020:
  *  - Modified header file to make Magic and NBitsMagic public
  *
@@ -34,104 +34,102 @@
 #include "EncryptionMode.h"
 
 class EmbData {
-	public:
-	enum MODE { EMBED, EXTRACT } ;
-	enum STATE { READ_MAGIC, READ_VERSION, READ_ENCINFO, READ_NPLAINBITS, READ_ENCRYPTED, END } ;
+  public:
+    enum MODE { EMBED, EXTRACT };
+    enum STATE { READ_MAGIC, READ_VERSION, READ_ENCINFO, READ_NPLAINBITS, READ_ENCRYPTED, END };
 
-	/**
-	 * construct a new EmbData object
-	 * \param m the mode (EMBED or EXTRACT)
-	 * \param pp the passphrase
-	 * \param fn the filename (only need for mode EMBED)
-	 **/
-	EmbData (MODE m, std::string pp, std::string fn = "") ;
+    /**
+     * construct a new EmbData object
+     * \param m the mode (EMBED or EXTRACT)
+     * \param pp the passphrase
+     * \param fn the filename (only need for mode EMBED)
+     **/
+    EmbData(MODE m, std::string pp, std::string fn = "");
 
-	BitString getBitString (void) ;
+    BitString getBitString(void);
 
-	bool finished (void) ;
+    bool finished(void);
 
-	/**
-	 * get the minimum length of the BitString that is to be passed to addBits
-	 **/
-	unsigned long getNumBitsRequested (void) ;
+    /**
+     * get the minimum length of the BitString that is to be passed to addBits
+     **/
+    unsigned long getNumBitsRequested(void);
 
-	void addBits (BitString addbits) ;
+    void addBits(BitString addbits);
 
-	void setEncAlgo (EncryptionAlgorithm a) ;
-	EncryptionAlgorithm getEncAlgo (void) const ;
-	
-	void setEncMode (EncryptionMode m) ;
-	EncryptionMode getEncMode (void) const ;
+    void setEncAlgo(EncryptionAlgorithm a);
+    EncryptionAlgorithm getEncAlgo(void) const;
 
-	void setCompression (int c) ;
-	int getCompression (void) const ;
+    void setEncMode(EncryptionMode m);
+    EncryptionMode getEncMode(void) const;
 
-	void setChecksum (bool c) ;
-	bool getChecksum (void) const ;
+    void setCompression(int c);
+    int getCompression(void) const;
 
-	/**
-	 * check if crc32 checksum is ok (needs filled Data and CRC32 fields)
-	 * \return true iff checksum is ok
-	 **/
-	bool checksumOK (void) const ;
+    void setChecksum(bool c);
+    bool getChecksum(void) const;
 
-	void setData (const std::vector<BYTE> data)
-		{ Data = data ; } ;
+    /**
+     * check if crc32 checksum is ok (needs filled Data and CRC32 fields)
+     * \return true iff checksum is ok
+     **/
+    bool checksumOK(void) const;
 
-	std::vector<BYTE> getData (void) const
-		{ return Data ; } ;
+    void setData(const std::vector<BYTE> data) { Data = data; };
 
-	std::string getFileName (void) const
-		{ return FileName ; } ;
+    std::vector<BYTE> getData(void) const { return Data; };
 
-	/// the minimum size of the part of the generatred BitString that is not the data
-	static const unsigned int MinStegoHeaderSize = 50 ;
-	/// steghide magic to recognize embedded data (the string "shm")
-	static const UWORD32 Magic = 0x73688DUL ;
-	/// size (in bits of Magic)
-	static const unsigned int NBitsMagic = 24 ;
+    std::string getFileName(void) const { return FileName; };
 
-	protected:
-	std::string stripDir (std::string s) ;
+    /// the minimum size of the part of the generatred BitString that is not the data
+    static const unsigned int MinStegoHeaderSize = 50;
+    /// steghide magic to recognize embedded data (the string "shm")
+    static const UWORD32 Magic = 0x73688DUL;
+    /// size (in bits of Magic)
+    static const unsigned int NBitsMagic = 24;
 
-	private:
-	/// number of bits used to code the number of plain bits
-	static const unsigned int NBitsNPlainBits = 32 ;
-	/// number of bits used to code the number of uncompressed bits
-	static const unsigned int NBitsNUncompressedBits = 32 ;
-	/// size of a crc32 checksum in bits
-	static const unsigned int NBitsCrc32 = 32 ;
-	/// version of this steghide embedding (stego compatibility of EmbData)
-	static const unsigned short CodeVersion = 0 ;
+  protected:
+    std::string stripDir(std::string s);
 
-	MODE Mode ;
-	STATE State ;
-	
-	unsigned long NPlainBits ;
+  private:
+    /// number of bits used to code the number of plain bits
+    static const unsigned int NBitsNPlainBits = 32;
+    /// number of bits used to code the number of uncompressed bits
+    static const unsigned int NBitsNUncompressedBits = 32;
+    /// size of a crc32 checksum in bits
+    static const unsigned int NBitsCrc32 = 32;
+    /// version of this steghide embedding (stego compatibility of EmbData)
+    static const unsigned short CodeVersion = 0;
 
-	/// the number of bits that the caller must at least supply to addBits
-	unsigned long NumBitsRequested ;
-	/// exactly the number of bits that the next step will consume from Reservoir and addBits together
-	unsigned long NumBitsNeeded ;
+    MODE Mode;
+    STATE State;
 
-	BitString Reservoir ;
+    unsigned long NPlainBits;
 
-	std::string Passphrase ;
+    /// the number of bits that the caller must at least supply to addBits
+    unsigned long NumBitsRequested;
+    /// exactly the number of bits that the next step will consume from Reservoir and addBits
+    /// together
+    unsigned long NumBitsNeeded;
 
-	/// version read from input bitstring
-	unsigned short Version ;
+    BitString Reservoir;
 
-	EncryptionAlgorithm EncAlgo ;
-	EncryptionMode EncMode ;
-	/// compression level: 0(none),1(best speed),...,9(best compression)
-	int Compression ;
-	/// will a checksum be embedded ?
-	bool Checksum ;
-	/// the checksum
-	unsigned long CRC32 ;
-	std::string FileName ;
-	/// contains the actual message to be embedded
-	std::vector<BYTE> Data ;
-} ;
+    std::string Passphrase;
+
+    /// version read from input bitstring
+    unsigned short Version;
+
+    EncryptionAlgorithm EncAlgo;
+    EncryptionMode EncMode;
+    /// compression level: 0(none),1(best speed),...,9(best compression)
+    int Compression;
+    /// will a checksum be embedded ?
+    bool Checksum;
+    /// the checksum
+    unsigned long CRC32;
+    std::string FileName;
+    /// contains the actual message to be embedded
+    std::vector<BYTE> Data;
+};
 
 #endif // ndef SH_EMBDATA_H

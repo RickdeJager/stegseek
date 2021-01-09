@@ -24,56 +24,46 @@
 #include <string>
 
 class EncryptionMode {
-	public:
-	/// number of bits needed to code the mode
-	static const unsigned int IRep_size = 3 ;
+  public:
+    /// number of bits needed to code the mode
+    static const unsigned int IRep_size = 3;
 
-	/// integer representation of encryption mode
-	enum IRep {
-		ECB = 0,
-		CBC = 1,
-		OFB = 2,
-		CFB = 3,
-		NOFB = 4,
-		NCFB = 5,
-		CTR = 6,
-		STREAM = 7
-	} ;
+    /// integer representation of encryption mode
+    enum IRep { ECB = 0, CBC = 1, OFB = 2, CFB = 3, NOFB = 4, NCFB = 5, CTR = 6, STREAM = 7 };
 
-	/**
-	 * construct a new EncryptionMode object setting Value to ECB
-	 **/
-	EncryptionMode (void) ;
-	EncryptionMode (IRep irep) ;
-	/**
-	 * construct a new EncryptionMode object from a std::string representation
-	 * \param srep a valid(!) std::string representation
-	 **/
-	EncryptionMode (std::string srep) ;
+    /**
+     * construct a new EncryptionMode object setting Value to ECB
+     **/
+    EncryptionMode(void);
+    EncryptionMode(IRep irep);
+    /**
+     * construct a new EncryptionMode object from a std::string representation
+     * \param srep a valid(!) std::string representation
+     **/
+    EncryptionMode(std::string srep);
 
-	void setValue (IRep irep) ;
+    void setValue(IRep irep);
 
-	std::string getStringRep (void) const ;
-	IRep getIntegerRep (void) const ;
+    std::string getStringRep(void) const;
+    IRep getIntegerRep(void) const;
 
-	bool operator== (const EncryptionMode& mode) const
-		{ return (Value == mode.Value) ; } ;
+    bool operator==(const EncryptionMode &mode) const { return (Value == mode.Value); };
 
-	static bool isValidStringRep (std::string srep) ;
-	static bool isValidIntegerRep (unsigned int irep) ;
+    static bool isValidStringRep(std::string srep);
+    static bool isValidIntegerRep(unsigned int irep);
 
-	static std::string translate (IRep irep) ;
-	static IRep translate (std::string srep) ;
+    static std::string translate(IRep irep);
+    static IRep translate(std::string srep);
 
-	private:
-	static const unsigned int NumValues = 8 ;
-	IRep Value ;
+  private:
+    static const unsigned int NumValues = 8;
+    IRep Value;
 
-	typedef struct struct_Translation {
-		IRep	irep ;
-		const char*	srep ;
-	} Translation ;
-	static const Translation Translations[] ;
-} ;
+    typedef struct struct_Translation {
+        IRep irep;
+        const char *srep;
+    } Translation;
+    static const Translation Translations[];
+};
 
 #endif // ndef SH_ENCMODE_H

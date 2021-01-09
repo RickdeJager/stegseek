@@ -18,22 +18,20 @@
  *
  */
 
+#include "WavChunkUnused.h"
 #include "BinaryIO.h"
 #include "WavChunkHeader.h"
-#include "WavChunkUnused.h"
 
-void WavChunkUnused::read (BinaryIO *io)
-{
-	Data = std::vector<BYTE> (ChunkHeader->getChunkLength()) ;
-	for (unsigned int i = 0 ; i < ChunkHeader->getChunkLength() ; i++) {
-		Data[i] = io->read8() ;
-	}
+void WavChunkUnused::read(BinaryIO *io) {
+    Data = std::vector<BYTE>(ChunkHeader->getChunkLength());
+    for (unsigned int i = 0; i < ChunkHeader->getChunkLength(); i++) {
+        Data[i] = io->read8();
+    }
 }
 
-void WavChunkUnused::write (BinaryIO *io)
-{
-	WavChunk::write (io) ;
-	for (std::vector<BYTE>::const_iterator i = Data.begin() ; i != Data.end() ; i++) {
-		io->write8 (*i) ;
-	}
+void WavChunkUnused::write(BinaryIO *io) {
+    WavChunk::write(io);
+    for (std::vector<BYTE>::const_iterator i = Data.begin(); i != Data.end(); i++) {
+        io->write8(*i);
+    }
 }

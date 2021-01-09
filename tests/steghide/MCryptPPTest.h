@@ -24,19 +24,19 @@
 #include "BitString.h"
 #include "MCryptPP.h"
 
-#include "UnitTest.h"
 #include "TestSuite.h"
+#include "UnitTest.h"
 
 class MCryptPPTest : public UnitTest {
-	public:
-	MCryptPPTest (TestSuite* s) ;
+  public:
+    MCryptPPTest(TestSuite *s);
 
-	void testEncryption (void) ;
-	void testDecryption (void) ;
+    void testEncryption(void);
+    void testDecryption(void);
 
-	private:
-	bool genericTestEncryption () ;
-	bool genericTestDecryption () ;
-} ;
+  private:
+    bool genericTestEncryption();
+    bool genericTestDecryption();
+};
 
 #endif // ndef SH_MCRYPTPPTEST_H

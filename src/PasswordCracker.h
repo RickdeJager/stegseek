@@ -2,9 +2,9 @@
  *
  * Stegseek 0.5 - a steghide cracker
  * Copyright (C) 2020 Rick de Jager
- * 
+ *
  * Based on the work of Stefan Hetzl <shetzl@chello.at>
- * 
+ *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
  * as published by the Free Software Foundation; either version 2
@@ -24,29 +24,28 @@
 #ifndef SH_PASSWORDCRACKER_H
 #define SH_PASSWORDCRACKER_H
 
-#include <thread>
-#include <string>
 #include <atomic>
-#include <sys/stat.h>
 #include <cstring>
+#include <string>
+#include <sys/stat.h>
+#include <thread>
 
 #include "Cracker.h"
 #include "Selector.h"
 
 class PasswordCracker : Cracker {
-	public:
-	PasswordCracker (void) ;
+  public:
+    PasswordCracker();
+    void crack();
 
-	void crack (void) ;
-
-	private:
-	bool tryPassphrase (const char *) ;
-	void extract (std::string) ;
-	void consume (unsigned long, unsigned long, bool) ;
-	void sillyCtfGuesses () ;
-	std::ifstream wordlist ;
-	std::string foundPassphrase ;
-	unsigned long wordlistLength = 0 ;
-} ;
+  private:
+    bool tryPassphrase(const char *);
+    void extract(std::string);
+    void consume(unsigned long, unsigned long, bool);
+    void sillyCtfGuesses();
+    std::ifstream wordlist;
+    std::string foundPassphrase;
+    unsigned long wordlistLength = 0;
+};
 
 #endif // ndef SH_PASSWORDCRACKER_H

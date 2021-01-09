@@ -18,34 +18,28 @@
  *
  */
 
-#include "BinaryIO.h"
 #include "WavChunkHeader.h"
+#include "BinaryIO.h"
 
-WavChunkHeader::WavChunkHeader (const char *id, UWORD32 len)
-{
-	for (unsigned int i = 0 ; i < 4 ; i++) {
-		ChunkId[i] = id[i] ;
-	}
-	ChunkLength = len ;
+WavChunkHeader::WavChunkHeader(const char *id, UWORD32 len) {
+    for (unsigned int i = 0; i < 4; i++) {
+        ChunkId[i] = id[i];
+    }
+    ChunkLength = len;
 }
 
-WavChunkHeader::WavChunkHeader (BinaryIO *io)
-{
-	read (io) ;
+WavChunkHeader::WavChunkHeader(BinaryIO *io) { read(io); }
+
+void WavChunkHeader::read(BinaryIO *io) {
+    for (unsigned int i = 0; i < 4; i++) {
+        ChunkId[i] = io->read8();
+    }
+    ChunkLength = io->read32_le();
 }
 
-void WavChunkHeader::read (BinaryIO *io)
-{
-	for (unsigned int i = 0 ; i < 4 ; i++) {
-		ChunkId[i] = io->read8() ;
-	}
-	ChunkLength = io->read32_le() ;
-}
-
-void WavChunkHeader::write (BinaryIO *io) const
-{
-	for (unsigned int i = 0 ; i < 4 ; i++) {
-		io->write8 (ChunkId[i]) ;
-	}
-	io->write32_le (ChunkLength) ;
+void WavChunkHeader::write(BinaryIO *io) const {
+    for (unsigned int i = 0; i < 4; i++) {
+        io->write8(ChunkId[i]);
+    }
+    io->write32_le(ChunkLength);
 }

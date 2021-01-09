@@ -21,18 +21,18 @@
 #ifndef SH_ASSERTIONFAILED_H
 #define SH_ASSERTIONFAILED_H
 
-#include "common.h"
 #include "SteghideError.h"
+#include "common.h"
 
 class AssertionFailed : public SteghideError {
-	public:
-	AssertionFailed (const char* fn, unsigned int l)
-		: SteghideError(_("assertion failed in %s at line number %d."), stripDir(fn), l) {} ;
+  public:
+    AssertionFailed(const char *fn, unsigned int l)
+        : SteghideError(_("assertion failed in %s at line number %d."), stripDir(fn), l){};
 
-	void printMessage (void) const ;
+    void printMessage(void) const;
 
-	private:
-	char* stripDir (const char* fn) ;
-} ;
+  private:
+    char *stripDir(const char *fn);
+};
 
 #endif // ndef SH_ASSERTION_FAILED

@@ -25,64 +25,65 @@
 
 #include "CvrStgFile.h"
 
-class BinaryIO ;
-class WavChunkHeader ;
-class WavChunkUnused ;
-class WavFormatChunk ;
+class BinaryIO;
+class WavChunkHeader;
+class WavChunkUnused;
+class WavFormatChunk;
 
 class WavFile : public CvrStgFile {
-	public:
-	WavFile (void) ;
-	WavFile (BinaryIO *io) ;
-	~WavFile (void) ;
+  public:
+    WavFile(void);
+    WavFile(BinaryIO *io);
+    ~WavFile(void);
 
-	void read (BinaryIO *io) ;
-	void write (void) ;
+    void read(BinaryIO *io);
+    void write(void);
 
-	std::list<CvrStgFile::Property> getProperties (void) const ;
+    std::list<CvrStgFile::Property> getProperties(void) const;
 
-	unsigned long getNumSamples (void) const ;
-	void replaceSample (const SamplePos pos, const SampleValue* s) ;
-	SampleValue* getSampleValue (SamplePos pos) const ;
+    unsigned long getNumSamples(void) const;
+    void replaceSample(const SamplePos pos, const SampleValue *s);
+    SampleValue *getSampleValue(SamplePos pos) const;
 
-	std::vector<SampleValueAdjacencyList*> calcSVAdjacencyLists (const std::vector<SampleValue*>& svs) const ;
-	std::vector<MatchingAlgorithm*> getMatchingAlgorithms (Graph* g, Matching* m) const ;
+    std::vector<SampleValueAdjacencyList *>
+    calcSVAdjacencyLists(const std::vector<SampleValue *> &svs) const;
+    std::vector<MatchingAlgorithm *> getMatchingAlgorithms(Graph *g, Matching *m) const;
 
-	unsigned short getBitsPerSample (void) const ;
+    unsigned short getBitsPerSample(void) const;
 
-	private:
-	static const signed short	FormatPCM = 1 ;
+  private:
+    static const signed short FormatPCM = 1;
 
-	static const unsigned short SamplesPerVertex = 2 ;
-	static const UWORD32 Radius_small = 1 ;
-	static const UWORD32 Radius_large = 20 ;
-	static const EmbValue EmbValueModulus = 2 ;
+    static const unsigned short SamplesPerVertex = 2;
+    static const UWORD32 Radius_small = 1;
+    static const UWORD32 Radius_large = 20;
+    static const EmbValue EmbValueModulus = 2;
 
-	WavChunkHeader *riffchhdr ;
-	char id_wave[4] ;
+    WavChunkHeader *riffchhdr;
+    char id_wave[4];
 
-	WavFormatChunk *FormatChunk ;
+    WavFormatChunk *FormatChunk;
 
-	WavChunkHeader *datachhdr ;
-	/// this std::vector contains the wav data if BitsPerSample <= 8
-	std::vector<unsigned char> data_small ;
-	/// this std::vector contains the wav data if BitsPerSample >8
-	std::vector<int> data_large ;	// it is assumed that an int can hold 32 bits
-	
-	std::vector<WavChunkUnused*> UnusedBeforeData ;
-	std::vector<BYTE> UnusedAfterData ;
+    WavChunkHeader *datachhdr;
+    /// this std::vector contains the wav data if BitsPerSample <= 8
+    std::vector<unsigned char> data_small;
+    /// this std::vector contains the wav data if BitsPerSample >8
+    std::vector<int> data_large; // it is assumed that an int can hold 32 bits
 
-	void readheaders (void) ;
-	void readdata (void) ;
-	void writeheaders (void) ;
-	void writedata (void) ;
-	void calcpos (SamplePos n, unsigned long *bytepos, unsigned short *firstbitpos) const ;
-	/**
-	 * get the position of the first bit (of the first byte) containing the actual sample data
-	 * \return the bit position (where 0 is the lsb and 7 the msb)
-	 **/
-	unsigned short getFirstBitPosinSample (void) ;
-	unsigned short getBytesPerSample (void) ;
-} ;
+    std::vector<WavChunkUnused *> UnusedBeforeData;
+    std::vector<BYTE> UnusedAfterData;
+
+    void readheaders(void);
+    void readdata(void);
+    void writeheaders(void);
+    void writedata(void);
+    void calcpos(SamplePos n, unsigned long *bytepos, unsigned short *firstbitpos) const;
+    /**
+     * get the position of the first bit (of the first byte) containing the actual sample data
+     * \return the bit position (where 0 is the lsb and 7 the msb)
+     **/
+    unsigned short getFirstBitPosinSample(void);
+    unsigned short getBytesPerSample(void);
+};
 
 #endif // ndef SH_WAVFILE_H

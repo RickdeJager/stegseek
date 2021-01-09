@@ -21,52 +21,38 @@
 #include "SteghideError.h"
 
 #include "TestCategory.h"
-#include "UnitTest.h"
 #include "TestSuite.h"
+#include "UnitTest.h"
 
-UnitTest::~UnitTest()
-{
-	for (std::vector<TestCategory*>::const_iterator it = TestCategories.begin() ; it != TestCategories.end() ; it++) {
-		delete *it ;
-	}
+UnitTest::~UnitTest() {
+    for (std::vector<TestCategory *>::const_iterator it = TestCategories.begin();
+         it != TestCategories.end(); it++) {
+        delete *it;
+    }
 }
 
-void UnitTest::setup ()
-{
-	GlobsBackup = Globs ;
+void UnitTest::setup() { GlobsBackup = Globs; }
+
+void UnitTest::run() {
+    getSuite()->startUnit(getName());
+    for (std::vector<TestCategory *>::const_iterator it = TestCategories.begin();
+         it != TestCategories.end(); it++) {
+        getSuite()->startCategory((*it)->getName());
+        try {
+            (*it)->run();
+        } catch (SteghideError &e) {
+            getSuite()->addTestResult(TestSuite::KNOWNEXCEPTION);
+            e.printMessage();
+        } catch (...) {
+            getSuite()->addTestResult(TestSuite::UNKNOWNEXCEPTION);
+        }
+        getSuite()->endCategory((*it)->getName());
+    }
+    getSuite()->endUnit(getName());
 }
 
-void UnitTest::run()
-{
-	getSuite()->startUnit (getName()) ;
-	for (std::vector<TestCategory*>::const_iterator it = TestCategories.begin() ; it != TestCategories.end() ; it++) {
-		getSuite()->startCategory ((*it)->getName()) ;
-		try {
-			(*it)->run() ;
-		}
-		catch (SteghideError& e) {
-			getSuite()->addTestResult (TestSuite::KNOWNEXCEPTION) ;
-			e.printMessage() ;
-		}
-		catch (...) {
-			getSuite()->addTestResult (TestSuite::UNKNOWNEXCEPTION) ;
-		}
-		getSuite()->endCategory ((*it)->getName()) ;
-	}
-	getSuite()->endUnit (getName()) ;
-}
+void UnitTest::cleanup() { Globs = GlobsBackup; }
 
-void UnitTest::cleanup ()
-{
-	Globs = GlobsBackup ;
-}
+void UnitTest::addTestCategory(TestCategory *tc) { TestCategories.push_back(tc); }
 
-void UnitTest::addTestCategory (TestCategory* tc)
-{
-	TestCategories.push_back (tc) ;
-}
-
-void UnitTest::addTestResult (bool r)
-{
-	getSuite()->addTestResult (r) ;
-}
+void UnitTest::addTestResult(bool r) { getSuite()->addTestResult(r); }

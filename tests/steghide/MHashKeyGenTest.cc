@@ -24,7 +24,4 @@
 
 #include "BitString.h"
 
-MHashKeyGenTest::MHashKeyGenTest (TestSuite* s)
-	: UnitTest ("MHashKeyGen", s)
-{
-}
+MHashKeyGenTest::MHashKeyGenTest(TestSuite *s) : UnitTest("MHashKeyGen", s) {}

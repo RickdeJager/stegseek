@@ -18,41 +18,39 @@
  *
  */
 
+#include "SMDConstructionHeuristic.h"
 #include "Edge.h"
 #include "Graph.h"
 #include "Matching.h"
-#include "SMDConstructionHeuristic.h"
 #include "Vertex.h"
 
 #include <algorithm>
 
-SMDConstructionHeuristic::SMDConstructionHeuristic (Graph* g, Matching* m, float goal)
-	: MatchingAlgorithm (g, m, goal)
-{
-	Vertices = std::vector<Vertex*> (g->getNumVertices()) ;
-	for (VertexLabel l = 0 ; l < g->getNumVertices() ; l++) {
-		Vertices[l] = g->getVertex(l) ;
-		myassert (m->isExposed (Vertices[l])) ;
-	}
+SMDConstructionHeuristic::SMDConstructionHeuristic(Graph *g, Matching *m, float goal)
+    : MatchingAlgorithm(g, m, goal) {
+    Vertices = std::vector<Vertex *>(g->getNumVertices());
+    for (VertexLabel l = 0; l < g->getNumVertices(); l++) {
+        Vertices[l] = g->getVertex(l);
+        myassert(m->isExposed(Vertices[l]));
+    }
 
-	sort (Vertices.begin(), Vertices.end(), SmallerVertexDegree()) ;
+    sort(Vertices.begin(), Vertices.end(), SmallerVertexDegree());
 }
 
-void SMDConstructionHeuristic::run (void)
-{
-	for (VertexLabel l = 0 ; l < Vertices.size() ; l++) {
-		if (TheMatching->isExposed(Vertices[l]) && Vertices[l]->getDegree() > 0) {
-			Vertex* v1 = Vertices[l] ;
-			v1->updateShortestEdge() ;
-			Edge* e = v1->getShortestEdge() ;
-			Vertex* v2 = e->getOtherVertex (v1) ;
+void SMDConstructionHeuristic::run(void) {
+    for (VertexLabel l = 0; l < Vertices.size(); l++) {
+        if (TheMatching->isExposed(Vertices[l]) && Vertices[l]->getDegree() > 0) {
+            Vertex *v1 = Vertices[l];
+            v1->updateShortestEdge();
+            Edge *e = v1->getShortestEdge();
+            Vertex *v2 = e->getOtherVertex(v1);
 
-			TheMatching->addEdge(*e) ;
+            TheMatching->addEdge(*e);
 
-			v1->markDeleted() ;
-			v2->markDeleted() ;
-		}
-	}
+            v1->markDeleted();
+            v2->markDeleted();
+        }
+    }
 
-	TheGraph->unmarkDeletedAllVertices() ;
+    TheGraph->unmarkDeletedAllVertices();
 }

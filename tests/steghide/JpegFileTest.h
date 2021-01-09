@@ -26,22 +26,22 @@
 #include "CvrStgFileTest.h"
 
 class JpegFileTest : public CvrStgFileTest {
-	public:
-	JpegFileTest (TestSuite* s) ;
+  public:
+    JpegFileTest(TestSuite *s);
 
-	void setup (void) ;
-	void cleanup (void) ;
+    void setup(void);
+    void cleanup(void);
 
-	void testReadEmbedExtract (void) ;
-	void testReadEmbedWriteReadExtract (void) ;
-	void testPosition (void) ;
-	void testReadExtractCompare (void) ;
-	void testEmbeddedValue (void) ;
+    void testReadEmbedExtract(void);
+    void testReadEmbedWriteReadExtract(void);
+    void testPosition(void);
+    void testReadExtractCompare(void);
+    void testEmbeddedValue(void);
 
-	private:
-	BitString *bs1, *bs2 ;
-	CvrStgFile *f1, *f2 ;
-	Globals gl1, gl2 ;
-} ;
+  private:
+    BitString *bs1, *bs2;
+    CvrStgFile *f1, *f2;
+    Globals gl1, gl2;
+};
 
 #endif // ndef SH_JPEGFILETEST_H

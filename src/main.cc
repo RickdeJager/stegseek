@@ -18,24 +18,21 @@
  *
  */
 
-#include "common.h"
 #include "Session.h"
 #include "SteghideError.h"
+#include "common.h"
 
+int main(int argc, char *argv[]) {
+    try {
+        Args = Arguments(argc, argv);
+        Args.parse();
 
-int main (int argc, char *argv[])
-{
-	try {
-		Args = Arguments (argc, argv) ;
-		Args.parse() ;
+        Session s;
+        s.run();
+    } catch (const SteghideError &e) {
+        e.printMessage();
+        exit(EXIT_FAILURE);
+    }
 
-		Session s ;
-		s.run() ;
-	}
-	catch (const SteghideError& e) {
-		e.printMessage() ;
-		exit(EXIT_FAILURE) ;
-	}
-
-	exit(EXIT_SUCCESS) ;
+    exit(EXIT_SUCCESS);
 }

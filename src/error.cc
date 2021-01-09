@@ -15,16 +15,16 @@
  * You should have received a copy of the GNU General Public License
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
- * 
+ *
  * 2020:
  * 	- Changed steghide help to stegseek help
  *
  */
 
+#include <cstdarg>
+#include <cstdio>
 #include <iostream>
 #include <string>
-#include <cstdio>
-#include <cstdarg>
 
 #include "BinaryIO.h"
 #include "common.h"
@@ -33,134 +33,106 @@
 //
 // class ArgError
 //
-ArgError::ArgError (const char* msgfmt, ...)
-	: SteghideError()
-{
-	va_list ap ;
-	va_start (ap, msgfmt) ,
-	setMessage (vcompose (msgfmt, ap)) ;
-	va_end (ap) ;
+ArgError::ArgError(const char *msgfmt, ...) : SteghideError() {
+    va_list ap;
+    va_start(ap, msgfmt), setMessage(vcompose(msgfmt, ap));
+    va_end(ap);
 }
 
-void ArgError::printMessage () const
-{
-	SteghideError::printMessage() ;
-	std::cerr << "stegseek: " << _("type \"stegseek --help\" for help.") << std::endl ;
+void ArgError::printMessage() const {
+    SteghideError::printMessage();
+    std::cerr << "stegseek: " << _("type \"stegseek --help\" for help.") << std::endl;
 }
 
 //
 // class BinaryInputError
 //
-BinaryInputError::BinaryInputError (std::string fn, FILE* s)
-	: SteghideError()
-{
-	if (feof (s)) {
-		if (fn == "") {
-			setMessage(_("premature end of data from standard input.")) ;
-			setType (STDIN_EOF) ;
-		}
-		else {
-			setMessage(compose (_("premature end of file \"%s\"."), fn.c_str())) ;
-			setType (FILE_EOF) ;
-		}
-	}
-	else {
-		if (fn == "") {
-			setMessage(_("an error occurred while reading data from standard input.")) ;
-			setType (STDIN_ERR) ;
-		}
-		else {
-			setMessage(compose (_("an error occurred while reading data from the file \"%s\"."), fn.c_str())) ;
-			setType (FILE_ERR) ;
-		}
-	}
+BinaryInputError::BinaryInputError(std::string fn, FILE *s) : SteghideError() {
+    if (feof(s)) {
+        if (fn == "") {
+            setMessage(_("premature end of data from standard input."));
+            setType(STDIN_EOF);
+        } else {
+            setMessage(compose(_("premature end of file \"%s\"."), fn.c_str()));
+            setType(FILE_EOF);
+        }
+    } else {
+        if (fn == "") {
+            setMessage(_("an error occurred while reading data from standard input."));
+            setType(STDIN_ERR);
+        } else {
+            setMessage(compose(_("an error occurred while reading data from the file \"%s\"."),
+                               fn.c_str()));
+            setType(FILE_ERR);
+        }
+    }
 }
 
-BinaryInputError::TYPE BinaryInputError::getType (void)
-{
-	return type ;
-}
+BinaryInputError::TYPE BinaryInputError::getType(void) { return type; }
 
-void BinaryInputError::setType (BinaryInputError::TYPE t)
-{
-	type = t ;
-}
+void BinaryInputError::setType(BinaryInputError::TYPE t) { type = t; }
 
 //
 // class BinaryOutputError
 //
-BinaryOutputError::BinaryOutputError (std::string fn)
-	: SteghideError()
-{
-	if (fn == "") {
-		setMessage(_("an error occurred while writing data to standard output.")) ;
-		setType(STDOUT_ERR) ;
-	}
-	else {
-		setMessage(compose (_("an error occurred while writing data to the file \"%s\"."), fn.c_str())) ;
-		setType(FILE_ERR) ;
-	}
+BinaryOutputError::BinaryOutputError(std::string fn) : SteghideError() {
+    if (fn == "") {
+        setMessage(_("an error occurred while writing data to standard output."));
+        setType(STDOUT_ERR);
+    } else {
+        setMessage(
+            compose(_("an error occurred while writing data to the file \"%s\"."), fn.c_str()));
+        setType(FILE_ERR);
+    }
 }
 
-BinaryOutputError::TYPE BinaryOutputError::getType (void)
-{
-	return type ;
-}
+BinaryOutputError::TYPE BinaryOutputError::getType(void) { return type; }
 
-void BinaryOutputError::setType (BinaryOutputError::TYPE t)
-{
-	type = t ;
-}
+void BinaryOutputError::setType(BinaryOutputError::TYPE t) { type = t; }
 
 //
 // class UnSupFileFormat
 //
-UnSupFileFormat::UnSupFileFormat (BinaryIO *io)
-	: SteghideError()
-{
-	if (io->is_std()) {
-		setMessage(_("the file format of the data from standard input is not supported.")) ;
-	}
-	else {
-		setMessage(compose (_("the file format of the file \"%s\" is not supported."), io->getName().c_str())) ;
-	}
+UnSupFileFormat::UnSupFileFormat(BinaryIO *io) : SteghideError() {
+    if (io->is_std()) {
+        setMessage(_("the file format of the data from standard input is not supported."));
+    } else {
+        setMessage(compose(_("the file format of the file \"%s\" is not supported."),
+                           io->getName().c_str()));
+    }
 }
 
 //
 // class NotImplementedError
 //
-NotImplementedError::NotImplementedError (const char *msgfmt, ...)
-	: SteghideError()
-{
-	va_list ap ;
-	va_start (ap, msgfmt) ;
-	setMessage (vcompose (msgfmt, ap)) ;
-	va_end (ap) ;
+NotImplementedError::NotImplementedError(const char *msgfmt, ...) : SteghideError() {
+    va_list ap;
+    va_start(ap, msgfmt);
+    setMessage(vcompose(msgfmt, ap));
+    va_end(ap);
 }
 
-void NotImplementedError::printMessage () const
-{
-	SteghideError::printMessage() ;
-	printf (_("This feature is not (yet) available. Please let steghide's author (shetzl@chello.at) know\n"
-		"that you want to use this functionality to increase the chance that this will\n"
-		"be implemented in the near future.\n")) ;
+void NotImplementedError::printMessage() const {
+    SteghideError::printMessage();
+    printf(_("This feature is not (yet) available. Please let steghide's author "
+             "(shetzl@chello.at) know\n"
+             "that you want to use this functionality to increase the chance "
+             "that this will\n"
+             "be implemented in the near future.\n"));
 }
 
 //
 // class CorruptDataError
 //
-CorruptDataError::CorruptDataError (const char* msgfmt, ...)
-	: SteghideError()
-{
-	va_list ap ;
-	va_start (ap, msgfmt) ;
-	setMessage (vcompose (msgfmt, ap)) ;
-	va_end (ap) ;
+CorruptDataError::CorruptDataError(const char *msgfmt, ...) : SteghideError() {
+    va_list ap;
+    va_start(ap, msgfmt);
+    setMessage(vcompose(msgfmt, ap));
+    va_end(ap);
 }
 
-void CorruptDataError::printMessage () const
-{
-	SteghideError::printMessage() ;
-	printf (_("Other possible reasons for this error are that the passphrase is wrong\n"
-		"or that there is no embedded data.\n")) ;
+void CorruptDataError::printMessage() const {
+    SteghideError::printMessage();
+    printf(_("Other possible reasons for this error are that the passphrase is wrong\n"
+             "or that there is no embedded data.\n"));
 }

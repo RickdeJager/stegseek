@@ -21,27 +21,27 @@
 #ifndef SH_SELECTORTEST_H
 #define SH_SELECTORTEST_H
 
-class Selector ;
+class Selector;
 
-#include "UnitTest.h"
 #include "TestSuite.h"
+#include "UnitTest.h"
 
 class SelectorTest : public UnitTest {
-	public:
-	SelectorTest (TestSuite* s) ;
+  public:
+    SelectorTest(TestSuite *s);
 
-	void setup (void) ;
-	void cleanup (void) ;
+    void setup(void);
+    void cleanup(void);
 
-	void testIsPermutation (void) ;
-	void testIsIdentityPermutation (void) ;
+    void testIsPermutation(void);
+    void testIsIdentityPermutation(void);
 
-	private:
-	Selector *s1, *s2, *s3, *s4 ;
-	Selector *sid1, *sid2 ;
+  private:
+    Selector *s1, *s2, *s3, *s4;
+    Selector *sid1, *sid2;
 
-	bool genericTestIsPermutation (Selector* s) ;
-	bool genericTestIsIdentityPermutation (Selector* s) ;
-} ;
+    bool genericTestIsPermutation(Selector *s);
+    bool genericTestIsIdentityPermutation(Selector *s);
+};
 
 #endif // ndef SH_SELECTORTEST_H

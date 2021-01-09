@@ -25,62 +25,62 @@
 #include "AudioSampleValueTest.h"
 #include "utcommon.h"
 
-AudioSampleValueTest::AudioSampleValueTest (TestSuite* s)
-	: SampleValueTest ("AudioSampleValue", s)
-{
-	ADDTESTCATEGORY (AudioSampleValueTest, testDistance) ;
-	ADDTESTCATEGORY (AudioSampleValueTest, testIsNeighbour) ;
+AudioSampleValueTest::AudioSampleValueTest(TestSuite *s) : SampleValueTest("AudioSampleValue", s) {
+    ADDTESTCATEGORY(AudioSampleValueTest, testDistance);
+    ADDTESTCATEGORY(AudioSampleValueTest, testIsNeighbour);
 }
 
-void AudioSampleValueTest::setup ()
-{
-	UnitTest::setup() ;
+void AudioSampleValueTest::setup() {
+    UnitTest::setup();
 
-	Globs.reset() ;
-	f_AuMuLaw = CvrStgFile::readFile (std::string(DATADIR) + "mulaw_std.au") ;
-	sv_AuMuLaw_0 = new AuMuLawSampleValue (0) ;
-	sv_AuMuLaw_1 = new AuMuLawSampleValue (1) ;
-	sv_AuMuLaw_45 = new AuMuLawSampleValue (45) ;
-	gl_AuMuLaw = Globs ;
+    Globs.reset();
+    f_AuMuLaw = CvrStgFile::readFile(std::string(DATADIR) + "mulaw_std.au");
+    sv_AuMuLaw_0 = new AuMuLawSampleValue(0);
+    sv_AuMuLaw_1 = new AuMuLawSampleValue(1);
+    sv_AuMuLaw_45 = new AuMuLawSampleValue(45);
+    gl_AuMuLaw = Globs;
 
-	Globs.reset() ;
-	f_AuPCM16 = CvrStgFile::readFile (std::string(DATADIR) + "pcm16_std.au") ;
-	sv_AuPCM16_m32768 = new AuPCM16SampleValue (-32768) ;
-	sv_AuPCM16_32767 = new AuPCM16SampleValue (32767) ;
-	sv_AuPCM16_0 = new AuPCM16SampleValue (0) ;
-	sv_AuPCM16_15 = new AuPCM16SampleValue (15) ;
-	gl_AuPCM16 = Globs ;
+    Globs.reset();
+    f_AuPCM16 = CvrStgFile::readFile(std::string(DATADIR) + "pcm16_std.au");
+    sv_AuPCM16_m32768 = new AuPCM16SampleValue(-32768);
+    sv_AuPCM16_32767 = new AuPCM16SampleValue(32767);
+    sv_AuPCM16_0 = new AuPCM16SampleValue(0);
+    sv_AuPCM16_15 = new AuPCM16SampleValue(15);
+    gl_AuPCM16 = Globs;
 }
 
-void AudioSampleValueTest::cleanup ()
-{
-	UnitTest::cleanup() ;
+void AudioSampleValueTest::cleanup() {
+    UnitTest::cleanup();
 
-	delete f_AuMuLaw ; delete f_AuPCM16 ;
-	delete sv_AuMuLaw_0 ; delete sv_AuMuLaw_1 ; delete sv_AuMuLaw_45 ;
-	delete sv_AuPCM16_m32768 ; delete sv_AuPCM16_32767 ; delete sv_AuPCM16_0 ; delete sv_AuPCM16_15 ;
+    delete f_AuMuLaw;
+    delete f_AuPCM16;
+    delete sv_AuMuLaw_0;
+    delete sv_AuMuLaw_1;
+    delete sv_AuMuLaw_45;
+    delete sv_AuPCM16_m32768;
+    delete sv_AuPCM16_32767;
+    delete sv_AuPCM16_0;
+    delete sv_AuPCM16_15;
 }
 
-void AudioSampleValueTest::testDistance ()
-{
-	Globs = gl_AuMuLaw ;
-	addTestResult (genericTestDistance (sv_AuMuLaw_0, sv_AuMuLaw_1, 1)) ;
-	addTestResult (genericTestDistance (sv_AuMuLaw_1, sv_AuMuLaw_45, 44)) ;
+void AudioSampleValueTest::testDistance() {
+    Globs = gl_AuMuLaw;
+    addTestResult(genericTestDistance(sv_AuMuLaw_0, sv_AuMuLaw_1, 1));
+    addTestResult(genericTestDistance(sv_AuMuLaw_1, sv_AuMuLaw_45, 44));
 
-	Globs = gl_AuPCM16 ;
-	addTestResult (genericTestDistance (sv_AuPCM16_0, sv_AuPCM16_15, 15)) ;
-	addTestResult (genericTestDistance (sv_AuPCM16_15, sv_AuPCM16_32767, 32752)) ;
-	addTestResult (genericTestDistance (sv_AuPCM16_m32768, sv_AuPCM16_32767, 65535)) ;
+    Globs = gl_AuPCM16;
+    addTestResult(genericTestDistance(sv_AuPCM16_0, sv_AuPCM16_15, 15));
+    addTestResult(genericTestDistance(sv_AuPCM16_15, sv_AuPCM16_32767, 32752));
+    addTestResult(genericTestDistance(sv_AuPCM16_m32768, sv_AuPCM16_32767, 65535));
 }
 
-void AudioSampleValueTest::testIsNeighbour ()
-{
-	Globs = gl_AuMuLaw ;
-	addTestResult (genericTestIsNeighbour (sv_AuMuLaw_0, sv_AuMuLaw_1, true)) ;
-	addTestResult (genericTestIsNeighbour (sv_AuMuLaw_0, sv_AuMuLaw_45, false)) ;
+void AudioSampleValueTest::testIsNeighbour() {
+    Globs = gl_AuMuLaw;
+    addTestResult(genericTestIsNeighbour(sv_AuMuLaw_0, sv_AuMuLaw_1, true));
+    addTestResult(genericTestIsNeighbour(sv_AuMuLaw_0, sv_AuMuLaw_45, false));
 
-	Globs = gl_AuPCM16 ;
-	addTestResult (genericTestIsNeighbour (sv_AuPCM16_0, sv_AuPCM16_15, true)) ;
-	addTestResult (genericTestIsNeighbour (sv_AuPCM16_m32768, sv_AuPCM16_0, false)) ;
-	addTestResult (genericTestIsNeighbour (sv_AuPCM16_m32768, sv_AuPCM16_32767, false)) ;
+    Globs = gl_AuPCM16;
+    addTestResult(genericTestIsNeighbour(sv_AuPCM16_0, sv_AuPCM16_15, true));
+    addTestResult(genericTestIsNeighbour(sv_AuPCM16_m32768, sv_AuPCM16_0, false));
+    addTestResult(genericTestIsNeighbour(sv_AuPCM16_m32768, sv_AuPCM16_32767, false));
 }

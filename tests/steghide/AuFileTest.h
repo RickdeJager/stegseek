@@ -26,23 +26,23 @@
 #include "CvrStgFileTest.h"
 
 class AuFileTest : public CvrStgFileTest {
-	public:
-	AuFileTest (TestSuite* s) ;
+  public:
+    AuFileTest(TestSuite *s);
 
-	void setup (void) ;
-	void cleanup (void) ;
+    void setup(void);
+    void cleanup(void);
 
-	void testReadWrite (void) ;
-	void testReadEmbedExtract (void) ;
-	void testReadEmbedWriteReadExtract (void) ;
-	void testPosition (void) ;
-	void testReadExtractCompare (void) ;
-	void testEmbeddedValue (void) ;
+    void testReadWrite(void);
+    void testReadEmbedExtract(void);
+    void testReadEmbedWriteReadExtract(void);
+    void testPosition(void);
+    void testReadExtractCompare(void);
+    void testEmbeddedValue(void);
 
-	private:
-	BitString *bs1, *bs2, *bs3 ;
-	CvrStgFile *f1, *f2, *f3 ;
-	Globals gl1, gl2, gl3 ;
-} ;
+  private:
+    BitString *bs1, *bs2, *bs3;
+    CvrStgFile *f1, *f2, *f3;
+    Globals gl1, gl2, gl3;
+};
 
 #endif // ndef SH_AUFILETEST_H

@@ -2,9 +2,9 @@
  *
  * Stegseek 0.5 - a steghide cracker
  * Copyright (C) 2020 Rick de Jager
- * 
+ *
  * Based on the work of Stefan Hetzl <shetzl@chello.at>
- * 
+ *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
  * as published by the Free Software Foundation; either version 2
@@ -24,49 +24,48 @@
 #ifndef SH_CRACKER_H
 #define SH_CRACKER_H
 
-#include <thread>
-#include <mutex>
-#include <condition_variable>
-#include <iostream>
-#include <fstream>
-#include <string>
-#include <queue>
 #include <atomic>
 #include <chrono>
+#include <condition_variable>
+#include <fstream>
+#include <iostream>
+#include <mutex>
+#include <queue>
 #include <set>
+#include <string>
+#include <thread>
 
 #include "EmbData.h"
 #include "Selector.h"
 
 class Cracker {
-	public:
-	Cracker () ;
+  public:
+    Cracker();
 
-	void crack () ;
+    void crack();
 
-	protected:
-	void metrics (unsigned long max, const char * unit) ;
-	void finish () ;
-	void extract (EmbData*) ;
-	bool verifyMagic (std::string) ;
-	bool verifyMagic (const char *) ;
-	bool verifyMagic (UWORD32) ;
+  protected:
+    void metrics(unsigned long max, const char *unit);
+    void finish();
+    void extract(EmbData *);
+    bool verifyMagic(std::string);
+    bool verifyMagic(const char *);
+    bool verifyMagic(UWORD32);
 
-	// Control variables
-	bool success ;
-	bool stopped ;
-	std::atomic<unsigned long> progress ;
+    // Control variables
+    bool success;
+    bool stopped;
+    std::atomic<unsigned long> progress;
 
-	// File properties
-	unsigned short bitsperembvalue ;
-	unsigned long numSamples ;
-	unsigned short samplesPerVertex ;
-	EmbValue EmbValueModulus ;
-	unsigned long embvaluesRequestedMagic ;
+    // File properties
+    unsigned short bitsperembvalue;
+    unsigned long numSamples;
+    unsigned short samplesPerVertex;
+    EmbValue EmbValueModulus;
+    unsigned long embvaluesRequestedMagic;
 
-	private:
-	EmbValue* embeddedValues ;
-
-} ;
+  private:
+    EmbValue *embeddedValues;
+};
 
 #endif // ndef SH_CRACKER_H

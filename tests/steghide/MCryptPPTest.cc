@@ -20,28 +20,19 @@
 
 #include "MCryptPPTest.h"
 
-MCryptPPTest::MCryptPPTest (TestSuite* s)
-	: UnitTest ("MCryptPP", s)
-{
-	ADDTESTCATEGORY (MCryptPPTest, testEncryption) ;
-	ADDTESTCATEGORY (MCryptPPTest, testDecryption) ;
+MCryptPPTest::MCryptPPTest(TestSuite *s) : UnitTest("MCryptPP", s) {
+    ADDTESTCATEGORY(MCryptPPTest, testEncryption);
+    ADDTESTCATEGORY(MCryptPPTest, testDecryption);
 }
 
 // TODO - implement this unit test
 
-void MCryptPPTest::testEncryption (void)
-{
+void MCryptPPTest::testEncryption(void) {}
+
+void MCryptPPTest::testDecryption(void) {}
+
+bool MCryptPPTest::genericTestEncryption() {
+    // evaluate test vector
 }
 
-void MCryptPPTest::testDecryption (void)
-{
-}
-
-bool MCryptPPTest::genericTestEncryption ()
-{
-	// evaluate test vector
-}
-
-bool MCryptPPTest::genericTestDecryption ()
-{
-}
+bool MCryptPPTest::genericTestDecryption() {}

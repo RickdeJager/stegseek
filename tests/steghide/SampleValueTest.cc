@@ -23,34 +23,32 @@
 
 #include "SampleValue.h"
 
-bool SampleValueTest::genericTestIsNeighbour (SampleValue* s1, SampleValue* s2, bool res)
-{
-	bool retval = ((s1->isNeighbour(s2) == s2->isNeighbour(s1)) && (s1->isNeighbour(s2) == res)) ;
-	if (ArgVerbose && !retval) {
-		std::cerr << std::endl << "---- FAILED: genericIsNeighbour ----" << std::endl ;
-		std::cerr << "is: " << s1->isNeighbour(s2) << ", shouldbe: " << res << std::endl ;
-		std::cerr << "distance of s1 (0x" << std::hex << s1->getKey() << ") and s2 (0x" ;
-		std::cerr << s2->getKey() << std::dec << ") is: " << s1->calcDistance(s2) << std::endl ;
-		std::cerr << "-------------------------------------" << std::endl ;
-	}
-	return retval ;
+bool SampleValueTest::genericTestIsNeighbour(SampleValue *s1, SampleValue *s2, bool res) {
+    bool retval = ((s1->isNeighbour(s2) == s2->isNeighbour(s1)) && (s1->isNeighbour(s2) == res));
+    if (ArgVerbose && !retval) {
+        std::cerr << std::endl << "---- FAILED: genericIsNeighbour ----" << std::endl;
+        std::cerr << "is: " << s1->isNeighbour(s2) << ", shouldbe: " << res << std::endl;
+        std::cerr << "distance of s1 (0x" << std::hex << s1->getKey() << ") and s2 (0x";
+        std::cerr << s2->getKey() << std::dec << ") is: " << s1->calcDistance(s2) << std::endl;
+        std::cerr << "-------------------------------------" << std::endl;
+    }
+    return retval;
 }
 
-bool SampleValueTest::genericTestDistance (SampleValue* s1, SampleValue* s2, UWORD32 dist)
-{
-	bool retval = ((s1->calcDistance(s2) == s2->calcDistance(s1)) && (s1->calcDistance(s2) == dist)) ;
-	if (ArgVerbose && !retval) {
-		std::cerr << std::endl << "---- FAILED: genericTestDistance ----" << std::endl ;
-		std::cerr << "distance of s1 (0x" << std::hex << s1->getKey() << ") and s2 (0x" ;
-		std::cerr << s2->getKey() << std::dec << ") is: " << s1->calcDistance(s2) << std::endl ;
-		std::cerr << "should be: " << dist << std::endl ;
-		std::cerr << "-------------------------------------" << std::endl ;
-	}
-	return retval ;
+bool SampleValueTest::genericTestDistance(SampleValue *s1, SampleValue *s2, UWORD32 dist) {
+    bool retval =
+        ((s1->calcDistance(s2) == s2->calcDistance(s1)) && (s1->calcDistance(s2) == dist));
+    if (ArgVerbose && !retval) {
+        std::cerr << std::endl << "---- FAILED: genericTestDistance ----" << std::endl;
+        std::cerr << "distance of s1 (0x" << std::hex << s1->getKey() << ") and s2 (0x";
+        std::cerr << s2->getKey() << std::dec << ") is: " << s1->calcDistance(s2) << std::endl;
+        std::cerr << "should be: " << dist << std::endl;
+        std::cerr << "-------------------------------------" << std::endl;
+    }
+    return retval;
 }
 
-bool SampleValueTest::genericTestEValue (SampleValue* s, EmbValue ev)
-{
-	bool retval = (s->getEmbeddedValue() == ev) ;
-	return retval ;
+bool SampleValueTest::genericTestEValue(SampleValue *s, EmbValue ev) {
+    bool retval = (s->getEmbeddedValue() == ev);
+    return retval;
 }

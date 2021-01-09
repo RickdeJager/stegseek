@@ -29,50 +29,50 @@
 #include "Test.h"
 #include "TestCategoryCaller.h"
 // declared here to avoid circulating includes
-class TestCategory ;
-class TestSuite ;
+class TestCategory;
+class TestSuite;
 
-#define ADDTESTCATEGORY(UTCLASS,CMETHOD) \
-	addTestCategory (new TestCategoryCaller<UTCLASS> (strip_test(#CMETHOD), getSuite(), this, &UTCLASS::CMETHOD))
+#define ADDTESTCATEGORY(UTCLASS, CMETHOD)                                                          \
+    addTestCategory(new TestCategoryCaller<UTCLASS>(strip_test(#CMETHOD), getSuite(), this,        \
+                                                    &UTCLASS::CMETHOD))
 
 class UnitTest : public Test {
-	public:
-	/**
-	 * \param n name of this unit test (probably the name of the tested class)
-	 **/
-	UnitTest (std::string n, TestSuite* s) : Test(n,s), GlobsBackup(NULL) {} ;
+  public:
+    /**
+     * \param n name of this unit test (probably the name of the tested class)
+     **/
+    UnitTest(std::string n, TestSuite *s) : Test(n, s), GlobsBackup(NULL){};
 
-	~UnitTest (void) ;
+    ~UnitTest(void);
 
-	/**
-	 * setup the unit test - called before run
-	 *
-	 * UnitTest::setup will (together with UnitTest::cleanup) save and restore the object
-	 * stored in Globs so they should be called from the corresponding functions in the
-	 * derived object if the derived unit test manipulates the Globs object.
-	 **/
-	virtual void setup (void) ;
+    /**
+     * setup the unit test - called before run
+     *
+     * UnitTest::setup will (together with UnitTest::cleanup) save and restore the object
+     * stored in Globs so they should be called from the corresponding functions in the
+     * derived object if the derived unit test manipulates the Globs object.
+     **/
+    virtual void setup(void);
 
-	void run (void) ;
+    void run(void);
 
-	/**
-	 * cleanup the unit test - called after run
-	 **/
-	virtual void cleanup (void) ;
+    /**
+     * cleanup the unit test - called after run
+     **/
+    virtual void cleanup(void);
 
-	protected:
-	void addTestCategory (TestCategory *tc) ;
+  protected:
+    void addTestCategory(TestCategory *tc);
 
-	void addTestResult (bool r) ;
+    void addTestResult(bool r);
 
-	char *strip_test (char* s)
-		{ return (s + 4) ; } ;
+    char *strip_test(char *s) { return (s + 4); };
 
-	private:
-	std::vector<TestCategory*> TestCategories ;
+  private:
+    std::vector<TestCategory *> TestCategories;
 
-	/// servers as a backup for the Globals object stored in Globs
-	Globals GlobsBackup ;
-} ;
+    /// servers as a backup for the Globals object stored in Globs
+    Globals GlobsBackup;
+};
 
 #endif // ndef SH_UNITTEST_H

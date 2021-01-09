@@ -23,23 +23,24 @@
 
 #include "SampleValueTest.h"
 
-class CvrStgFile ;
+class CvrStgFile;
 
 class BmpPaletteSampleValueTest : public SampleValueTest {
-	public:
-	BmpPaletteSampleValueTest (TestSuite* s) ;
+  public:
+    BmpPaletteSampleValueTest(TestSuite *s);
 
-	void setup (void) ;
-	void cleanup (void) ;
+    void setup(void);
+    void cleanup(void);
 
-	void testDistance (void) ;
-	void testIsNeighbour (void) ;
+    void testDistance(void);
+    void testIsNeighbour(void);
 
-	private:
-	CvrStgFile *f1, *f2 ;
-	Globals gl1, gl2 ;
-	SampleValue *sv1_0, *sv1_3, *sv1_7, *sv1_15 ;
-	SampleValue *sv2_3_49_96_5, *sv2_10_11_99_203, *sv2_48_18_106_194, *sv2_68_73_104_15, *sv2_171_61_97_25 ;
-} ;
+  private:
+    CvrStgFile *f1, *f2;
+    Globals gl1, gl2;
+    SampleValue *sv1_0, *sv1_3, *sv1_7, *sv1_15;
+    SampleValue *sv2_3_49_96_5, *sv2_10_11_99_203, *sv2_48_18_106_194, *sv2_68_73_104_15,
+        *sv2_171_61_97_25;
+};
 
 #endif // ndef SH_BMPPALETTESAMPLEVALUETEST_H

@@ -26,12 +26,12 @@
 #include "msg.h"
 
 class SteghideError : public MessageBase {
-	public:
-	SteghideError (void) ;
-	SteghideError (std::string msg) ;
-	SteghideError (const char *msgfmt, ...) ;
+  public:
+    SteghideError(void);
+    SteghideError(std::string msg);
+    SteghideError(const char *msgfmt, ...);
 
-	virtual void printMessage (void) const ;	
-} ;
+    virtual void printMessage(void) const;
+};
 
 #endif // ndef SH_STEGHIDEERROR_H

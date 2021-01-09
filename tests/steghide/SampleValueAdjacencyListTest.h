@@ -27,21 +27,21 @@
 #undef private
 #undef protected
 
-#include "UnitTest.h"
 #include "TestSuite.h"
+#include "UnitTest.h"
 
 class SampleValueAdjacencyListTest : public UnitTest {
-	public:
-	SampleValueAdjacencyListTest (TestSuite* s) ;
+  public:
+    SampleValueAdjacencyListTest(TestSuite *s);
 
-	void setup (void) ;
+    void setup(void);
 
-	void testEquality (void) ;
-	void testQuicksort (void) ;
+    void testEquality(void);
+    void testQuicksort(void);
 
-	private:
-	SampleValueAdjacencyList DummySVAL ;
-	std::vector<SampleValue*> SVEmpty ;
-} ;
+  private:
+    SampleValueAdjacencyList DummySVAL;
+    std::vector<SampleValue *> SVEmpty;
+};
 
 #endif // ndef SH_SAMPLEVALUEOPPOSITENEIGHBOURHOODTEST_H

@@ -26,26 +26,26 @@
 #include "Selector.h"
 
 class WavFileTest : public CvrStgFileTest {
-	public:
-	WavFileTest (TestSuite* s) ;
+  public:
+    WavFileTest(TestSuite *s);
 
-	void setup (void) ;
-	void cleanup (void) ;
+    void setup(void);
+    void cleanup(void);
 
-	void testReadWrite (void) ;
-	void testReadEmbedExtract (void) ;
-	void testReadEmbedWriteReadExtract (void) ;
-	void testPosition (void) ;
-	void testReadExtractCompare (void) ;
-	void testSVALCalculation (void) ;
-	void testEmbeddedValue (void) ;
+    void testReadWrite(void);
+    void testReadEmbedExtract(void);
+    void testReadEmbedWriteReadExtract(void);
+    void testPosition(void);
+    void testReadExtractCompare(void);
+    void testSVALCalculation(void);
+    void testEmbeddedValue(void);
 
-	private:
-	BitString *bs1, *bs2 ;
-	CvrStgFile *f1, *f2 ;
-	Graph *g1, *g2 ;
-	Selector *s1, *s2 ;
-	Globals gl1, gl2 ;
-} ;
+  private:
+    BitString *bs1, *bs2;
+    CvrStgFile *f1, *f2;
+    Graph *g1, *g2;
+    Selector *s1, *s2;
+    Globals gl1, gl2;
+};
 
 #endif // ndef SH_BMPWINFILETEST_H

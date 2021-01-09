@@ -25,9 +25,9 @@
 #include "MatchingAlgorithm.h"
 #include "Vertex.h"
 
-class Edge ;
+class Edge;
 #include "Graph.h"
-class Matching ;
+class Matching;
 
 /**
  * \class DFSAPHeuristic
@@ -38,70 +38,68 @@ class Matching ;
  * Matching: Heuristic Search for Augmenting Paths".
  **/
 class DFSAPHeuristic : public MatchingAlgorithm {
-	public:
-	/**
-	 * construct an DFSAPHeuristic object
-	 * \param g the graph on which this heuristic should run
-	 * \param m the matching to start with
-	 * \param goal the percentage of matched vertices that should be reached
-	 * \param mne the maximum number of edges that should be considered for every vertex
-	 * \param mo the mode for edge iteration
-	 **/
-	DFSAPHeuristic (Graph* g, Matching* m, float goal = 100.0, UWORD32 mne = UWORD32_MAX, EdgeIterator::ITERATIONMODE mo = EdgeIterator::SAMPLEOCCURENCE) ;
+  public:
+    /**
+     * construct an DFSAPHeuristic object
+     * \param g the graph on which this heuristic should run
+     * \param m the matching to start with
+     * \param goal the percentage of matched vertices that should be reached
+     * \param mne the maximum number of edges that should be considered for every vertex
+     * \param mo the mode for edge iteration
+     **/
+    DFSAPHeuristic(Graph *g, Matching *m, float goal = 100.0, UWORD32 mne = UWORD32_MAX,
+                   EdgeIterator::ITERATIONMODE mo = EdgeIterator::SAMPLEOCCURENCE);
 
-	virtual ~DFSAPHeuristic (void) ;
+    virtual ~DFSAPHeuristic(void);
 
-	const char* getName (void) const
-		{ return "DFS Augmenting Path Heuristic" ; } ;
+    const char *getName(void) const { return "DFS Augmenting Path Heuristic"; };
 
-	/**
-	 * reset the state of this DFSAPHeuristic, esp. the EdgeIterators
-	 * \param mne the maximum number of edges that should be considered for every vertex for now on
-	 **/
-	void reset (UWORD32 mne = UWORD32_MAX, EdgeIterator::ITERATIONMODE mo = EdgeIterator::SAMPLEOCCURENCE) ;
+    /**
+     * reset the state of this DFSAPHeuristic, esp. the EdgeIterators
+     * \param mne the maximum number of edges that should be considered for every vertex for now on
+     **/
+    void reset(UWORD32 mne = UWORD32_MAX,
+               EdgeIterator::ITERATIONMODE mo = EdgeIterator::SAMPLEOCCURENCE);
 
-	void run (void) ;
+    void run(void);
 
-	private:
-	/**
-	 * \param v0 an exposed vertex
-	 * \param path an array of Edge pointers where the path will be put
-	 * \return the length of the path (the number of valid edges in path)
-	 **/
-	unsigned long searchAugmentingPath (Vertex* v0, const Edge** path) ;
+  private:
+    /**
+     * \param v0 an exposed vertex
+     * \param path an array of Edge pointers where the path will be put
+     * \return the length of the path (the number of valid edges in path)
+     **/
+    unsigned long searchAugmentingPath(Vertex *v0, const Edge **path);
 
-	const Edge* getNextEdge (Vertex *v) ;
+    const Edge *getNextEdge(Vertex *v);
 
-	void markVisited (Vertex *v)
-		{ TimeCounters[v->getLabel()] = TimeCounter ; } ;
+    void markVisited(Vertex *v) { TimeCounters[v->getLabel()] = TimeCounter; };
 
-	/**
-	 * returns true iff v has already been visited in this
-	 * iteration, i.e. in the current call of searchAugmentingPath
-	 **/
-	bool isVisited (Vertex *v) const
-		{ return isVisited(v->getLabel()) ; } ;
+    /**
+     * returns true iff v has already been visited in this
+     * iteration, i.e. in the current call of searchAugmentingPath
+     **/
+    bool isVisited(Vertex *v) const { return isVisited(v->getLabel()); };
 
-	bool isVisited (VertexLabel vlbl) const
-		{ return (TimeCounters[vlbl] == TimeCounter) ; } ;
+    bool isVisited(VertexLabel vlbl) const { return (TimeCounters[vlbl] == TimeCounter); };
 
-	UWORD32 TimeCounter ;
-	UWORD32* TimeCounters ;
-	bool* VertexOnPath ;
-	EdgeIterator* EdgeIterators ;
+    UWORD32 TimeCounter;
+    UWORD32 *TimeCounters;
+    bool *VertexOnPath;
+    EdgeIterator *EdgeIterators;
 
 #ifdef DEBUG
-	/// the number of edges that have been examined in all successful searches
-	unsigned long long NEdgesSuccessful ;
-	/// the number of edges that have been examined in all unsuccessful searches
-	unsigned long long NEdgesUnsuccessful ;
-	/// the number of calls to searchAugmentingPath that have been sucessful
-	unsigned long NSuccessful ;
-	/// the number of calls to searchAugmentingPath that have been unsuccessful
-	unsigned long NUnsuccessful ;
-	/// string indicating if n-th search was successful
-	std::string SuccessString ;
+    /// the number of edges that have been examined in all successful searches
+    unsigned long long NEdgesSuccessful;
+    /// the number of edges that have been examined in all unsuccessful searches
+    unsigned long long NEdgesUnsuccessful;
+    /// the number of calls to searchAugmentingPath that have been sucessful
+    unsigned long NSuccessful;
+    /// the number of calls to searchAugmentingPath that have been unsuccessful
+    unsigned long NUnsuccessful;
+    /// string indicating if n-th search was successful
+    std::string SuccessString;
 #endif
-} ;
+};
 
 #endif // ndef SH_DFSAPHEURISTIC

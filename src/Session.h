@@ -27,25 +27,26 @@
 #include "common.h"
 
 class Session {
-	public:
-	Session (void) {} ;
+  public:
+    Session(void){};
 
-	void run (void) ;
+    void run(void);
 
-	private:
-	void printInfo (void) ;
-	void printEncInfo (void) ;
-	void printLicense (void) ;
-	void printSteghideHelp (void) ;
-	void printSteghideVersion (void) ;
-	void printHelp (void) ;
-	void printVersion (void) ;
+  private:
+    void printInfo(void);
+    void printEncInfo(void);
+    void printLicense(void);
+    void printSteghideHelp(void);
+    void printSteghideVersion(void);
+    void printHelp(void);
+    void printVersion(void);
 #ifdef DEBUG
-	void printFrequencies (void) ;
-	/**
-	 * add the frequencies in f2 to those in f1 (changing only f1 - like f1 += f2)
-	 **/
-	void addFrequencies (std::map<SampleKey,unsigned long>* f1, const std::map<SampleKey,unsigned long>* f2) ;
+    void printFrequencies(void);
+    /**
+     * add the frequencies in f2 to those in f1 (changing only f1 - like f1 += f2)
+     **/
+    void addFrequencies(std::map<SampleKey, unsigned long> *f1,
+                        const std::map<SampleKey, unsigned long> *f2);
 #endif
-} ;
-#endif //ndef SH_SESSION_H
+};
+#endif // ndef SH_SESSION_H

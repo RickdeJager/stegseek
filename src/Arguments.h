@@ -36,130 +36,133 @@
  * \brief parsing and data representation of command-line arguments
  **/
 class Arguments {
-	public:
-	Arguments (void) {} ;
+  public:
+    Arguments(void){};
 
-	/**
-	 * initialize this Arguments object with argc and argv
-	 **/
-	Arguments (int argc, char *argv[]) ;
+    /**
+     * initialize this Arguments object with argc and argv
+     **/
+    Arguments(int argc, char *argv[]);
 
-	/**
-	 * parse Argc and Argv filling the Arg* member variable for later access
-	 **/
-	void parse (void) ;
+    /**
+     * parse Argc and Argv filling the Arg* member variable for later access
+     **/
+    void parse(void);
 
-	/**
-	 * is standard input used ? - according to the given arguments
-	 **/
-	bool stdin_isused (void) const ;
+    /**
+     * is standard input used ? - according to the given arguments
+     **/
+    bool stdin_isused(void) const;
 
-	/// the command to be executed in this session
-	ArgCommand		Command ;
-	/// the name of the command to be executed in this session (as supplied by the user)
-	std::string		CommandString ;
+    /// the command to be executed in this session
+    ArgCommand Command;
+    /// the name of the command to be executed in this session (as supplied by the user)
+    std::string CommandString;
 
-	/// the embed file name, "" if stdin
-	ArgString		EmbFn ;
-	/// the extract file name, "" if stdout
-	ArgString		ExtFn ;
-	/// the cover file name, "" if stdin
-	ArgString		CvrFn ;
-	/// the stego file name, "" if stdout/stdin
-	ArgString		StgFn ;
-	/// the wordlist file name, "" if stdout/stdin
-	ArgString		WordlistFn ;
-	ArgString		Passphrase ;
-	ArgBool			Checksum ;
-	ArgInt			Compression ;
-	ArgInt			Threads ;
-	ArgBool			EmbedEmbFn ;
-	ArgEncAlgo		EncAlgo ;
-	ArgEncMode		EncMode ;
-	ArgULong		Radius ;
-	ArgFloat		Goal ;
-	ArgBool			Force ;
-	ArgBool			SkipDefaultGuesses ;
-	ArgVerbosity	Verbosity ;
-	ArgDebugCommand	DebugCommand ;
-	ArgBool			Check ;
-	ArgStringList	FileList ;
-	ArgUInt			DebugLevel ;
-	ArgUInt			GmlGraphRecDepth ;
-	ArgUInt			GmlStartVertex ;
+    /// the embed file name, "" if stdin
+    ArgString EmbFn;
+    /// the extract file name, "" if stdout
+    ArgString ExtFn;
+    /// the cover file name, "" if stdin
+    ArgString CvrFn;
+    /// the stego file name, "" if stdout/stdin
+    ArgString StgFn;
+    /// the wordlist file name, "" if stdout/stdin
+    ArgString WordlistFn;
+    ArgString Passphrase;
+    ArgBool Checksum;
+    ArgInt Compression;
+    ArgInt Threads;
+    ArgBool EmbedEmbFn;
+    ArgEncAlgo EncAlgo;
+    ArgEncMode EncMode;
+    ArgULong Radius;
+    ArgFloat Goal;
+    ArgBool Force;
+    ArgBool SkipDefaultGuesses;
+    ArgVerbosity Verbosity;
+    ArgDebugCommand DebugCommand;
+    ArgBool Check;
+    ArgStringList FileList;
+    ArgUInt DebugLevel;
+    ArgUInt GmlGraphRecDepth;
+    ArgUInt GmlStartVertex;
 
-	std::string getPassphrase (bool doublecheck = false) ;
+    std::string getPassphrase(bool doublecheck = false);
 
-	private:
-	typedef std::vector<std::string>::const_iterator ArgIt ;
+  private:
+    typedef std::vector<std::string>::const_iterator ArgIt;
 
-	static const int		NoCompression = 0 ;
+    static const int NoCompression = 0;
 
-	static const EncryptionAlgorithm Default_EncAlgo ;
-	static const EncryptionMode Default_EncMode ;
-	static const bool		Default_Checksum = true ;
-	static const int		Default_Compression = 9 ; // slowest, but smallest
-	static const bool		Default_EmbedEmbFn = true ;
-	static const bool		Default_Force = false ;
-	static const bool		Default_SkipDefaultGuesses = false ;
-	static const VERBOSITY	Default_Verbosity = NORMAL ;
-	static const unsigned long	Default_Radius = 0 ; // there is no default radius for all file formats
-	static const unsigned int	Max_Algorithm = 3 ;
-	static constexpr float		Default_Goal = 100.0 ;
-	static const DEBUGCOMMAND	Default_DebugCommand = NONE ;
-	static const bool		Default_Check = false ;
-	static const unsigned int	Default_DebugLevel = 0 ;
-	static const unsigned int	Default_GmlGraphRecDepth = 0 ;
-	static const unsigned int	Default_GmlStartVertex = 0 ;
+    static const EncryptionAlgorithm Default_EncAlgo;
+    static const EncryptionMode Default_EncMode;
+    static const bool Default_Checksum = true;
+    static const int Default_Compression = 9; // slowest, but smallest
+    static const bool Default_EmbedEmbFn = true;
+    static const bool Default_Force = false;
+    static const bool Default_SkipDefaultGuesses = false;
+    static const VERBOSITY Default_Verbosity = NORMAL;
+    static const unsigned long Default_Radius =
+        0; // there is no default radius for all file formats
+    static const unsigned int Max_Algorithm = 3;
+    static constexpr float Default_Goal = 100.0;
+    static const DEBUGCOMMAND Default_DebugCommand = NONE;
+    static const bool Default_Check = false;
+    static const unsigned int Default_DebugLevel = 0;
+    static const unsigned int Default_GmlGraphRecDepth = 0;
+    static const unsigned int Default_GmlStartVertex = 0;
 
-	/**
-	 * parse the command
-	 *
-	 * Note: parse_Command is the only parse_* function that requires curarg to be a command.
-	 * (because the command is the only argument with a fixed position).
-	 **/
-	void parse_Command (ArgIt& curarg) ;
+    /**
+     * parse the command
+     *
+     * Note: parse_Command is the only parse_* function that requires curarg to be a command.
+     * (because the command is the only argument with a fixed position).
+     **/
+    void parse_Command(ArgIt &curarg);
 
-	/**
-	 * Parse arguments based on their positions.
-	 * Will fully ignore any argument starting with -
-	 **/ 
-	void parse_Positional (std::vector<std::string>) ;
+    /**
+     * Parse arguments based on their positions.
+     * Will fully ignore any argument starting with -
+     **/
+    void parse_Positional(std::vector<std::string>);
 
-	/**
-	 * Parse arguments starting with a -
-	 **/
-	std::vector<std::string> parse_Arguments (ArgIt& curarg) ;
+    /**
+     * Parse arguments starting with a -
+     **/
+    std::vector<std::string> parse_Arguments(ArgIt &curarg);
 
-	/**
-	 * test if curarg points to an emb filename argument and if yes: parse it
-	 * \return true iff one or more arguments have been parsed
-	 **/
-	bool parse_EmbFn (ArgIt& curarg) ;
+    /**
+     * test if curarg points to an emb filename argument and if yes: parse it
+     * \return true iff one or more arguments have been parsed
+     **/
+    bool parse_EmbFn(ArgIt &curarg);
 
-	bool parse_Generic_String (ArgIt& curarg, std::vector<COMMAND> compatibleCommands, ArgString* destArg) ;
-	bool parse_Generic_Bool (ArgIt& curarg, std::vector<COMMAND> compatibleCommands, ArgBool* destArg, bool ifMatch) ;
+    bool parse_Generic_String(ArgIt &curarg, std::vector<COMMAND> compatibleCommands,
+                              ArgString *destArg);
+    bool parse_Generic_Bool(ArgIt &curarg, std::vector<COMMAND> compatibleCommands,
+                            ArgBool *destArg, bool ifMatch);
 
-	bool parse_ExtFn (ArgIt& curarg) ;
-	bool parse_CvrFn (ArgIt& curarg) ;
-	bool parse_StgFn (ArgIt& curarg) ;
-	bool parse_WordlistFn (ArgIt& curarg) ;
-	bool parse_Passphrase (ArgIt& curarg) ;
-	bool parse_Checksum (ArgIt& curarg) ;
-	bool parse_Compression (ArgIt& curarg) ;
-	bool parse_EmbedEmbFn (ArgIt& curarg) ;
-	bool parse_Encryption (ArgIt& curarg) ;
-	bool parse_Radius (ArgIt& curarg) ;
-	bool parse_Goal (ArgIt& curarg) ;
-	bool parse_Force (ArgIt& curarg) ;
-	bool parse_Threading (ArgIt& curarg) ;
-	bool parse_Verbosity (ArgIt& curarg) ;
-	bool parse_Debug (ArgIt& curarg) ;
+    bool parse_ExtFn(ArgIt &curarg);
+    bool parse_CvrFn(ArgIt &curarg);
+    bool parse_StgFn(ArgIt &curarg);
+    bool parse_WordlistFn(ArgIt &curarg);
+    bool parse_Passphrase(ArgIt &curarg);
+    bool parse_Checksum(ArgIt &curarg);
+    bool parse_Compression(ArgIt &curarg);
+    bool parse_EmbedEmbFn(ArgIt &curarg);
+    bool parse_Encryption(ArgIt &curarg);
+    bool parse_Radius(ArgIt &curarg);
+    bool parse_Goal(ArgIt &curarg);
+    bool parse_Force(ArgIt &curarg);
+    bool parse_Threading(ArgIt &curarg);
+    bool parse_Verbosity(ArgIt &curarg);
+    bool parse_Debug(ArgIt &curarg);
 
-	void setDefaults (void) ;
+    void setDefaults(void);
 
-	std::vector<std::string> TheArguments ;
-} ;
+    std::vector<std::string> TheArguments;
+};
 
 // gcc does not support the export keyword
 #include "Arg.cc"

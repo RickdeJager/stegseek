@@ -21,35 +21,33 @@
  * a significant amount of changes and bugs in stegseek might not be his fault.
  */
 
-#include <cstring>
 #include "AssertionFailed.h"
+#include <cstring>
 
-void AssertionFailed::printMessage () const
-{
-	printf ("\n") ;
-	SteghideError::printMessage() ;
-	printf (_("This means that you have found a bug. Please open an issue on Github\n"
-		"if you have a way to reproduce the error.\n"
-		"Stegseek has to exit now. Sorry.\n")) ;
+void AssertionFailed::printMessage() const {
+    printf("\n");
+    SteghideError::printMessage();
+    printf(_("This means that you have found a bug. Please open an issue on Github\n"
+             "if you have a way to reproduce the error.\n"
+             "Stegseek has to exit now. Sorry.\n"));
 }
 
-char* AssertionFailed::stripDir (const char *fn)
-{
-    int i = 0, j = 0, start = 0, end = 0 ;
+char *AssertionFailed::stripDir(const char *fn) {
+    int i = 0, j = 0, start = 0, end = 0;
 
-    end = i = strlen (fn) - 1 ;
+    end = i = strlen(fn) - 1;
     while ((i >= 0) && (fn[i] != '\\') && (fn[i] != '/')) {
-        i-- ;
+        i--;
     }
-    start = i + 1 ;
+    start = i + 1;
 
-    char* retval = (char *) malloc (end - start + 2) ;
+    char *retval = (char *)malloc(end - start + 2);
 
-    j = 0 ;
-    for (i = start ; i <= end ; i++, j++) {
-        retval[j] = fn [i] ;
+    j = 0;
+    for (i = start; i <= end; i++, j++) {
+        retval[j] = fn[i];
     }
-    retval[j] = '\0' ;
+    retval[j] = '\0';
 
-    return retval ;
+    return retval;
 }

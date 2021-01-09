@@ -29,83 +29,88 @@
 #include "common.h"
 #include "error.h"
 
-EmbData* Extractor::extract ()
-{
-	VerboseMessage vrs ;
-	if (Args.StgFn.getValue() == "") {
-		vrs.setMessage (_("reading stego file from standard input...")) ;
-	}
-	else {
-		vrs.setMessage (_("reading stego file \"%s\"..."), Args.StgFn.getValue().c_str()) ;
-	}
-	vrs.setNewline (false) ;
-	vrs.printMessage() ;
+EmbData *Extractor::extract() {
+    VerboseMessage vrs;
+    if (Args.StgFn.getValue() == "") {
+        vrs.setMessage(_("reading stego file from standard input..."));
+    } else {
+        vrs.setMessage(_("reading stego file \"%s\"..."), Args.StgFn.getValue().c_str());
+    }
+    vrs.setNewline(false);
+    vrs.printMessage();
 
-	Globs.TheCvrStgFile = CvrStgFile::readFile (StegoFileName) ;
+    Globs.TheCvrStgFile = CvrStgFile::readFile(StegoFileName);
 
-	VerboseMessage vd (_(" done")) ;
-	vd.printMessage() ;
+    VerboseMessage vd(_(" done"));
+    vd.printMessage();
 
-	Selector* sel ;
-	EmbData* embdata ;
+    Selector *sel;
+    EmbData *embdata;
 
-	// Determine wether we are cracking with or without a passphrase
-	if (passphraseSet) {
-		embdata = new EmbData (EmbData::EXTRACT, Passphrase) ;
-		sel = new Selector (Globs.TheCvrStgFile->getNumSamples(), Passphrase) ;
-	} else {
-		// The password is only used for encrypted data.
-		// We can still extract plain text using only a seed value
-		embdata = new EmbData (EmbData::EXTRACT, "") ;
-		sel = new Selector (Globs.TheCvrStgFile->getNumSamples(), seed) ;
-	}
+    // Determine wether we are cracking with or without a passphrase
+    if (passphraseSet) {
+        embdata = new EmbData(EmbData::EXTRACT, Passphrase);
+        sel = new Selector(Globs.TheCvrStgFile->getNumSamples(), Passphrase);
+    } else {
+        // The password is only used for encrypted data.
+        // We can still extract plain text using only a seed value
+        embdata = new EmbData(EmbData::EXTRACT, "");
+        sel = new Selector(Globs.TheCvrStgFile->getNumSamples(), seed);
+    }
 
-	VerboseMessage ve (_("extracting data...")) ;
-	ve.setNewline (false) ;
-	ve.printMessage() ;
+    VerboseMessage ve(_("extracting data..."));
+    ve.setNewline(false);
+    ve.printMessage();
 
-	unsigned long sv_idx = 0 ;
-	while (!embdata->finished()) {
-		unsigned short bitsperembvalue = AUtils::log2_ceil<unsigned short> (Globs.TheCvrStgFile->getEmbValueModulus()) ;
-		unsigned long embvaluesrequested = AUtils::div_roundup<unsigned long> (embdata->getNumBitsRequested(), bitsperembvalue) ;
-		if (sv_idx + (Globs.TheCvrStgFile->getSamplesPerVertex() * embvaluesrequested) >= Globs.TheCvrStgFile->getNumSamples()) {
-			if (Globs.TheCvrStgFile->is_std()) {
-				throw CorruptDataError (_("the stego data from standard input is too short to contain the embedded data.")) ;
-			}
-			else {
-				throw CorruptDataError (_("the stego file \"%s\" is too short to contain the embedded data."), Globs.TheCvrStgFile->getName().c_str()) ;
-			}
-		}
-		BitString bits (Globs.TheCvrStgFile->getEmbValueModulus()) ;
-		for (unsigned long i = 0 ; i < embvaluesrequested ; i++) {
-			EmbValue ev = 0 ;
-			for (unsigned int j = 0 ; j < Globs.TheCvrStgFile->getSamplesPerVertex() ; j++, sv_idx++) {
-				ev = (ev + Globs.TheCvrStgFile->getEmbeddedValue ((*sel)[sv_idx])) % Globs.TheCvrStgFile->getEmbValueModulus() ;
-			}
-			bits.appendNAry(ev) ;
-		}
-		embdata->addBits (bits) ;
-	}
+    unsigned long sv_idx = 0;
+    while (!embdata->finished()) {
+        unsigned short bitsperembvalue =
+            AUtils::log2_ceil<unsigned short>(Globs.TheCvrStgFile->getEmbValueModulus());
+        unsigned long embvaluesrequested =
+            AUtils::div_roundup<unsigned long>(embdata->getNumBitsRequested(), bitsperembvalue);
+        if (sv_idx + (Globs.TheCvrStgFile->getSamplesPerVertex() * embvaluesrequested) >=
+            Globs.TheCvrStgFile->getNumSamples()) {
+            if (Globs.TheCvrStgFile->is_std()) {
+                throw CorruptDataError(_("the stego data from standard input is too "
+                                         "short to contain the embedded data."));
+            } else {
+                throw CorruptDataError(_("the stego file \"%s\" is too short to "
+                                         "contain the embedded data."),
+                                       Globs.TheCvrStgFile->getName().c_str());
+            }
+        }
+        BitString bits(Globs.TheCvrStgFile->getEmbValueModulus());
+        for (unsigned long i = 0; i < embvaluesrequested; i++) {
+            EmbValue ev = 0;
+            for (unsigned int j = 0; j < Globs.TheCvrStgFile->getSamplesPerVertex();
+                 j++, sv_idx++) {
+                ev = (ev + Globs.TheCvrStgFile->getEmbeddedValue((*sel)[sv_idx])) %
+                     Globs.TheCvrStgFile->getEmbValueModulus();
+            }
+            bits.appendNAry(ev);
+        }
+        embdata->addBits(bits);
+    }
 
-	delete(sel) ;
+    delete sel;
 
-	vd.printMessage() ;
+    vd.printMessage();
 
-	// TODO (postponed due to message freeze): rename into "verifying crc32 checksum..."
-	VerboseMessage vc (_("checking crc32 checksum...")) ;
-	vc.setNewline (false) ;
-	vc.printMessage() ;
-	if (embdata->checksumOK()) {
-		VerboseMessage vok (_(" ok")) ;
-		vok.printMessage() ;
-	}
-	else {
-		VerboseMessage vfailed (_(" FAILED!")) ;
-		vfailed.printMessage() ;
+    // TODO (postponed due to message freeze): rename into "verifying crc32
+    // checksum..."
+    VerboseMessage vc(_("checking crc32 checksum..."));
+    vc.setNewline(false);
+    vc.printMessage();
+    if (embdata->checksumOK()) {
+        VerboseMessage vok(_(" ok"));
+        vok.printMessage();
+    } else {
+        VerboseMessage vfailed(_(" FAILED!"));
+        vfailed.printMessage();
 
-		CriticalWarning w (_("crc32 checksum failed! extracted data is probably corrupted.")) ;
-		w.printMessage() ;
-	}
+        CriticalWarning w(_("crc32 checksum failed! extracted data is probably corrupted."));
+        w.printMessage();
+    }
 
-	return embdata ;
+    return embdata;
 }

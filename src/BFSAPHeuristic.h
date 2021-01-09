@@ -25,40 +25,39 @@
 #include "MatchingAlgorithm.h"
 #include "Vertex.h"
 
-class Edge ;
+class Edge;
 #include "Graph.h"
-class Matching ;
+class Matching;
 
 /**
  * \class BFSAPHeuristic
  * \brief a matching algorithm implementing a heuristic breadth-first-search for augmenting paths
  **/
 class BFSAPHeuristic : public MatchingAlgorithm {
-	public:
-	/**
-	 * construct an BFSAPHeuristic object
-	 * \param g the graph on which this heuristic should run
-	 * \param m the matching to start with
-	 **/
-	BFSAPHeuristic (Graph* g, Matching* m) ;
+  public:
+    /**
+     * construct an BFSAPHeuristic object
+     * \param g the graph on which this heuristic should run
+     * \param m the matching to start with
+     **/
+    BFSAPHeuristic(Graph *g, Matching *m);
 
-	virtual ~BFSAPHeuristic (void) ;
+    virtual ~BFSAPHeuristic(void);
 
-	const char* getName (void) const
-		{ return "BFS Augmenting Path Heuristic" ; } ;
+    const char *getName(void) const { return "BFS Augmenting Path Heuristic"; };
 
-	void run (void) ;
+    void run(void);
 
-	private:
-	/**
-	 * \param v0 an exposed vertex
-	 * \param path an array of Edge pointers where the path will be put
-	 * \return the length of the path (the number of valid edges in path)
-	 **/
-	unsigned long searchAugmentingPath (Vertex* v0, const Edge** path) ;
+  private:
+    /**
+     * \param v0 an exposed vertex
+     * \param path an array of Edge pointers where the path will be put
+     * \return the length of the path (the number of valid edges in path)
+     **/
+    unsigned long searchAugmentingPath(Vertex *v0, const Edge **path);
 
-	bool* VertexVisited ;
-	Edge* BackEdge ;
-} ;
+    bool *VertexVisited;
+    Edge *BackEdge;
+};
 
 #endif // ndef SH_BFSAPHeuristic
