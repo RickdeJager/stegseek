@@ -13,4 +13,5 @@ jobs:
     - name: Run clang-format
       run: ./clang-format.sh
     - name: Return an exit code if the code doesn't match the clang-format
-      run: git status -s && exit 1
+      # git diff returns error code 1 if there are differences
+      run: git diff || exit 1
