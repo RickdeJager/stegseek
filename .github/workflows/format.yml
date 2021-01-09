@@ -4,7 +4,7 @@ on: push
 
 jobs:
   clang-format:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-20.04
 
     steps:
     - uses: actions/checkout@v2
@@ -14,4 +14,4 @@ jobs:
       run: ./clang-format.sh
     - name: Return an exit code if the code doesn't match the clang-format
       # git diff returns error code 1 if there are differences
-      run: git diff || exit 1
+      run: git diff --exit-code || exit 1
