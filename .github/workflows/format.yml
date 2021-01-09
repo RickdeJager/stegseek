@@ -1,0 +1,16 @@
+name: Enforce consistent formatting
+
+on: push
+
+jobs:
+  clang-format:
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v2
+    - name: Install dependencies
+      run: sudo apt install -y clang-format
+    - name: Run clang-format
+      run: ./clang-format.sh
+    - name: Return an exit code if the code doesn't match the clang-format
+      run: git status -s && exit 1
