@@ -26,6 +26,7 @@
 #include "EmbData.h"
 #include "Extractor.h"
 #include "MHashPP.h"
+#include "PseudoRandomSource.h"
 #include "Selector.h"
 #include "Utils.h"
 #include "common.h"
@@ -130,16 +131,9 @@ bool Cracker::verifyMagic(const char *Passphrase) {
 
 bool Cracker::verifyMagic(UWORD32 seed) {
     // Create a buf to keep track of rng collisions
-    UWORD32 rngBuf[25 * samplesPerVertex];
-
-    // Pseudorandom properties
-    const UWORD32 A = 1367208549;
-    const UWORD32 C = 1;
-
-    const int magics[25] = {// Magic, "shm" in binary LE
-                            1, 0, 1, 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 1, 0, 1, 1, 0, 0, 1, 1, 1, 0,
-                            // Code version (0)
-                            0};
+    // the size of the buffer is equal to the length of the magics array,
+    // multiplied by the number of samples used to encode one vertex.
+    UWORD32 rngBuf[sizeof(magics)/sizeof(magics[0]) * samplesPerVertex];
 
     if (samplesPerVertex * embvaluesRequestedMagic >= numSamples) {
         // TODO; In theory, we should error out if we hit this.
@@ -154,7 +148,7 @@ bool Cracker::verifyMagic(UWORD32 seed) {
     for (unsigned long i = 0; i < embvaluesRequestedMagic; i++) {
         for (unsigned int j = 0; j < samplesPerVertex; j++, sv_idx++) {
             // Calc next random number
-            seed = (UWORD32)(seed * A + C);
+            seed = (UWORD32)(seed * PseudoRandomSource::A + PseudoRandomSource::C);
             // Get next value index
             const UWORD32 valIdx =
                 sv_idx + (((double)seed / (double)4294967296.0) * ((double)(numSamples - sv_idx)));

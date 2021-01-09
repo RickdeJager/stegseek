@@ -64,6 +64,12 @@ class Cracker {
     EmbValue EmbValueModulus;
     unsigned long embvaluesRequestedMagic;
 
+    // Constants
+    const int magics[25] = { // Magic, "shm" in binary LE
+        1, 0, 1, 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 1, 0, 1, 1, 0, 0, 1, 1, 1, 0,
+        // Code version (0)
+        0};
+
   private:
     EmbValue *embeddedValues;
 };

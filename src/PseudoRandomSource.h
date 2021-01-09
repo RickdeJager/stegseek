@@ -48,9 +48,12 @@ class PseudoRandomSource {
      **/
     UWORD32 getValue(UWORD32 n);
 
-  private:
+    // Linear Congruential parameters are public, s.t. they can be read in
+    // the cracker classes.
     static const UWORD32 A = 1367208549;
     static const UWORD32 C = 1;
+
+  private:
     UWORD32 Value;
 };
 

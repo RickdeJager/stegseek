@@ -115,10 +115,6 @@ bool SeedCracker::trySeed(UWORD32 seed) {
     unsigned int encMode = 0;
     unsigned int plainSize = 0;
     unsigned long sv_idx = 0;
-    const int magics[25] = {// Magic, "shm" in binary LE
-                            1, 0, 1, 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 1, 0, 1, 1, 0, 0, 1, 1, 1, 0,
-                            // Code version (0)
-                            0};
 
     for (unsigned int i = 0; i < requestedValues; i++) {
         for (unsigned int j = 0; j < samplesPerVertex; j++, sv_idx++) {
