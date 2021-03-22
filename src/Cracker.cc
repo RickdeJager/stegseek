@@ -38,9 +38,9 @@ Cracker::Cracker() {
     VerboseMessage vrs;
     // get stegofile
     if (Args.StgFn.getValue() != "") {
-        vrs.setMessage(_("[v] Using stegofile \"%s\"."), Args.StgFn.getValue().c_str());
+        vrs.setMessage("[v] Using stegofile \"%s\".", Args.StgFn.getValue().c_str());
     } else if (Args.StgFn.is_set()) {
-        vrs.setMessage(_("[v] Reading stegofile from stdin."));
+        vrs.setMessage("[v] Reading stegofile from stdin.");
     } else {
         throw SteghideError("No stegofile specified as input.");
     }
@@ -49,15 +49,15 @@ Cracker::Cracker() {
     // get output file
     if (Args.ExtFn.is_set()) {
         if (Args.ExtFn.getValue() != "") {
-            vrs.setMessage(_("[v] Using output file \"%s\"."), Args.ExtFn.getValue().c_str());
+            vrs.setMessage("[v] Using output file \"%s\".", Args.ExtFn.getValue().c_str());
         } else {
-            vrs.setMessage(_("[v] Using stdout as output."));
+            vrs.setMessage("[v] Using stdout as output.");
         }
         vrs.printMessage();
     }
 
     // Print threading info
-    vrs.setMessage(_("[v] Running on %d threads."), Args.Threads.getValue());
+    vrs.setMessage("[v] Running on %d threads.", Args.Threads.getValue());
     vrs.printMessage();
 
     // Load the Stegfile

@@ -32,7 +32,7 @@
 
 PasswordCracker::PasswordCracker() {
     VerboseMessage vrs;
-    vrs.setMessage(_("[v] Using wordlist file \"%s\"."), Args.WordlistFn.getValue().c_str());
+    vrs.setMessage("[v] Using wordlist file \"%s\".", Args.WordlistFn.getValue().c_str());
     vrs.printMessage();
 }
 
