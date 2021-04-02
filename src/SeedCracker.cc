@@ -64,9 +64,9 @@ void SeedCracker::crack() {
         ThreadPool.pop_back();
     }
 
-    // If we didn't find a passphrase, print a message directly to stderr
+    // If we didn't find a passphrase, throw an error.
     if (!success) {
-        fprintf(stderr, "[!] Could not find a valid seed.\n");
+        throw SteghideError("Could not find a valid seed.");
     } else {
         // Output the found seed. At the moment this isn't particularly
         // useful to then end-user, it's nice for debugging

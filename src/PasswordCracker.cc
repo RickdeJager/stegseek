@@ -81,9 +81,7 @@ void PasswordCracker::crack() {
     }
 
     if (!success) {
-        // On failure, send the message directly to stderr so it will be printed in
-        // quiet mode as well
-        fprintf(stderr, "[!] Could not find a valid passphrase.\n");
+        throw SteghideError("Could not find a valid passphrase.");
     } else {
         // Re-extract the data with the confirmed passphrase.
         // This does mean we're throwing away one valid "embdata" object, but

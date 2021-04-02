@@ -24,7 +24,7 @@ jobs:
     - name: Run (legacy) system tests
       run: cd tests/steghide && ./systemtests.pl
     - name: Run cracker tests
-      run: cd tests/stegseek && ./testCracker.sh
+      run: cd tests/stegseek && python test.py
     - name: Create a .deb package
       run: bash package/package.sh
     - name: Save the .deb as a build artifact
