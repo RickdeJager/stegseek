@@ -436,7 +436,7 @@ void BmpFile::readheaders ()
 	catch (BinaryInputError e) {
 		switch (e.getType()) {
 			case BinaryInputError::FILE_ERR: {
-				throw SteghideError (_("an error occured while reading the bmp headers from the file \"%s\"."), getBinIO()->getName().c_str()) ;
+				throw SteghideError (_("an error occurred while reading the bmp headers from the file \"%s\"."), getBinIO()->getName().c_str()) ;
 			break ; }
 
 			case BinaryInputError::FILE_EOF: {
@@ -444,7 +444,7 @@ void BmpFile::readheaders ()
 			break ; }
 
 			case BinaryInputError::STDIN_ERR: {
-				throw SteghideError (_("an error occured while reading the bmp headers from standard input.")) ;
+				throw SteghideError (_("an error occurred while reading the bmp headers from standard input.")) ;
 			break ; }
 
 			case BinaryInputError::STDIN_EOF: {
@@ -666,11 +666,11 @@ void BmpFile::writeheaders ()
 	catch (BinaryOutputError e) {
 		switch (e.getType()) {
 			case BinaryOutputError::FILE_ERR: {
-				throw SteghideError (_("an error occured while writing the bmp headers to the file \"%s\"."), getBinIO()->getName().c_str()) ;
+				throw SteghideError (_("an error occurred while writing the bmp headers to the file \"%s\"."), getBinIO()->getName().c_str()) ;
 			break ; }
 
 			case BinaryOutputError::STDOUT_ERR: {
-				throw SteghideError (_("an error occured while writing the bmp headers to standard output.")) ;
+				throw SteghideError (_("an error occurred while writing the bmp headers to standard output.")) ;
 			break ; }
 		}
 	}
@@ -787,7 +787,7 @@ void BmpFile::readdata ()
 	catch (BinaryInputError e) {
 		switch (e.getType()) {
 			case BinaryInputError::FILE_ERR: {
-				throw SteghideError (_("an error occured while reading the bmp data from the file \"%s\"."), getBinIO()->getName().c_str()) ;
+				throw SteghideError (_("an error occurred while reading the bmp data from the file \"%s\"."), getBinIO()->getName().c_str()) ;
 			break ; }
 
 			case BinaryInputError::FILE_EOF: {
@@ -795,7 +795,7 @@ void BmpFile::readdata ()
 			break ; }
 
 			case BinaryInputError::STDIN_ERR: {
-				throw SteghideError (_("an error occured while reading the bmp data from standard input.")) ;
+				throw SteghideError (_("an error occurred while reading the bmp data from standard input.")) ;
 			break ; }
 
 			case BinaryInputError::STDIN_EOF: {
@@ -837,11 +837,11 @@ void BmpFile::writedata ()
 	catch (BinaryOutputError e) {
 		switch (e.getType()) {
 			case BinaryOutputError::FILE_ERR: {
-				throw SteghideError (_("an error occured while writing the bitmap data to the file \"%s\"."), getBinIO()->getName().c_str()) ;
+				throw SteghideError (_("an error occurred while writing the bitmap data to the file \"%s\"."), getBinIO()->getName().c_str()) ;
 			break ; }
 
 			case BinaryOutputError::STDOUT_ERR: {
-				throw SteghideError (_("an error occured while writing the bitmap data to standard output.")) ;
+				throw SteghideError (_("an error occurred while writing the bitmap data to standard output.")) ;
 			break ; }
 		}
 	}

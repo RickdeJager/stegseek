@@ -7,7 +7,7 @@ print "-------------------------\n\n" ;
 print "Running System Tests.....\n\n" ;
 print "-------------------------\n\n" ;
 
-$exitvalue = 0 ; # 0 -> everything ok, 1 -> an error occured
+$exitvalue = 0 ; # 0 -> everything ok, 1 -> an error occurred
 while (<st*.pl>) {
 	# pass command line args to st_*.pl scripts
 	if (system "./$_ @ARGV") {

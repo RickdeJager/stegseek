@@ -91,7 +91,7 @@ void AuFile::read (BinaryIO *io)
 
 			default:
 			if (getBinIO()->is_std()) {
-				throw NotImplementedError (_("the au file on standard input uses the unkown encoding %d."), encoding) ;
+				throw NotImplementedError (_("the au file on standard input uses the unknown encoding %d."), encoding) ;
 			}
 			else {
 				throw NotImplementedError (_("the au file \"%s\" uses the unknown encoding %d."), getBinIO()->getName().c_str(), encoding) ;
@@ -104,7 +104,7 @@ void AuFile::read (BinaryIO *io)
 		switch (e.getType()) {
 			case BinaryInputError::FILE_ERR:
 			{
-				throw SteghideError (_("an error occured while reading the au headers from the file \"%s\"."), getBinIO()->getName().c_str()) ;
+				throw SteghideError (_("an error occurred while reading the au headers from the file \"%s\"."), getBinIO()->getName().c_str()) ;
 				break ;
 			}
 
@@ -116,7 +116,7 @@ void AuFile::read (BinaryIO *io)
 
 			case BinaryInputError::STDIN_ERR:
 			{
-				throw SteghideError (_("an error occured while reading the au headers from standard input.")) ;
+				throw SteghideError (_("an error occurred while reading the au headers from standard input.")) ;
 				break ;
 			}
 
@@ -162,13 +162,13 @@ void AuFile::write ()
 		switch (e.getType()) {
 			case BinaryOutputError::FILE_ERR:
 			{
-				throw SteghideError (_("an error occured while writing the au headers to the file \"%s\"."), getBinIO()->getName().c_str()) ;
+				throw SteghideError (_("an error occurred while writing the au headers to the file \"%s\"."), getBinIO()->getName().c_str()) ;
 				break ;
 			}
 
 			case BinaryOutputError::STDOUT_ERR:
 			{
-				throw SteghideError (_("an error occured while writing the au headers to standard output.")) ;
+				throw SteghideError (_("an error occurred while writing the au headers to standard output.")) ;
 				break ;
 			}
 		}

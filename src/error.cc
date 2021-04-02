@@ -66,11 +66,11 @@ BinaryInputError::BinaryInputError (std::string fn, FILE* s)
 	}
 	else {
 		if (fn == "") {
-			setMessage(_("an error occured while reading data from standard input.")) ;
+			setMessage(_("an error occurred while reading data from standard input.")) ;
 			setType (STDIN_ERR) ;
 		}
 		else {
-			setMessage(compose (_("an error occured while reading data from the file \"%s\"."), fn.c_str())) ;
+			setMessage(compose (_("an error occurred while reading data from the file \"%s\"."), fn.c_str())) ;
 			setType (FILE_ERR) ;
 		}
 	}
@@ -93,11 +93,11 @@ BinaryOutputError::BinaryOutputError (std::string fn)
 	: SteghideError()
 {
 	if (fn == "") {
-		setMessage(_("an error occured while writing data to standard output.")) ;
+		setMessage(_("an error occurred while writing data to standard output.")) ;
 		setType(STDOUT_ERR) ;
 	}
 	else {
-		setMessage(compose (_("an error occured while writing data to the file \"%s\"."), fn.c_str())) ;
+		setMessage(compose (_("an error occurred while writing data to the file \"%s\"."), fn.c_str())) ;
 		setType(FILE_ERR) ;
 	}
 }
