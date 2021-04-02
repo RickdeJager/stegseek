@@ -91,7 +91,7 @@ void AudioDataImpl<Type,ValueType,SampleValueType>::read (BinaryIO* io, UWORD32 
 		switch (e.getType()) {
 			case BinaryInputError::FILE_ERR:
 			{
-				throw SteghideError (_("an error occured while reading the audio data from the file \"%s\"."), io->getName().c_str()) ;
+				throw SteghideError (_("an error occurred while reading the audio data from the file \"%s\"."), io->getName().c_str()) ;
 				break ;
 			}
 
@@ -103,7 +103,7 @@ void AudioDataImpl<Type,ValueType,SampleValueType>::read (BinaryIO* io, UWORD32 
 
 			case BinaryInputError::STDIN_ERR:
 			{
-				throw SteghideError (_("an error occured while reading the audio data from standard input.")) ;
+				throw SteghideError (_("an error occurred while reading the audio data from standard input.")) ;
 				break ;
 			}
 
@@ -131,13 +131,13 @@ void AudioDataImpl<Type,ValueType,SampleValueType>::write (BinaryIO* io, UWORD32
 		switch (e.getType()) {
 			case BinaryOutputError::FILE_ERR:
 			{
-				throw SteghideError (_("an error occured while writing the audio data to the file \"%s\"."), io->getName().c_str()) ;
+				throw SteghideError (_("an error occurred while writing the audio data to the file \"%s\"."), io->getName().c_str()) ;
 				break ;
 			}
 
 			case BinaryOutputError::STDOUT_ERR:
 			{
-				throw SteghideError (_("an error occured while writing the audio data to standard output.")) ;
+				throw SteghideError (_("an error occurred while writing the audio data to standard output.")) ;
 				break ;
 			}
 		}

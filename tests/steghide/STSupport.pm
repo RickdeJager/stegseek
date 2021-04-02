@@ -72,14 +72,14 @@ sub startCategory {
 
 #
 #
-# return value: 1 if an error occured, 0 if everything was ok
+# return value: 1 if an error occurred, 0 if everything was ok
 sub endCategory {
 	$curcategory = "" ;
 	print "\n" ;
 	if ($catstatus) { # no error
 		return 0 ;
 	}
-	else { # an error occured
+	else { # an error occurred
 		return 1 ;
 	}
 }

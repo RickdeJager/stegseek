@@ -64,20 +64,20 @@ void SelectorTest::testIsIdentityPermutation ()
 
 bool SelectorTest::genericTestIsPermutation (Selector* s)
 {
-	std::vector<bool> hasoccured (s->getRange()) ; // all set to false
+	std::vector<bool> hasoccurred (s->getRange()) ; // all set to false
 
 	bool range_ok = true ;
 	bool inj = true ;
 	for (UWORD32 i = 0 ; i < s->getRange() ; i++) {
 		UWORD32 value = (*s)[i] ;
 		range_ok = (value < s->getRange()) && range_ok ;
-		inj = !hasoccured[value] && inj ;
-		hasoccured[value] = true ;
+		inj = !hasoccurred[value] && inj ;
+		hasoccurred[value] = true ;
 	}
 
 	bool surj = true ;
 	for (UWORD32 i = 0 ; i < s->getRange() ; i++) {
-		surj = hasoccured[i] && surj ;
+		surj = hasoccurred[i] && surj ;
 	}
 
 	return range_ok && inj && surj ;
