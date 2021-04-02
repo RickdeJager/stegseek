@@ -65,12 +65,12 @@ Cracker::Cracker() {
 
     // Look up these parameters once, to prevent function calls for each
     // passphrase attempt
-    bitsperembvalue = AUtils::log2_ceil<unsigned short>(Globs.TheCvrStgFile->getEmbValueModulus());
+    bitsPerEmbValue = AUtils::log2_ceil<unsigned short>(Globs.TheCvrStgFile->getEmbValueModulus());
     numSamples = Globs.TheCvrStgFile->getNumSamples();
     samplesPerVertex = Globs.TheCvrStgFile->getSamplesPerVertex();
     EmbValueModulus = Globs.TheCvrStgFile->getEmbValueModulus();
     embvaluesRequestedMagic =
-        AUtils::div_roundup<unsigned long>(EmbData::NBitsMagic, bitsperembvalue);
+        AUtils::div_roundup<unsigned long>(EmbData::NBitsMagic, bitsPerEmbValue);
 
     // Load the embedded values into a "plain" array for faster lookup
     embeddedValues = new EmbValue[numSamples];
@@ -133,7 +133,7 @@ bool Cracker::verifyMagic(UWORD32 seed) {
     // Create a buf to keep track of rng collisions
     // the size of the buffer is equal to the length of the magics array,
     // multiplied by the number of samples used to encode one vertex.
-    UWORD32 rngBuf[sizeof(magics)/sizeof(magics[0]) * samplesPerVertex];
+    UWORD32 rngBuf[25 * samplesPerVertex];
 
     if (samplesPerVertex * embvaluesRequestedMagic >= numSamples) {
         // TODO; In theory, we should error out if we hit this.
@@ -168,8 +168,15 @@ bool Cracker::verifyMagic(UWORD32 seed) {
             rngBuf[sv_idx] = valIdx;
             ev = (ev + embeddedValues[valIdx]) % EmbValueModulus;
         }
-        if (ev != magics[i]) {
-            return false;
+
+        // Compare each bit in the retrieved embValue individually.
+        for (short k = 0; k < bitsPerEmbValue; k++) {
+            short currentBit = (ev >> k) & 1;
+            int bitsSeen = i * bitsPerEmbValue + k;
+            // Add an extra check to make sure we don't touch bit 26, even if bitsPerEmbValue > 1
+            if (currentBit != ((magic >> bitsSeen) & 1) && bitsSeen < 25) {
+                return false;
+            }
         }
         ev = 0;
     }

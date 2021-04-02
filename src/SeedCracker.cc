@@ -120,29 +120,34 @@ bool SeedCracker::trySeed(UWORD32 seed) {
         for (unsigned int j = 0; j < samplesPerVertex; j++, sv_idx++) {
             ev = (ev + Globs.TheCvrStgFile->getEmbeddedValue(sel[sv_idx])) % EmbValueModulus;
         }
-        // Check magic
-        if (i < 25) {
-            if (magics[i] != ev) {
-                return false;
+        for (short k = 0; k < bitsPerEmbValue; k++) {
+            short currentBit = (ev >> k) & 1;
+            int bitsSeen = i * bitsPerEmbValue + k;
+            // Check magic
+            if (bitsSeen < 25) {
+                if (((magic >> bitsSeen) & 1) != currentBit) {
+                    return false;
+                }
             }
-        }
-        // Get enc algo
-        if (25 <= i && i < 30) {
-            encAlgo ^= ev << (i - 25);
-            if (encAlgo > 22) {
-                return false;
+            // Get enc algo
+            if (25 <= bitsSeen && bitsSeen < 30) {
+                encAlgo ^= currentBit << (bitsSeen - 25);
+                if (encAlgo > 22) {
+                    return false;
+                }
             }
-        }
-        // Get enc mode
-        if (30 <= i && i < 33) {
-            encMode ^= ev << (i - 30);
-        }
-        // get Plain size
-        if (33 <= i && i < 65) {
-            plainSize ^= ev << (i - 33);
-            if (plainSize * samplesPerVertex > numSamples - requestedValues * samplesPerVertex) {
-                // This plain size wouldn't fit, so the seed must be wrong.
-                return false;
+            // Get enc mode
+            if (30 <= bitsSeen && bitsSeen < 33) {
+                encMode ^= currentBit << (bitsSeen - 30);
+            }
+            // get Plain size
+            if (33 <= bitsSeen && bitsSeen < 65) {
+                plainSize ^= currentBit << (bitsSeen - 33);
+                if (plainSize * samplesPerVertex >
+                    numSamples - requestedValues * samplesPerVertex) {
+                    // This plain size wouldn't fit, so the seed must be wrong.
+                    return false;
+                }
             }
         }
         ev = 0;

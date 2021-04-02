@@ -163,7 +163,7 @@ bool PasswordCracker::tryPassphrase(const char *Passphrase) {
     unsigned long sv_idx = 0;
     while (!embdata.finished()) {
         unsigned long embvaluesrequested =
-            AUtils::div_roundup<unsigned long>(embdata.getNumBitsRequested(), bitsperembvalue);
+            AUtils::div_roundup<unsigned long>(embdata.getNumBitsRequested(), bitsPerEmbValue);
         if (sv_idx + (samplesPerVertex * embvaluesrequested) >= numSamples) {
             // TODO; In theory, we should error out if we hit this.
             // However, I've seen this error happen randomly on valid input files

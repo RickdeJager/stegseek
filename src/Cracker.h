@@ -58,17 +58,15 @@ class Cracker {
     std::atomic<unsigned long> progress;
 
     // File properties
-    unsigned short bitsperembvalue;
+    unsigned short bitsPerEmbValue;
     unsigned long numSamples;
     unsigned short samplesPerVertex;
     EmbValue EmbValueModulus;
     unsigned long embvaluesRequestedMagic;
 
     // Constants
-    const int magics[25] = { // Magic, "shm" in binary LE
-        1, 0, 1, 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 1, 0, 1, 1, 0, 0, 1, 1, 1, 0,
-        // Code version (0)
-        0};
+    // 's', 'h', 'm', 0
+    const unsigned int magic = 0x073688d;
 
   private:
     EmbValue *embeddedValues;
