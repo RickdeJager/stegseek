@@ -27,6 +27,7 @@
 #include <string>
 
 #include "Terminal.h"
+#include "colors.h"
 #include "common.h"
 #include "msg.h"
 
@@ -66,7 +67,7 @@ std::string MessageBase::compose(const char *msgfmt, ...) const {
     return retval;
 }
 
-std::string MessageBase::vcompose(const char *msgfmt, va_list ap) const {
+std::string MessageBase::vcompose(const char *msgfmt, va_list ap) {
     char *str = new char[MsgMaxSize];
     vsnprintf(str, MsgMaxSize, msgfmt, ap);
     std::string retval(str);
@@ -90,6 +91,26 @@ void Message::printMessage() const {
     }
 }
 
+void Message::print(const char *msgfmt, ...) {
+    if (Args.Verbosity.getValue() == NORMAL || Args.Verbosity.getValue() == VERBOSE) {
+        va_list ap;
+        va_start(ap, msgfmt);
+        // print a prefix unless we are in accesible mode
+        if (!Args.Accessible.getValue()) {
+            std::cerr << "[" << CBLU("i") << "] ";
+        }
+        std::cerr << vcompose(msgfmt, ap);
+    }
+}
+
+void Message::printRaw(const char *msgfmt, ...) {
+    if (Args.Verbosity.getValue() == NORMAL || Args.Verbosity.getValue() == VERBOSE) {
+        va_list ap;
+        va_start(ap, msgfmt);
+        std::cerr << vcompose(msgfmt, ap);
+    }
+}
+
 //
 // class VerboseMessage
 //
@@ -104,6 +125,25 @@ VerboseMessage::VerboseMessage(const char *msgfmt, ...) : MessageBase() {
 void VerboseMessage::printMessage() const {
     if (Args.Verbosity.getValue() == VERBOSE) {
         std::cerr << getMessage() << getNewline();
+    }
+}
+
+void VerboseMessage::print(const char *msgfmt, ...) {
+    if (Args.Verbosity.getValue() == VERBOSE) {
+        va_list ap;
+        va_start(ap, msgfmt);
+        // print a prefix unless we are in accesible mode
+        if (!Args.Accessible.getValue()) {
+            std::cerr << "[" << CYEL("v") << "] ";
+        }
+        std::cerr << vcompose(msgfmt, ap);
+    }
+}
+void VerboseMessage::printRaw(const char *msgfmt, ...) {
+    if (Args.Verbosity.getValue() == VERBOSE) {
+        va_list ap;
+        va_start(ap, msgfmt);
+        std::cerr << vcompose(msgfmt, ap);
     }
 }
 
@@ -123,6 +163,19 @@ void Warning::printMessage() const {
     }
 }
 
+void Warning::print(const char *msgfmt, ...) {
+    if (Args.Verbosity.getValue() != QUIET) {
+        va_list ap;
+        va_start(ap, msgfmt);
+        // print a prefix unless we are in accesible mode
+        if (!Args.Accessible.getValue()) {
+            std::cerr << "[" << CRED("w") << "] ";
+        }
+        std::cerr << "stegseek: "
+                  << "warning: " << vcompose(msgfmt, ap);
+    }
+}
+
 //
 // class CriticalWarning
 //
@@ -135,6 +188,17 @@ CriticalWarning::CriticalWarning(const char *msgfmt, ...) : MessageBase() {
 
 void CriticalWarning::printMessage() const {
     std::cerr << "stegseek: " << _("warning:") << " " << getMessage() << getNewline();
+}
+
+void CriticalWarning::print(const char *msgfmt, ...) {
+    va_list ap;
+    va_start(ap, msgfmt);
+    // print a prefix unless we are in accesible mode
+    if (!Args.Accessible.getValue()) {
+        std::cerr << "[" << CRED("w") << "] ";
+    }
+    std::cerr << "stegseek: "
+              << "warning: " << vcompose(msgfmt, ap);
 }
 
 //

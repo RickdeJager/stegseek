@@ -54,7 +54,7 @@ class MessageBase {
     static const unsigned int MsgMaxSize = 512;
 
     std::string compose(const char *msgfmt, ...) const;
-    std::string vcompose(const char *msgfmt, va_list ap) const;
+    static std::string vcompose(const char *msgfmt, va_list ap);
 
   private:
     std::string Message;
@@ -68,6 +68,8 @@ class Message : public MessageBase {
     Message(const char *msgfmt, ...);
 
     void printMessage(void) const;
+    static void print(const char *, ...);
+    static void printRaw(const char *, ...);
 };
 
 class VerboseMessage : public MessageBase {
@@ -77,6 +79,8 @@ class VerboseMessage : public MessageBase {
     VerboseMessage(const char *msgfmt, ...);
 
     void printMessage(void) const;
+    static void print(const char *, ...);
+    static void printRaw(const char *, ...);
 };
 
 class Warning : public MessageBase {
@@ -86,6 +90,7 @@ class Warning : public MessageBase {
     Warning(const char *msgfmt, ...);
 
     void printMessage(void) const;
+    static void print(const char *, ...);
 };
 
 class CriticalWarning : public MessageBase {
@@ -95,6 +100,7 @@ class CriticalWarning : public MessageBase {
     CriticalWarning(const char *msgfmt, ...);
 
     void printMessage(void) const;
+    static void print(const char *, ...);
 };
 
 class Question : public MessageBase {

@@ -103,14 +103,20 @@ void Session::run() {
     }
 
     case CRACK: {
-        printVersion();
+        // Don't print a banner in accessible mode
+        if (!Args.Accessible.getValue()) {
+            printVersion();
+        }
         PasswordCracker pcr;
         pcr.crack();
         break;
     }
 
     case SEED_CRACK: {
-        printVersion();
+        // Don't print a banner in accessible mode
+        if (!Args.Accessible.getValue()) {
+            printVersion();
+        }
         SeedCracker scr;
         scr.crack();
         break;
@@ -279,6 +285,9 @@ void Session::printHelp() {
              "performance)\n"
              " -s, --skipdefault       don't add guesses to the wordlist (empty "
              "password, filename, ...)\n"
+             " -c, --nocolor           disable colors in output\n"
+             " -a, --accessible        simplify the output to be more screen reader "
+             "friendly\n"
              "\n"));
 
     if (Args.Verbosity.getValue() == VERBOSE) {

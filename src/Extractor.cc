@@ -30,19 +30,15 @@
 #include "error.h"
 
 EmbData *Extractor::extract() {
-    VerboseMessage vrs;
     if (Args.StgFn.getValue() == "") {
-        vrs.setMessage(_("reading stego file from standard input..."));
+        VerboseMessage::print("reading stego file from standard input...");
     } else {
-        vrs.setMessage(_("reading stego file \"%s\"..."), Args.StgFn.getValue().c_str());
+        VerboseMessage::print("reading stego file \"%s\"...", Args.StgFn.getValue().c_str());
     }
-    vrs.setNewline(false);
-    vrs.printMessage();
 
     Globs.TheCvrStgFile = CvrStgFile::readFile(StegoFileName);
 
-    VerboseMessage vd(_(" done"));
-    vd.printMessage();
+    VerboseMessage::printRaw("done.\n");
 
     Selector *sel;
     EmbData *embdata;
@@ -58,9 +54,7 @@ EmbData *Extractor::extract() {
         sel = new Selector(Globs.TheCvrStgFile->getNumSamples(), seed);
     }
 
-    VerboseMessage ve(_("extracting data..."));
-    ve.setNewline(false);
-    ve.printMessage();
+    VerboseMessage::print("extracting data...");
 
     unsigned long sv_idx = 0;
     while (!embdata->finished()) {
@@ -71,11 +65,11 @@ EmbData *Extractor::extract() {
         if (sv_idx + (Globs.TheCvrStgFile->getSamplesPerVertex() * embvaluesrequested) >=
             Globs.TheCvrStgFile->getNumSamples()) {
             if (Globs.TheCvrStgFile->is_std()) {
-                throw CorruptDataError(_("the stego data from standard input is too "
-                                         "short to contain the embedded data."));
+                throw CorruptDataError("the stego data from standard input is too "
+                                       "short to contain the embedded data.");
             } else {
-                throw CorruptDataError(_("the stego file \"%s\" is too short to "
-                                         "contain the embedded data."),
+                throw CorruptDataError("the stego file \"%s\" is too short to "
+                                       "contain the embedded data.",
                                        Globs.TheCvrStgFile->getName().c_str());
             }
         }
@@ -94,23 +88,16 @@ EmbData *Extractor::extract() {
 
     delete sel;
 
-    vd.printMessage();
+    VerboseMessage::printRaw("done.\n");
 
     // TODO (postponed due to message freeze): rename into "verifying crc32
     // checksum..."
-    VerboseMessage vc(_("checking crc32 checksum..."));
-    vc.setNewline(false);
-    vc.printMessage();
+    VerboseMessage::print("checking crc32 checksum...");
     if (embdata->checksumOK()) {
-        VerboseMessage vok(_(" ok"));
-        vok.printMessage();
+        VerboseMessage::printRaw(" ok\n");
     } else {
-        VerboseMessage vfailed(_(" FAILED!"));
-        vfailed.printMessage();
-
-        CriticalWarning w(_("crc32 checksum failed! extracted data is probably corrupted."));
-        w.printMessage();
+        VerboseMessage::printRaw(" FAILED\n");
+        CriticalWarning::print("crc32 checksum failed! extracted data is probably corrupted.\n");
     }
-
     return embdata;
 }

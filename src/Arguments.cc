@@ -23,8 +23,10 @@
 
 #include <cstring>
 #include <iostream>
+#include <stdio.h>
 #include <string>
 #include <thread>
+#include <unistd.h>
 
 #include "MCryptPP.h"
 #include "Terminal.h"
@@ -231,6 +233,12 @@ std::vector<std::string> Arguments::parse_Arguments(ArgIt &curarg) {
         } else if (*curarg == "-s" || *curarg == "--skipdefault") {
             std::vector<COMMAND> compatible{CRACK};
             parse_Generic_Bool(curarg, compatible, &SkipDefaultGuesses, true);
+        } else if (*curarg == "-a" || *curarg == "--accessible") {
+            std::vector<COMMAND> compatible{};
+            parse_Generic_Bool(curarg, compatible, &Accessible, true);
+        } else if (*curarg == "-c" || *curarg == "--nocolor") {
+            std::vector<COMMAND> compatible{};
+            parse_Generic_Bool(curarg, compatible, &Color, false);
         }
         // If there is no generic parser available, use a specific parser
         else {
@@ -767,6 +775,8 @@ void Arguments::setDefaults(void) {
     Verbosity.setValue(Default_Verbosity, false);
     Radius.setValue(Default_Radius, false);
     Goal.setValue(Default_Goal, false);
+    Accessible.setValue(Default_Accessible, false);
+    Color.setValue(isatty(fileno(stderr)), false);
     Check.setValue(Default_Check, false);
     DebugCommand.setValue(Default_DebugCommand, false);
     DebugLevel.setValue(Default_DebugLevel, false);

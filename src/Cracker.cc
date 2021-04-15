@@ -35,30 +35,26 @@
 #include <cstring>
 
 Cracker::Cracker() {
-    VerboseMessage vrs;
     // get stegofile
     if (Args.StgFn.getValue() != "") {
-        vrs.setMessage("[v] Using stegofile \"%s\".", Args.StgFn.getValue().c_str());
+        VerboseMessage::print("Using stegofile \"%s\".\n", Args.StgFn.getValue().c_str());
     } else if (Args.StgFn.is_set()) {
-        vrs.setMessage("[v] Reading stegofile from stdin.");
+        VerboseMessage::print("Reading stegofile from stdin.\n");
     } else {
         throw SteghideError("No stegofile specified as input.");
     }
-    vrs.printMessage();
 
     // get output file
     if (Args.ExtFn.is_set()) {
         if (Args.ExtFn.getValue() != "") {
-            vrs.setMessage("[v] Using output file \"%s\".", Args.ExtFn.getValue().c_str());
+            VerboseMessage::print("Using output file \"%s\".\n", Args.ExtFn.getValue().c_str());
         } else {
-            vrs.setMessage("[v] Using stdout as output.");
+            VerboseMessage::print("Using stdout as output.\n");
         }
-        vrs.printMessage();
     }
 
     // Print threading info
-    vrs.setMessage("[v] Running on %d threads.", Args.Threads.getValue());
-    vrs.printMessage();
+    VerboseMessage::print("Running on %d threads.\n", Args.Threads.getValue());
 
     // Load the Stegfile
     Globs.TheCvrStgFile = CvrStgFile::readFile(Args.StgFn.getValue().c_str());
@@ -87,20 +83,38 @@ Cracker::Cracker() {
 void Cracker::metrics(unsigned long max, const char *unit) {
     // Make sure "max" is at least 1 (in case of empty wordlist)
     max = std::max(max, 1UL);
-    Message msg;
-    msg.setNewline(false);
+    // Keep track of the previous percentage we printed
+    // s.t. we can filter output in accessibility mode
+    float prevPercentage = -10.0f;
 
-    do {
+    while (!stopped) {
+        // Copy the (atomic) progress to a temp value
         unsigned long a = progress;
-        float percentage = 100.0f * ((float)a / (float)max);
-        msg.setMessage("\rProgress: %.2f%% (%lu %s)           ", percentage, a, unit);
-        msg.printMessage();
-        std::this_thread::sleep_for(std::chrono::milliseconds(20));
-    } while (!stopped);
-    // Print 2 newlines before returning
-    msg.setNewline(true);
-    msg.setMessage("\n");
-    msg.printMessage();
+        // Only show the progress bar if we've made considerable progress.
+        // Set at half a million seeds / 5 MB
+        if (a > 500000) {
+            float percentage = 100.0f * ((float)a / (float)max);
+            // In accessibility mode, print a flat percentage without a huge number
+            if (Args.Accessible.getValue()) {
+                // Only update if we've made some additional progress:
+                if (percentage - prevPercentage > accessibleUpdateThreshold) {
+                    Message::print("%.0f%%\n", percentage);
+                    prevPercentage = percentage;
+                    // Add some additional wait time to prevent spamming the terminal
+                    std::this_thread::sleep_for(std::chrono::milliseconds(progressDeltaAccessible));
+                    continue;
+                }
+            } else {
+                Message::print("Progress: %.2f%% (%lu %s)           \r", percentage, a, unit);
+                prevPercentage = percentage;
+            }
+        }
+        std::this_thread::sleep_for(std::chrono::milliseconds(progressDelta));
+    }
+    // Print a newline before returning in case the last thing we printed contained \r
+    if (! Args.Accessible.getValue()) {
+        Message::printRaw("\n");
+    }
 }
 
 bool Cracker::verifyMagic(std::string Passphrase) {
@@ -191,14 +205,12 @@ void Cracker::extract(EmbData *emb) {
     }
 
     if (origFn != "") {
-        Message msg;
-        msg.setMessage("[i] Original filename: \"%s\"", origFn.c_str());
-        msg.printMessage();
+        Message::print("Original filename: \"%s\".\n", origFn.c_str());
     }
     if (outFn != "") {
-        fprintf(stderr, "[i] Extracting to \"%s\"\n", outFn.c_str());
+        Message::print("Extracting to \"%s\".\n", outFn.c_str());
     } else {
-        fprintf(stderr, "[i] Extracting to stdout\n\n");
+        Message::print("Extracting to stdout.\n\n");
     }
     BinaryIO io(outFn, BinaryIO::WRITE);
     std::vector<BYTE> data = emb->getData();

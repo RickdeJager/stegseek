@@ -70,9 +70,7 @@ void SeedCracker::crack() {
     } else {
         // Output the found seed. At the moment this isn't particularly
         // useful to then end-user, it's nice for debugging
-        Message msg;
-        msg.setMessage("[i] --> Found seed: \"%x\"", foundResult.seed);
-        msg.printMessage();
+        Message::print("Found seed: \"%x\"\n", foundResult.seed);
         finish();
     }
 }

@@ -67,6 +67,10 @@ class Cracker {
     // Constants
     // 's', 'h', 'm', 0
     const unsigned int magic = 0x073688d;
+    const float accessibleUpdateThreshold = 1.0f;
+
+    const unsigned int progressDelta = 40;
+    const unsigned int progressDeltaAccessible = 500;
 
   private:
     EmbValue *embeddedValues;

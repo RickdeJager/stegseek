@@ -83,6 +83,8 @@ class Arguments {
     ArgVerbosity Verbosity;
     ArgDebugCommand DebugCommand;
     ArgBool Check;
+    ArgBool Accessible;
+    ArgBool Color;
     ArgStringList FileList;
     ArgUInt DebugLevel;
     ArgUInt GmlGraphRecDepth;
@@ -109,6 +111,8 @@ class Arguments {
     static constexpr float Default_Goal = 100.0;
     static const DEBUGCOMMAND Default_DebugCommand = NONE;
     static const bool Default_Check = false;
+    static const bool Default_Accessible = false;
+    static const bool Default_Color = true;
     static const unsigned int Default_DebugLevel = 0;
     static const unsigned int Default_GmlGraphRecDepth = 0;
     static const unsigned int Default_GmlStartVertex = 0;

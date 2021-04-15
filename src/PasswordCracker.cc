@@ -31,9 +31,7 @@
 #include "error.h"
 
 PasswordCracker::PasswordCracker() {
-    VerboseMessage vrs;
-    vrs.setMessage("[v] Using wordlist file \"%s\".", Args.WordlistFn.getValue().c_str());
-    vrs.printMessage();
+    VerboseMessage::print("Using wordlist file \"%s\".\n", Args.WordlistFn.getValue().c_str());
 }
 
 void PasswordCracker::crack() {
@@ -86,7 +84,7 @@ void PasswordCracker::crack() {
         // Re-extract the data with the confirmed passphrase.
         // This does mean we're throwing away one valid "embdata" object, but
         // that's not a bad trade-off to be able to use steghide's structure
-        fprintf(stderr, "[i] --> Found passphrase: \"%s\"\n", foundPassphrase.c_str());
+        Message::print("Found passphrase: \"%s\"\n", foundPassphrase.c_str());
         extract(foundPassphrase);
     }
 }
@@ -219,6 +217,7 @@ void PasswordCracker::sillyCtfGuesses() {
     };
     for (const char *line : guesses) {
         // Try extracting with this passphrase
+        VerboseMessage::print("Added password guess: \"%s\".\n", line);
         if (tryPassphrase(line)) {
             // Tell the other threads that they should stop
             stopped = true;
