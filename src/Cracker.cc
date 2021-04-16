@@ -112,7 +112,7 @@ void Cracker::metrics(unsigned long max, const char *unit) {
         std::this_thread::sleep_for(std::chrono::milliseconds(progressDelta));
     }
     // Print a newline before returning in case the last thing we printed contained \r
-    if (! Args.Accessible.getValue()) {
+    if (!Args.Accessible.getValue()) {
         Message::printRaw("\n");
     }
 }
