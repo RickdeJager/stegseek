@@ -38,13 +38,16 @@ class PasswordCracker : Cracker {
     PasswordCracker();
     void crack();
 
+  protected:
+    void metricLine(unsigned long, float) override;
+
   private:
     bool tryPassphrase(const char *);
     void extract(std::string);
     void consume(unsigned long, unsigned long, bool);
+    void handleResult(std::string);
     void sillyCtfGuesses();
     std::ifstream wordlist;
-    std::string foundPassphrase;
     unsigned long wordlistLength = 0;
 };
 

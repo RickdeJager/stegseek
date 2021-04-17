@@ -36,7 +36,10 @@ EmbData *Extractor::extract() {
         VerboseMessage::print("reading stego file \"%s\"...", Args.StgFn.getValue().c_str());
     }
 
-    Globs.TheCvrStgFile = CvrStgFile::readFile(StegoFileName);
+    // Load the stego/cover file if we haven't already
+    if (!Globs.TheCvrStgFile) {
+        Globs.TheCvrStgFile = CvrStgFile::readFile(StegoFileName);
+    }
 
     VerboseMessage::printRaw("done.\n");
 

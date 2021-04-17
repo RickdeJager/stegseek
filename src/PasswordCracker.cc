@@ -52,7 +52,7 @@ void PasswordCracker::crack() {
     // Add a thread to keep track of metrics
     if (metricsEnabled) {
         ThreadPool.push_back(
-            std::thread([this, wordlistStats] { metrics(wordlistStats.st_size, "bytes"); }));
+            std::thread([this, wordlistStats] { metrics(wordlistStats.st_size); }));
     }
 
     // Add n worker threads
@@ -81,11 +81,6 @@ void PasswordCracker::crack() {
     if (!success) {
         throw SteghideError("Could not find a valid passphrase.");
     } else {
-        // Re-extract the data with the confirmed passphrase.
-        // This does mean we're throwing away one valid "embdata" object, but
-        // that's not a bad trade-off to be able to use steghide's structure
-        Message::print("Found passphrase: \"%s\"\n", foundPassphrase.c_str());
-        extract(foundPassphrase);
     }
 }
 
@@ -119,11 +114,13 @@ void PasswordCracker::consume(unsigned long i, unsigned long stop, bool metricsE
 
         // Try extracting with this passphrase
         if (tryPassphrase(line)) {
-            // Tell the other threads that they should stop
-            stopped = true;
             success = true;
-            foundPassphrase = std::string(line);
-            break;
+            handleResult(line);
+            if ( !Args.ContinueAfterFirstResult.getValue()) {
+                // Tell the other threads that they should stop
+                stopped = true;
+                break;
+            }
         }
 
         // Incrementing an atomic int is quite costly, so don't do it if no one
@@ -219,11 +216,33 @@ void PasswordCracker::sillyCtfGuesses() {
         // Try extracting with this passphrase
         VerboseMessage::print("Added password guess: \"%s\".\n", line);
         if (tryPassphrase(line)) {
-            // Tell the other threads that they should stop
-            stopped = true;
             success = true;
-            foundPassphrase = std::string(line);
-            break;
+            if ( !Args.ContinueAfterFirstResult.getValue()) {
+                // Tell the other threads that they should stop
+                stopped = true;
+                break;
+            }
         }
+    }
+}
+
+void PasswordCracker::metricLine(unsigned long cur, float percentage) {
+    // In accessibility mode, print a flat percentage
+    if (Args.Accessible.getValue()) {
+        Message::print("%.0f%%\n", percentage);
+    } else {
+        Message::print("Progress: %.2f%% (%s)           \r", percentage,
+            Utils::formatHRSize(cur).c_str());
+    }
+}
+
+void PasswordCracker::handleResult(std::string passphrase) {
+    // Make sure we only extract one result in case continue is not set
+    if (Args.ContinueAfterFirstResult.getValue() || resultNum++ == 0 ) {
+        // Re-extract the data with the confirmed passphrase.
+        // This does mean we're throwing away one valid "embdata" object, but
+        // that's not a bad trade-off to be able to use steghide's structure
+        Message::print("Found passphrase: \"%s\"\n", passphrase.c_str());
+        extract(passphrase);
     }
 }

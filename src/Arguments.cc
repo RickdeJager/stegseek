@@ -236,9 +236,12 @@ std::vector<std::string> Arguments::parse_Arguments(ArgIt &curarg) {
         } else if (*curarg == "-a" || *curarg == "--accessible") {
             std::vector<COMMAND> compatible{};
             parse_Generic_Bool(curarg, compatible, &Accessible, true);
-        } else if (*curarg == "-c" || *curarg == "--nocolor") {
+        } else if (*curarg == "-n" || *curarg == "--nocolor") {
             std::vector<COMMAND> compatible{};
             parse_Generic_Bool(curarg, compatible, &Color, false);
+        } else if (*curarg == "-c" || *curarg == "--continue") {
+            std::vector<COMMAND> compatible{SEED_CRACK, CRACK};
+            parse_Generic_Bool(curarg, compatible, &ContinueAfterFirstResult, true);
         }
         // If there is no generic parser available, use a specific parser
         else {
@@ -776,6 +779,7 @@ void Arguments::setDefaults(void) {
     Radius.setValue(Default_Radius, false);
     Goal.setValue(Default_Goal, false);
     Accessible.setValue(Default_Accessible, false);
+    ContinueAfterFirstResult.setValue(Default_ContinueAfterFirstResult, false);
     Color.setValue(isatty(fileno(stderr)), false);
     Check.setValue(Default_Check, false);
     DebugCommand.setValue(Default_DebugCommand, false);

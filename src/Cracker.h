@@ -45,7 +45,8 @@ class Cracker {
     void crack();
 
   protected:
-    void metrics(unsigned long max, const char *unit);
+    void metrics(unsigned long maxValue);
+    virtual void metricLine(unsigned long cur, float percentage) {};
     void finish();
     void extract(EmbData *);
     bool verifyMagic(std::string);
@@ -56,6 +57,8 @@ class Cracker {
     bool success;
     bool stopped;
     std::atomic<unsigned long> progress;
+    std::atomic<unsigned int> saveFileIndex;
+    std::atomic<unsigned int> resultNum;
 
     // File properties
     unsigned short bitsPerEmbValue;

@@ -40,7 +40,7 @@ void SeedCracker::crack() {
 
     // Add a thread to keep track of metrics
     if (metricsEnabled) {
-        ThreadPool.push_back(std::thread([this] { metrics(UWORD32_MAX, "seeds"); }));
+        ThreadPool.push_back(std::thread([this] { metrics(UWORD32_MAX); }));
     }
 
     // Add n worker threads
@@ -67,11 +67,6 @@ void SeedCracker::crack() {
     // If we didn't find a passphrase, throw an error.
     if (!success) {
         throw SteghideError("Could not find a valid seed.");
-    } else {
-        // Output the found seed. At the moment this isn't particularly
-        // useful to then end-user, it's nice for debugging
-        Message::print("Found seed: \"%x\"\n", foundResult.seed);
-        finish();
     }
 }
 
@@ -79,10 +74,14 @@ void SeedCracker::crack() {
 void SeedCracker::consume(unsigned int i, unsigned int stop, bool metricsEnabled) {
     while (!stopped && i < stop) {
         // Try extracting with this seed
-        if (trySeed(i)) {
-            // Tell the other threads that they should stop
-            stopped = true;
+        Result result = trySeed(i);
+        if (result.found) {
             success = true;
+            if (!Args.ContinueAfterFirstResult.getValue()) {
+                // Tell the other threads that they should stop
+                stopped = true;
+            }
+            handleResult(result);
         }
         i++;
 
@@ -95,10 +94,10 @@ void SeedCracker::consume(unsigned int i, unsigned int stop, bool metricsEnabled
     }
 }
 
-bool SeedCracker::trySeed(UWORD32 seed) {
+Result SeedCracker::trySeed(UWORD32 seed) {
     // First verify the magic
     if (!verifyMagic(seed)) {
-        return false;
+        return Result{};
     }
     // Next, try to interpret the remaining bits
     // magic + enc mode + enc algo + plain size
@@ -124,14 +123,14 @@ bool SeedCracker::trySeed(UWORD32 seed) {
             // Check magic
             if (bitsSeen < 25) {
                 if (((magic >> bitsSeen) & 1) != currentBit) {
-                    return false;
+                    return Result{};
                 }
             }
             // Get enc algo
             if (25 <= bitsSeen && bitsSeen < 30) {
                 encAlgo ^= currentBit << (bitsSeen - 25);
                 if (encAlgo > 22) {
-                    return false;
+                    return Result{};
                 }
             }
             // Get enc mode
@@ -144,7 +143,7 @@ bool SeedCracker::trySeed(UWORD32 seed) {
                 if (plainSize * samplesPerVertex >
                     numSamples - requestedValues * samplesPerVertex) {
                     // This plain size wouldn't fit, so the seed must be wrong.
-                    return false;
+                    return Result{};
                 }
             }
         }
@@ -152,34 +151,45 @@ bool SeedCracker::trySeed(UWORD32 seed) {
     }
 
     // Save the values on success
-    foundResult = Result{
+    return Result{
+        true,
         seed,
         plainSize,
         encAlgo,
         encMode,
     };
-    return true;
 }
 
-void SeedCracker::finish() {
-    std::string size = Utils::formatHRSize(foundResult.plainSize / 8);
-    // Print directly to stderr s.t. the result will even be printed in quiet
-    // mode. There is no good reason to run this in quiet mode, and waiting for 5
-    // minutes to realise you accidentically set -q would be annoying
-    fprintf(stderr,
-            "Plain size: %s (compressed)\n"
-            "Encryption Algorithm: %s\n"
-            "Encryption Mode:      %s\n",
-            size.c_str(),
-            EncryptionAlgorithm::translate(EncryptionAlgorithm::IRep(foundResult.encAlgo)).c_str(),
-            EncryptionMode::translate(EncryptionMode::IRep(foundResult.encMode)).c_str());
+void SeedCracker::handleResult(Result result) {
+    // Make sure we only extract one result in case continue is not set
+    if (Args.ContinueAfterFirstResult.getValue() || resultNum++ == 0 ) {
+        std::string size = Utils::formatHRSize(result.plainSize / 8);
+        Message::print("Found (possible) seed: \"%x\"            \n"
+                "\tPlain size: %s (compressed)\n"
+                "\tEncryption Algorithm: %s\n"
+                "\tEncryption Mode:      %s\n",
+                result.seed,
+                size.c_str(),
+                EncryptionAlgorithm::translate(EncryptionAlgorithm::IRep(result.encAlgo)).c_str(),
+                EncryptionMode::translate(EncryptionMode::IRep(result.encMode)).c_str());
 
-    // Data is not encrypted :D
-    // Let's dump it to a file
-    if (foundResult.encAlgo == 0) {
-        Extractor ext(Args.StgFn.getValue(), foundResult.seed);
-        EmbData *emb = ext.extract();
-        extract(emb);
-        delete emb;
+        // Data is not encrypted :D
+        // Let's dump it to a file
+        if (result.encAlgo == 0) {
+            Extractor ext(Args.StgFn.getValue(), result.seed);
+            EmbData *emb = ext.extract();
+            extract(emb);
+            delete emb;
+        }
+    }
+}
+
+
+void SeedCracker::metricLine(unsigned long cur, float percentage) {
+    // In accessibility mode, print a flat percentage
+    if (Args.Accessible.getValue()) {
+        Message::print("%.0f%%\n", percentage);
+    } else {
+        Message::print("Progress: %.2f%% (%lu seeds)           \r", percentage, cur);
     }
 }

@@ -85,6 +85,7 @@ class Arguments {
     ArgBool Check;
     ArgBool Accessible;
     ArgBool Color;
+    ArgBool ContinueAfterFirstResult;
     ArgStringList FileList;
     ArgUInt DebugLevel;
     ArgUInt GmlGraphRecDepth;
@@ -113,6 +114,7 @@ class Arguments {
     static const bool Default_Check = false;
     static const bool Default_Accessible = false;
     static const bool Default_Color = true;
+    static const bool Default_ContinueAfterFirstResult = false;
     static const unsigned int Default_DebugLevel = 0;
     static const unsigned int Default_GmlGraphRecDepth = 0;
     static const unsigned int Default_GmlStartVertex = 0;

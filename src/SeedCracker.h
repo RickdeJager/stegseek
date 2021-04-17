@@ -31,6 +31,7 @@
 #include "Selector.h"
 
 struct Result {
+    bool found;
     unsigned int seed;
     unsigned int plainSize;
     unsigned int encAlgo;
@@ -40,14 +41,15 @@ struct Result {
 class SeedCracker : Cracker {
   public:
     SeedCracker(){};
-
     void crack();
+  
+  protected:
+    void metricLine(unsigned long, float) override;
 
   private:
-    bool trySeed(UWORD32);
+    Result trySeed(UWORD32);
     void consume(unsigned int, unsigned int, bool);
-    void finish();
-    Result foundResult;
+    void handleResult(Result);
 };
 
 #endif // ndef SH_SEEDCRACKER_H

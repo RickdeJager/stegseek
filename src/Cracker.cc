@@ -74,39 +74,40 @@ Cracker::Cracker() {
         embeddedValues[i] = Globs.TheCvrStgFile->getEmbeddedValue(i);
     }
 
-    // init the performace counters
+    // init counters
     progress = 0;
+    saveFileIndex = 0;
+    resultNum = 0;
     stopped = false;
     success = false;
 }
 
-void Cracker::metrics(unsigned long max, const char *unit) {
-    // Make sure "max" is at least 1 (in case of empty wordlist)
-    max = std::max(max, 1UL);
+void Cracker::metrics(unsigned long maxValue) {
+    // Make sure "end" is at least 1 (in case of empty wordlist)
+    maxValue = std::max(maxValue, 1UL);
     // Keep track of the previous percentage we printed
     // s.t. we can filter output in accessibility mode
     float prevPercentage = -10.0f;
 
     while (!stopped) {
         // Copy the (atomic) progress to a temp value
-        unsigned long a = progress;
+        unsigned long cur = progress;
         // Only show the progress bar if we've made considerable progress.
         // Set at half a million seeds / 5 MB
-        if (a > 500000) {
-            float percentage = 100.0f * ((float)a / (float)max);
+        if (cur > 500000) {
+            float percentage = 100.0f * ((float)cur / (float)maxValue);
             // In accessibility mode, print a flat percentage without a huge number
             if (Args.Accessible.getValue()) {
                 // Only update if we've made some additional progress:
                 if (percentage - prevPercentage > accessibleUpdateThreshold) {
-                    Message::print("%.0f%%\n", percentage);
+                    metricLine(cur, percentage);
                     prevPercentage = percentage;
                     // Add some additional wait time to prevent spamming the terminal
                     std::this_thread::sleep_for(std::chrono::milliseconds(progressDeltaAccessible));
                     continue;
                 }
             } else {
-                Message::print("Progress: %.2f%% (%lu %s)           \r", percentage, a, unit);
-                prevPercentage = percentage;
+                metricLine(cur, percentage);
             }
         }
         std::this_thread::sleep_for(std::chrono::milliseconds(progressDelta));
@@ -207,10 +208,20 @@ void Cracker::extract(EmbData *emb) {
     if (origFn != "") {
         Message::print("Original filename: \"%s\".\n", origFn.c_str());
     }
-    if (outFn != "") {
-        Message::print("Extracting to \"%s\".\n", outFn.c_str());
-    } else {
+    if (outFn == "") {
         Message::print("Extracting to stdout.\n\n");
+    } else {
+        // In case we're extracting to a file, we need to make sure this file is unique.
+        // In some cases, a stego file might contain two embedded files, both of which we
+        // should be able to extract.
+
+        // Increment and copy atomically
+        unsigned int fileNum = saveFileIndex++;
+        // Append the fileNum to the outfile, unless this is the first file
+        if (fileNum != 0) {
+            outFn += "." + std::to_string(fileNum);
+        }
+        Message::print("Extracting to \"%s\".\n", outFn.c_str());
     }
     BinaryIO io(outFn, BinaryIO::WRITE);
     std::vector<BYTE> data = emb->getData();
