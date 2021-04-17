@@ -246,10 +246,11 @@ void Session::printEncInfo() {
 }
 
 void Session::printVersion() {
-    fprintf(stderr, "StegSeek version %s\n", VERSION);
+    fprintf(stderr, "StegSeek %s - https://github.com/RickdeJager/StegSeek\n", VERSION);
     if (Args.Verbosity.getValue() == VERBOSE) {
         printSteghideVersion();
     }
+    fprintf(stderr, "\n");
 }
 
 void Session::printHelp() {
@@ -285,7 +286,9 @@ void Session::printHelp() {
              "performance)\n"
              " -s, --skipdefault       don't add guesses to the wordlist (empty "
              "password, filename, ...)\n"
-             " -c, --nocolor           disable colors in output\n"
+             " -n, --nocolor           disable colors in output\n"
+             " -c, --continue          continue cracking after a result has been found.\n"
+             "                         (A stego file might contain multiple embedded files)\n"
              " -a, --accessible        simplify the output to be more screen reader "
              "friendly\n"
              "\n"));
@@ -361,7 +364,7 @@ void Session::printSteghideHelp() {
 }
 
 void Session::printLicense() {
-    printf("Copyright (C) 2020 Rick de Jager ( https://github.com/rickdejager )\n\n"
+    printf("Copyright (C) 2021 Rick de Jager ( https://github.com/rickdejager )\n\n"
 
            "This program is free software; you can redistribute it and/or\n"
            "modify it under the terms of the GNU General Public License\n"

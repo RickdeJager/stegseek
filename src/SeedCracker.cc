@@ -152,26 +152,24 @@ Result SeedCracker::trySeed(UWORD32 seed) {
 
     // Save the values on success
     return Result{
-        true,
-        seed,
-        plainSize,
-        encAlgo,
-        encMode,
+        true, seed, plainSize, encAlgo, encMode,
     };
 }
 
 void SeedCracker::handleResult(Result result) {
+    // Get a lock, s.t. we don't print results from multiple threads at the same time
+    const std::lock_guard<std::mutex> lock(handleResultMutex);
     // Make sure we only extract one result in case continue is not set
-    if (Args.ContinueAfterFirstResult.getValue() || resultNum++ == 0 ) {
+    if (Args.ContinueAfterFirstResult.getValue() || resultNum++ == 0) {
         std::string size = Utils::formatHRSize(result.plainSize / 8);
-        Message::print("Found (possible) seed: \"%x\"            \n"
-                "\tPlain size: %s (compressed)\n"
-                "\tEncryption Algorithm: %s\n"
-                "\tEncryption Mode:      %s\n",
-                result.seed,
-                size.c_str(),
-                EncryptionAlgorithm::translate(EncryptionAlgorithm::IRep(result.encAlgo)).c_str(),
-                EncryptionMode::translate(EncryptionMode::IRep(result.encMode)).c_str());
+        Message::print(
+            "Found (possible) seed: \"%08x\"            \n"
+            "\tPlain size: %s (compressed)\n"
+            "\tEncryption Algorithm: %s\n"
+            "\tEncryption Mode:      %s\n",
+            result.seed, size.c_str(),
+            EncryptionAlgorithm::translate(EncryptionAlgorithm::IRep(result.encAlgo)).c_str(),
+            EncryptionMode::translate(EncryptionMode::IRep(result.encMode)).c_str());
 
         // Data is not encrypted :D
         // Let's dump it to a file
@@ -183,7 +181,6 @@ void SeedCracker::handleResult(Result result) {
         }
     }
 }
-
 
 void SeedCracker::metricLine(unsigned long cur, float percentage) {
     // In accessibility mode, print a flat percentage

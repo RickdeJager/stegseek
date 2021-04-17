@@ -42,7 +42,7 @@ class SeedCracker : Cracker {
   public:
     SeedCracker(){};
     void crack();
-  
+
   protected:
     void metricLine(unsigned long, float) override;
 

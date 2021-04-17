@@ -159,7 +159,11 @@ Warning::Warning(const char *msgfmt, ...) : MessageBase() {
 
 void Warning::printMessage() const {
     if (Args.Verbosity.getValue() != QUIET) {
-        std::cerr << "stegseek: " << _("warning:") << " " << getMessage() << getNewline();
+        // print a prefix unless we are in accesible mode
+        if (!Args.Accessible.getValue()) {
+            std::cerr << "[" << CRED("w") << "] ";
+        }
+        std::cerr << "warning: " << getMessage() << getNewline();
     }
 }
 
@@ -171,8 +175,7 @@ void Warning::print(const char *msgfmt, ...) {
         if (!Args.Accessible.getValue()) {
             std::cerr << "[" << CRED("w") << "] ";
         }
-        std::cerr << "stegseek: "
-                  << "warning: " << vcompose(msgfmt, ap);
+        std::cerr << "warning: " << vcompose(msgfmt, ap);
     }
 }
 
@@ -187,7 +190,11 @@ CriticalWarning::CriticalWarning(const char *msgfmt, ...) : MessageBase() {
 }
 
 void CriticalWarning::printMessage() const {
-    std::cerr << "stegseek: " << _("warning:") << " " << getMessage() << getNewline();
+    // print a prefix unless we are in accesible mode
+    if (!Args.Accessible.getValue()) {
+        std::cerr << "[" << CRED("w") << "] ";
+    }
+    std::cerr << "warning: " << getMessage() << getNewline();
 }
 
 void CriticalWarning::print(const char *msgfmt, ...) {
@@ -197,8 +204,7 @@ void CriticalWarning::print(const char *msgfmt, ...) {
     if (!Args.Accessible.getValue()) {
         std::cerr << "[" << CRED("w") << "] ";
     }
-    std::cerr << "stegseek: "
-              << "warning: " << vcompose(msgfmt, ap);
+    std::cerr << "warning: " << vcompose(msgfmt, ap);
 }
 
 //

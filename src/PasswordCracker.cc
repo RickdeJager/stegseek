@@ -116,7 +116,7 @@ void PasswordCracker::consume(unsigned long i, unsigned long stop, bool metricsE
         if (tryPassphrase(line)) {
             success = true;
             handleResult(line);
-            if ( !Args.ContinueAfterFirstResult.getValue()) {
+            if (!Args.ContinueAfterFirstResult.getValue()) {
                 // Tell the other threads that they should stop
                 stopped = true;
                 break;
@@ -217,7 +217,7 @@ void PasswordCracker::sillyCtfGuesses() {
         VerboseMessage::print("Added password guess: \"%s\".\n", line);
         if (tryPassphrase(line)) {
             success = true;
-            if ( !Args.ContinueAfterFirstResult.getValue()) {
+            if (!Args.ContinueAfterFirstResult.getValue()) {
                 // Tell the other threads that they should stop
                 stopped = true;
                 break;
@@ -232,13 +232,15 @@ void PasswordCracker::metricLine(unsigned long cur, float percentage) {
         Message::print("%.0f%%\n", percentage);
     } else {
         Message::print("Progress: %.2f%% (%s)           \r", percentage,
-            Utils::formatHRSize(cur).c_str());
+                       Utils::formatHRSize(cur).c_str());
     }
 }
 
 void PasswordCracker::handleResult(std::string passphrase) {
+    // Get a lock, s.t. we don't print results from multiple threads at the same time
+    const std::lock_guard<std::mutex> lock(handleResultMutex);
     // Make sure we only extract one result in case continue is not set
-    if (Args.ContinueAfterFirstResult.getValue() || resultNum++ == 0 ) {
+    if (Args.ContinueAfterFirstResult.getValue() || resultNum++ == 0) {
         // Re-extract the data with the confirmed passphrase.
         // This does mean we're throwing away one valid "embdata" object, but
         // that's not a bad trade-off to be able to use steghide's structure
