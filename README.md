@@ -20,7 +20,7 @@ The following instructions walk you through the installation process. Alternativ
 
 ### Linux
 
-On Ubuntu and other Debian-based systems, you can use the provided `.deb` package for installation:
+On recent Ubuntu and other Debian-based systems, you can use the provided `.deb` package for installation:
 
 1. Download the latest [Stegseek release](https://github.com/RickdeJager/stegseek/releases)
 1. Install the `.deb` file using `sudo apt install ./stegseek_0.6-1.deb`  
@@ -100,9 +100,9 @@ Use "stegseek --help -v" to include steghide's help.
 
 ## Steghide
 Stegseek includes nearly all of steghide's functionality, so it can also be used to embed or extract data as normal. The only catch is that commands must use the `--command` format.  
-So `steghide embed [...]` becomes `stegseek --embed [...]` .  
+For example, `steghide embed [...]` becomes `stegseek --embed [...]` .  
 
-### Positional commands
+### Positional arguments
 * `stegseek --embed <data> <coverfile> [<stegofile>]`
 * `stegseek --extract <stegofile> [<output>]`
 
