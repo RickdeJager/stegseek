@@ -23,8 +23,14 @@ jobs:
       run: cd build && make test
     - name: Run (legacy) system tests
       run: cd tests/steghide && ./systemtests.pl
+
+      # Get a recent python3 version to run the test script
+    - uses: actions/setup-python@v2
+      with:
+        python-version: '3.8'
     - name: Run cracker tests
       run: cd tests/stegseek && python test.py
+
     - name: Create a .deb package
       run: bash package/package.sh
     - name: Save the .deb as a build artifact
