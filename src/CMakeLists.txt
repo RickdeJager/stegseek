@@ -1,7 +1,7 @@
 add_definitions(-DHAVE_DEV_URANDOM)
 add_definitions(-DHAVE_DEV_RANDOM)
 add_definitions(-DHAVE_TERMIOS_H)
-add_definitions(-DVERSION="0.5")
+add_definitions(-DVERSION="0.6")
 add_definitions(-DSTEGHIDE_VERSION="0.5.1")
 
 set (sources
@@ -68,8 +68,8 @@ file(GLOB headers
 
 add_library(stegseek_lib ${sources} ${headers})
 
-
-set(CMAKE_CXX_FLAGS_RELEASE "-O3")
+set(CMAKE_CXX_FLAGS_RELEASE "-O2")
+set(CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS_RELEASE} -s")
 
 add_executable(stegseek main.cc)
 

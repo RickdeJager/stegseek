@@ -1,7 +1,7 @@
 /*
  *
- * Stegseek 0.5 - a steghide cracker
- * Copyright (C) 2020 Rick de Jager
+ * Stegseek 0.6 - a steghide cracker
+ * Copyright (C) 2021 Rick de Jager
  *
  * Based on the work of Stefan Hetzl <shetzl@chello.at>
  *
@@ -50,6 +50,7 @@ class SeedCracker : Cracker {
     Result trySeed(UWORD32);
     void consume(unsigned int, unsigned int, bool);
     void handleResult(Result);
+    const unsigned int batchSize = 5000;
 };
 
 #endif // ndef SH_SEEDCRACKER_H

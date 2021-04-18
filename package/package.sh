@@ -10,7 +10,7 @@
 #
 
 NAME="stegseek"
-VER="0.5"
+VER="0.6"
 REV="1"
 VERSION="${VER}-${REV}"
 PACKAGE="${NAME}_${VERSION}"

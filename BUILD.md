@@ -46,7 +46,7 @@ Next, enter the following commands to build and install Stegseek:
 cd stegseek
 mkdir -p build
 cd build
-cmake ..
+cmake -DCMAKE_BUILD_TYPE=Release ..
 make
 sudo make install
 ```

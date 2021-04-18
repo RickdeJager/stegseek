@@ -1,6 +1,6 @@
 /*
- * Stegseek 0.5 - a steghide cracker
- * Copyright (C) 2020 Rick de Jager
+ * Stegseek 0.6 - a steghide cracker
+ * Copyright (C) 2021 Rick de Jager
  *
  * Based on the work of Stefan Hetzl <shetzl@chello.at>
  *
@@ -80,7 +80,9 @@ void PasswordCracker::crack() {
 
     if (!success) {
         throw SteghideError("Could not find a valid passphrase.");
-    } else {
+    }
+    if (exception) {
+        std::rethrow_exception(exception);
     }
 }
 
@@ -95,6 +97,8 @@ void PasswordCracker::consume(unsigned long i, unsigned long stop, bool metricsE
     pWordList = fopen(Args.WordlistFn.getValue().c_str(), "r");
     // Skip to our section
     fseek(pWordList, i, SEEK_SET);
+
+    unsigned int batchProgess = 0;
 
     // Dedicating 512 chars should give us a max wordlength of 128 unicode
     // characters, worst case
@@ -115,19 +119,23 @@ void PasswordCracker::consume(unsigned long i, unsigned long stop, bool metricsE
         // Try extracting with this passphrase
         if (tryPassphrase(line)) {
             success = true;
-            handleResult(line);
             if (!Args.ContinueAfterFirstResult.getValue()) {
                 // Tell the other threads that they should stop
                 stopped = true;
+                handleResult(line);
                 break;
             }
+            handleResult(line);
         }
+
+        // Add 1, since the newline was stripped, but is present in the file size
+        batchProgess += std::strlen(line) + 1;
 
         // Incrementing an atomic int is quite costly, so don't do it if no one
         // cares about its value
-        if (metricsEnabled) {
-            // Add 1, since the newline was stripped, but is present in the file size
-            progress += std::strlen(line) + 1;
+        if (metricsEnabled && batchProgess >= batchSize) {
+            progress += batchProgess;
+            batchProgess = 0;
         }
 
         // If we've overshot the end of our section (by one word), we can stop
@@ -220,8 +228,10 @@ void PasswordCracker::sillyCtfGuesses() {
             if (!Args.ContinueAfterFirstResult.getValue()) {
                 // Tell the other threads that they should stop
                 stopped = true;
+                handleResult(line);
                 break;
             }
+            handleResult(line);
         }
     }
 }

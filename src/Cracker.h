@@ -1,7 +1,7 @@
 /*
  *
- * Stegseek 0.5 - a steghide cracker
- * Copyright (C) 2020 Rick de Jager
+ * Stegseek 0.6 - a steghide cracker
+ * Copyright (C) 2021 Rick de Jager
  *
  * Based on the work of Stefan Hetzl <shetzl@chello.at>
  *
@@ -27,6 +27,7 @@
 #include <atomic>
 #include <chrono>
 #include <condition_variable>
+#include <exception>
 #include <fstream>
 #include <iostream>
 #include <mutex>
@@ -53,13 +54,14 @@ class Cracker {
     bool verifyMagic(const char *);
     bool verifyMagic(UWORD32);
 
-    // Control variables
+    // Variables
     bool success;
     bool stopped;
     std::atomic<unsigned long> progress;
     std::atomic<unsigned int> saveFileIndex;
     std::atomic<unsigned int> resultNum;
     std::mutex handleResultMutex;
+    std::exception_ptr exception = nullptr;
 
     // File properties
     unsigned short bitsPerEmbValue;
@@ -72,7 +74,6 @@ class Cracker {
     // 's', 'h', 'm', 0
     const unsigned int magic = 0x073688d;
     const float accessibleUpdateThreshold = 1.0f;
-
     const unsigned int progressDelta = 40;
     const unsigned int progressDeltaAccessible = 500;
 

@@ -23,7 +23,7 @@ The following instructions walk you through the installation process. Alternativ
 On Ubuntu and other Debian-based systems, you can use the provided `.deb` package for installation:
 
 1. Download the latest [Stegseek release](https://github.com/RickdeJager/stegseek/releases)
-1. Install the `.deb` file using `sudo apt install ./stegseek_0.5-1.deb`  
+1. Install the `.deb` file using `sudo apt install ./stegseek_0.6-1.deb`  
   
 On other systems you will have to build Stegseek yourself. See [BUILD.md](BUILD.md) for more information.  
 
@@ -45,7 +45,7 @@ stegseek [stegofile.jpg] [wordlist.txt]
 
 This mode will simply try all passwords in the provided wordlist against the provided stegofile.
 
-## Detection and passwordless extraction
+## Detection and passwordless extraction (CVE-2021-27211)
 Stegseek can also be used to detect and extract any **unencrypted** (meta) data from a steghide image. This exploits the fact that the random number generator used in steghide only has 2^32 possible seeds, which can be bruteforced in a matter of minutes.  
 
 ```
@@ -61,14 +61,12 @@ If you're (very) lucky and the file was encoded without encryption, this mode wi
 The below demo features [a challenge from X-MAS CTF 2020](https://ctftime.org/writeup/25391). A flag was hidden using a secure random password, but without encryption enabled.
 Within a few minutes, Stegseek is able to recover the embedded file without needing to guess the correct password.
 
-![](./.demo/seed.gif "Sped up by a factor of 10 for your viewing pleasure.")
+![](./.demo/seed.gif "Sped up by a factor of 3 for your viewing pleasure.")
 
 ## Available arguments
 
 Use `stegseek --help` to get the full list of available options:
 ```
-StegSeek version 0.5
-
 === StegSeek Help ===
 To crack a stegofile:
 stegseek [stegofile.jpg] [wordlist.txt]
@@ -92,13 +90,21 @@ Keyword arguments:
  -v, --verbose           display detailed information
  -q, --quiet             hide performance metrics (can improve performance)
  -s, --skipdefault       don't add guesses to the wordlist (empty password, filename, ...)
+ -n, --nocolor           disable colors in output
+ -c, --continue          continue cracking after a result has been found.
+                         (A stego file might contain multiple embedded files)
+ -a, --accessible        simplify the output to be more screen reader friendly
 
 Use "stegseek --help -v" to include steghide's help.
 ```
 
 ## Steghide
 Stegseek includes nearly all of steghide's functionality, so it can also be used to embed or extract data as normal. The only catch is that commands must use the `--command` format.  
-So `steghide embed [...]` becomes `stegseek --embed [...]` .
+So `steghide embed [...]` becomes `stegseek --embed [...]` .  
+
+### Positional commands
+* `stegseek --embed <data> <coverfile> [<stegofile>]`
+* `stegseek --extract <stegofile> [<output>]`
 
 # :whale: Docker
 You can also run Stegseek as Docker container:
@@ -118,17 +124,16 @@ I picked the last password in `rockyou.txt` without control characters: "␣␣�
 This password is on line `14344383` out of `14344391`  
 
 ```
-> time stegseek 7spaces1.jpg rockyou.txt
-StegSeek version 0.5
-Progress: 95.21% (133213740 bytes)           
+> StegSeek 0.6 - https://github.com/RickdeJager/StegSeek
 
-[i] --> Found passphrase: "       1"
-[i] Original filename: "secret.txt"
-[i] Extracting to "7spaces1.jpg.out"
+[i] Found passphrase: "       1"          
+[i] Original filename: "secret.txt".
+[i] Extracting to "7spaces1.jpg.out".
 
-real	0m1,644s
-user	0m12,847s
-sys	0m0,041s
+
+real	0m1,211s
+user	0m9,488s
+sys	0m0,084s
 ```
 
 And there it is, over 14 million passwords in less than 2 seconds :heart_eyes:.
@@ -137,25 +142,16 @@ And there it is, over 14 million passwords in less than 2 seconds :heart_eyes:.
 
 To test the performance of of other tools, I created several stego files with different passwords, taken from `rockyou.txt`. I ran each of the tools with their default settings, except Stegbrute where I increased threading for a fair comparison.
 
-| password    | Line        | Stegseek v0.5  | Stegcracker 2.0.9 | Stegbrute v0.1.1 (-t 8) |
+| password    | Line        | Stegseek v0.6  | Stegcracker 2.0.9 | Stegbrute v0.1.1 (-t 8) |
 |-------------|-------------|----------------|-------------------|-------------------------|
-| "cassandra" | 1 000       |          0.04s |              3.1s |                    0.7s |
-| "kupal"     | 10 000      |          0.04s |             14.4s |                    7.1s |
-| "sagar"     | 100 000     |          0.04s |           2m23.0s |                 1m21.9s |
-| "budakid1"  | 1 000 000   |          0.06s | [p]      23m50.0s |                13m45.7s |
-| "␣␣␣␣␣␣␣1"  | 14 344 383  |          1.65s | [p]    5h41m52.5s | [p]          3h17m38.0s |
+| "cassandra" | 1 000       |          0.05s |              3.1s |                    0.7s |
+| "kupal"     | 10 000      |          0.05s |             14.4s |                    7.1s |
+| "sagar"     | 100 000     |          0.09s |           2m23.0s |                 1m21.9s |
+| "budakid1"  | 1 000 000   |          0.73s | [p]      23m50.0s |                13m45.7s |
+| "␣␣␣␣␣␣␣1"  | 14 344 383  |          1.21s | [p]    5h41m52.5s | [p]          3h17m38.0s |
 
 [p] = projected time based on previous results.  
   
-<details><summary>(click here for fine-tuned performance)</summary>
-<p>
-
-In the first four examples, half of the time is spent syncing metrics between threads and displaying them. In quiet mode, StegSeek's numbers are: 
-```
-[0.022s, 0.022s, 0.022s, 0.022s, 1.45s]
-```
-</p>
-</details>  
   
 ----
   
@@ -166,6 +162,17 @@ At this scale Stegseek is over **12 000** times faster than Stegcracker and over
 
 # :notebook: Changelog
 
+## v0.6
+2021-04-18  
+improvements:  
+* Fixed BMP cracking for files with a large palette.
+* Added a `--continue` flag to search for multiple hidden files.
+* Added an `--accessible` flag to make the CLI more screen reader friendly
+* Made the CLI more consistent, added colors.
+* `--crack` and `--seed` now throw proper exit codes for easier scripting.
+* Lower performance overhead for metrics.
+* fixed compiler flags for default build. 
+
 ## v0.5
 2020-12-28  
 improvements:  
@@ -173,47 +180,6 @@ improvements:
 * Wordlist is loaded on the fly, so we can start cracking immediately.
 * Fixed high false positive rate on `--seed`  
   
-<details><summary>This version scales better with cores, which allows you to run StegSeek on stupidly overkill hardware</summary>
-<p>
-
-#### Same test as above, but now running on a 16 thread VPS
-
-```
-root@beefy:~/testfiles# time stegseek 7spaces1.jpg rockyou.txt -q
-Stegseek version 0.5
-[i] --> Found passphrase: "       1"
-[i] Extracting to "7spaces1.jpg.out"
-
-real	0m0.837s
-user	0m12.694s
-sys	0m0.052s
-
-```
-#### 15 GB wordlist (running on the same laptop used in the original tests)
-```
-> steghide --embed -sf steg.jpg -ef secret.txt -cf clear.jpg -f -p $(shuf -n 1 realuniq.lst)
-embedding "secret.txt" in "clear.jpg"... done
-writing stego file "steg.jpg"... done
-> time stegseek steg.jpg realuniq.lst -
-StegSeek version 0.5
-Progress: 97.83% (15354873129 bytes)           
-
-[i] --> Found passphrase: "Hossuungsstrahl"
-[i] Original filename: "secret.txt"
-[i] Extracting to stdout
-
-Now that I can stream in the file on the fly, 
-I can run the cracker with stupidly large 
-wordlists. This one is 15 GB!
-
-real	3m25,540s
-user	23m13,614s
-sys	0m10,260s
-
-```
-</p>
-</details>
-
 ## v0.4
 2020-12-01  
 improvements:  

@@ -1,6 +1,6 @@
 /*
- * Stegseek 0.5 - a steghide cracker
- * Copyright (C) 2020 Rick de Jager
+ * Stegseek 0.6 - a steghide cracker
+ * Copyright (C) 2021 Rick de Jager
  *
  * Based on the work of Stefan Hetzl <shetzl@chello.at>
  *
@@ -68,10 +68,14 @@ void SeedCracker::crack() {
     if (!success) {
         throw SteghideError("Could not find a valid seed.");
     }
+    if (exception) {
+        std::rethrow_exception(exception);
+    }
 }
 
 // Take jobs and crack 'em
 void SeedCracker::consume(unsigned int i, unsigned int stop, bool metricsEnabled) {
+    unsigned int batchProgress = 0;
     while (!stopped && i < stop) {
         // Try extracting with this seed
         Result result = trySeed(i);
@@ -84,12 +88,14 @@ void SeedCracker::consume(unsigned int i, unsigned int stop, bool metricsEnabled
             handleResult(result);
         }
         i++;
+        batchProgress++;
 
         // Incrementing an atomic int is quite costly, so don't do it if no one
         // cares about its value
-        if (metricsEnabled) {
+        if (metricsEnabled && batchProgress >= batchSize) {
             // Add to the perf metric
-            progress++;
+            progress += batchProgress;
+            batchProgress = 0;
         }
     }
 }

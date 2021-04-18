@@ -17,7 +17,7 @@ jobs:
       run: |
               mkdir -p build
               cd build
-              cmake ..
+              cmake -DCMAKE_BUILD_TYPE=Release ..
               make -j2
     - name: Run unit tests
       run: cd build && make test

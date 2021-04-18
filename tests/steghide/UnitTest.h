@@ -66,7 +66,7 @@ class UnitTest : public Test {
 
     void addTestResult(bool r);
 
-    char *strip_test(char *s) { return (s + 4); };
+    char const *strip_test(char const *s) { return (s + 4); };
 
   private:
     std::vector<TestCategory *> TestCategories;

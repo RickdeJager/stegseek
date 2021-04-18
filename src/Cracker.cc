@@ -1,6 +1,6 @@
 /*
- * Stegseek 0.5 - a steghide cracker
- * Copyright (C) 2020 Rick de Jager
+ * Stegseek 0.6 - a steghide cracker
+ * Copyright (C) 2021 Rick de Jager
  *
  * Based on the work of Stefan Hetzl <shetzl@chello.at>
  *
@@ -223,10 +223,17 @@ void Cracker::extract(EmbData *emb) {
         }
         Message::print("Extracting to \"%s\".\n", outFn.c_str());
     }
-    BinaryIO io(outFn, BinaryIO::WRITE);
-    std::vector<BYTE> data = emb->getData();
-    for (std::vector<BYTE>::iterator i = data.begin(); i != data.end(); i++) {
-        io.write8(*i);
+
+    // Handle file writing exceptions locally and set the exception variable.
+    // the main thread will handle the exception later.
+    try {
+        BinaryIO io(outFn, BinaryIO::WRITE);
+        std::vector<BYTE> data = emb->getData();
+        for (std::vector<BYTE>::iterator i = data.begin(); i != data.end(); i++) {
+            io.write8(*i);
+        }
+        io.close();
+    } catch (...) {
+        exception = std::current_exception();
     }
-    io.close();
 }

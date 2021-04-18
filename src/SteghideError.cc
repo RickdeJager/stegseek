@@ -24,6 +24,7 @@
 #include <iostream>
 
 #include "SteghideError.h"
+#include "colors.h"
 #include "common.h"
 
 SteghideError::SteghideError(void)
@@ -38,4 +39,10 @@ SteghideError::SteghideError(const char *msgfmt, ...) : MessageBase() {
     va_end(ap);
 }
 
-void SteghideError::printMessage() const { std::cerr << "stegseek: " << getMessage() << std::endl; }
+void SteghideError::printMessage() const {
+    // print a prefix unless we are in accesible mode
+    if (!Args.Accessible.getValue()) {
+        std::cerr << "[" << CRED("!") << "] ";
+    }
+    std::cerr << "error: " << getMessage() << std::endl;
+}

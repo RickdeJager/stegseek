@@ -1,7 +1,7 @@
 /*
  *
- * Stegseek 0.5 - a steghide cracker
- * Copyright (C) 2020 Rick de Jager
+ * Stegseek 0.6 - a steghide cracker
+ * Copyright (C) 2021 Rick de Jager
  *
  * Based on the work of Stefan Hetzl <shetzl@chello.at>
  *
@@ -49,6 +49,7 @@ class PasswordCracker : Cracker {
     void sillyCtfGuesses();
     std::ifstream wordlist;
     unsigned long wordlistLength = 0;
+    const unsigned int batchSize = 20000;
 };
 
 #endif // ndef SH_PASSWORDCRACKER_H
