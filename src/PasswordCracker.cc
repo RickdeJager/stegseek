@@ -58,7 +58,11 @@ void PasswordCracker::crack() {
     // Add n worker threads
     // A part must have at least len 1, otherwise no words will be read when
     // threads > size
-    unsigned long part = std::max(wordlistStats.st_size / threads, 1L);
+    unsigned long part = ((unsigned long)wordlistStats.st_size) / threads;
+    if (part <= 0) {
+        part = 1;
+    }
+
     for (unsigned int i = 0; i < threads; i++) {
         ThreadPool.push_back(std::thread([this, i, part, metricsEnabled] {
             consume(i * part, (i + 1) * part, metricsEnabled);
@@ -138,8 +142,13 @@ void PasswordCracker::consume(unsigned long i, unsigned long stop, bool metricsE
             batchProgess = 0;
         }
 
+        // Get out current position in the wordlist, make sure it is non-negative, so
+        // we are safe to cast it to unsigned in the next compare.
+        long pos = ftell(pWordList);
+        myassert(pos >= 0);
+
         // If we've overshot the end of our section (by one word), we can stop
-        if (ftell(pWordList) > stop) {
+        if ((unsigned long)ftell(pWordList) > stop) {
             break;
         }
     }

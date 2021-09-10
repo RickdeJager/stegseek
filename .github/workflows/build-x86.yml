@@ -1,0 +1,35 @@
+name: Build and Test
+
+on:
+  push:
+  pull_request:
+    branches: [ master ]
+
+jobs:
+  build-linux-i386:
+    # Build / test on a 32 bit container
+    container: i386/ubuntu:18.04
+    runs-on: ubuntu-18.04
+
+    steps:
+    - uses: actions/checkout@v1
+    - name: Install build dependencies
+      run: | 
+              apt-get update && \
+              DEBIAN_FRONTEND=noninteractive TZ=UTC \
+              apt-get install -y libmhash-dev libmcrypt-dev libjpeg62-dev zlib1g-dev build-essential cmake python3.8
+    - name: Compile project
+      run: |
+              mkdir -p build
+              cd build
+              cmake -DCMAKE_BUILD_TYPE=Release ..
+              make -j2
+    - name: Run unit tests
+      run: cd build && make test
+    - name: Run (legacy) system tests
+      run: cd tests/steghide && ./systemtests.pl
+
+      # Uses a recent python3 version to run the test script
+    - name: Run cracker tests
+      run: cd tests/stegseek && python3.8 test.py
+

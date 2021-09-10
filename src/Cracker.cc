@@ -189,7 +189,7 @@ bool Cracker::verifyMagic(UWORD32 seed) {
             short currentBit = (ev >> k) & 1;
             int bitsSeen = i * bitsPerEmbValue + k;
             // Add an extra check to make sure we don't touch bit 26, even if bitsPerEmbValue > 1
-            if (currentBit != ((magic >> bitsSeen) & 1) && bitsSeen < 25) {
+            if (currentBit != (short)((magic >> bitsSeen) & 1) && bitsSeen < 25) {
                 return false;
             }
         }

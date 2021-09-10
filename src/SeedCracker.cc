@@ -128,7 +128,7 @@ Result SeedCracker::trySeed(UWORD32 seed) {
             int bitsSeen = i * bitsPerEmbValue + k;
             // Check magic
             if (bitsSeen < 25) {
-                if (((magic >> bitsSeen) & 1) != currentBit) {
+                if ((short)((magic >> bitsSeen) & 1) != currentBit) {
                     return Result{};
                 }
             }
