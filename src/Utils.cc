@@ -45,7 +45,7 @@ std::string Utils::formatHRSize(unsigned long size) {
 }
 
 std::string Utils::stripDir(std::string s) {
-    unsigned int start = 0;
+    size_t start = 0;
     if ((start = s.find_last_of("/\\")) == std::string::npos) {
         start = 0;
     } else {

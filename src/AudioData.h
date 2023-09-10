@@ -41,6 +41,8 @@ class AudioData : public CvrStgObject {
 
     virtual void read(BinaryIO *io, UWORD32 n = NoLimit) = 0;
     virtual void write(BinaryIO *io, UWORD32 n = NoLimit) = 0;
+
+    virtual ~AudioData(void){};
 };
 
 /**
@@ -52,7 +54,6 @@ template <AUDIOSAMPLETYPE Type, class ValueType,
 class AudioDataImpl : public AudioData {
   public:
     AudioDataImpl(CvrStgFile *f) : TheCvrStgFile(f){};
-    virtual ~AudioDataImpl(void){};
 
     void read(BinaryIO *io, UWORD32 n = AudioData::NoLimit);
     void write(BinaryIO *io, UWORD32 n = AudioData::NoLimit);

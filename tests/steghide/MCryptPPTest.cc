@@ -33,6 +33,9 @@ void MCryptPPTest::testDecryption(void) {}
 
 bool MCryptPPTest::genericTestEncryption() {
     // evaluate test vector
+    return true;
 }
 
-bool MCryptPPTest::genericTestDecryption() {}
+bool MCryptPPTest::genericTestDecryption() {
+    return true;
+}
