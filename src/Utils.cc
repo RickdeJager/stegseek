@@ -40,7 +40,7 @@ std::string Utils::formatHRSize(unsigned long size) {
     }
 
     char buf[15];
-    sprintf(buf, "%.1f %s", s, unit.c_str());
+    snprintf(buf, sizeof(buf), "%.1f %s", s, unit.c_str());
     return std::string(buf);
 }
 

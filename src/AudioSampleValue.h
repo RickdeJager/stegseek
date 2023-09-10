@@ -121,7 +121,7 @@ SampleValue *AudioSampleValue<Type, ValueType>::getNearestTargetSampleValue(EmbV
 template <AUDIOSAMPLETYPE Type, class ValueType>
 std::string AudioSampleValue<Type, ValueType>::getName(void) const {
     char buf[128];
-    sprintf(buf, "%ld", (long)Value);
+    snprintf(buf, sizeof(buf), "%ld", (long)Value);
     return std::string(buf);
 }
 

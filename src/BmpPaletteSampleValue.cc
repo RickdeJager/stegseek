@@ -53,6 +53,6 @@ SampleValue *BmpPaletteSampleValue::getNearestTargetSampleValue(EmbValue t) cons
 
 std::string BmpPaletteSampleValue::getName() const {
     char buf[128];
-    sprintf(buf, "i%ur%ug%ub%u", getIndex(), getRed(), getGreen(), getBlue());
+    snprintf(buf, sizeof(buf), "i%ur%ug%ub%u", getIndex(), getRed(), getGreen(), getBlue());
     return std::string(buf);
 }

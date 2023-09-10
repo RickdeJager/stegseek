@@ -109,6 +109,6 @@ UWORD32 WavPCMSampleValue::calcDistance(const SampleValue *s) const {
 
 std::string WavPCMSampleValue::getName() const {
     char buf[128];
-    sprintf(buf, "%d", Value);
+    snprintf(buf, sizeof(buf), "%d", Value);
     return std::string(buf);
 }
