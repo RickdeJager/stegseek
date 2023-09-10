@@ -433,7 +433,7 @@ void BmpFile::readheaders() {
             break;
         }
         }
-    } catch (BinaryInputError e) {
+    } catch (BinaryInputError& e) {
         switch (e.getType()) {
         case BinaryInputError::FILE_ERR: {
             throw SteghideError(
@@ -688,7 +688,7 @@ void BmpFile::writeheaders() {
             break;
         }
         }
-    } catch (BinaryOutputError e) {
+    } catch (BinaryOutputError& e) {
         switch (e.getType()) {
         case BinaryOutputError::FILE_ERR: {
             throw SteghideError(
@@ -810,7 +810,7 @@ void BmpFile::readdata() {
         while (!getBinIO()->eof()) {
             atend.push_back(getBinIO()->read8());
         }
-    } catch (BinaryInputError e) {
+    } catch (BinaryInputError& e) {
         switch (e.getType()) {
         case BinaryInputError::FILE_ERR: {
             throw SteghideError(
@@ -865,7 +865,7 @@ void BmpFile::writedata() {
         for (std::vector<unsigned char>::iterator i = atend.begin(); i != atend.end(); i++) {
             getBinIO()->write8(*i);
         }
-    } catch (BinaryOutputError e) {
+    } catch (BinaryOutputError& e) {
         switch (e.getType()) {
         case BinaryOutputError::FILE_ERR: {
             throw SteghideError(

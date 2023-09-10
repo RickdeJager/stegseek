@@ -86,7 +86,7 @@ void AudioDataImpl<Type, ValueType, SampleValueType>::read(BinaryIO *io, UWORD32
                 Data[i] = readValue(io);
             }
         }
-    } catch (BinaryInputError e) {
+    } catch (BinaryInputError& e) {
         switch (e.getType()) {
         case BinaryInputError::FILE_ERR: {
             throw SteghideError(
@@ -125,7 +125,7 @@ void AudioDataImpl<Type, ValueType, SampleValueType>::write(BinaryIO *io, UWORD3
         for (UWORD32 i = 0; i < n; i++) {
             writeValue(io, Data[i]);
         }
-    } catch (BinaryOutputError e) {
+    } catch (BinaryOutputError& e) {
         switch (e.getType()) {
         case BinaryOutputError::FILE_ERR: {
             throw SteghideError(

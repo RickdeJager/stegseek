@@ -146,7 +146,7 @@ void Arguments::parse_Positional(std::vector<std::string> positionalArgs) {
     switch (Command.getValue()) {
     case CRACK: {
         ArgString *posPtr[]{&StgFn, &WordlistFn, &ExtFn};
-        for (int i = 0; i < 3 && i < positionalArgs.size(); i++) {
+        for (size_t i = 0; i < 3 && i < positionalArgs.size(); i++) {
             if (!posPtr[i]->is_set())
                 posPtr[i]->setValue(positionalArgs[i]);
         }
@@ -154,7 +154,7 @@ void Arguments::parse_Positional(std::vector<std::string> positionalArgs) {
     case SEED_CRACK: {
         // Extract this file into that file
         ArgString *posPtr[]{&StgFn, &ExtFn};
-        for (int i = 0; i < 2 && i < positionalArgs.size(); i++) {
+        for (size_t i = 0; i < 2 && i < positionalArgs.size(); i++) {
             if (!posPtr[i]->is_set())
                 posPtr[i]->setValue(positionalArgs[i]);
         }
@@ -162,7 +162,7 @@ void Arguments::parse_Positional(std::vector<std::string> positionalArgs) {
     case EMBED: {
         // Embed this in that and output there
         ArgString *posPtr[]{&EmbFn, &CvrFn, &StgFn};
-        for (int i = 0; i < 3 && i < positionalArgs.size(); i++) {
+        for (size_t i = 0; i < 3 && i < positionalArgs.size(); i++) {
             if (!posPtr[i]->is_set())
                 posPtr[i]->setValue(positionalArgs[i]);
         }
@@ -170,7 +170,7 @@ void Arguments::parse_Positional(std::vector<std::string> positionalArgs) {
     case EXTRACT: {
         // Extract this file into that file
         ArgString *posPtr[]{&StgFn, &ExtFn};
-        for (int i = 0; i < 2 && i < positionalArgs.size(); i++) {
+        for (size_t i = 0; i < 2 && i < positionalArgs.size(); i++) {
             if (!posPtr[i]->is_set())
                 posPtr[i]->setValue(positionalArgs[i]);
         }

@@ -95,7 +95,7 @@ void AuFile::read(BinaryIO *io) {
             break;
         };
         Header.encoding = (ENCODING)encoding;
-    } catch (BinaryInputError e) {
+    } catch (BinaryInputError& e) {
         switch (e.getType()) {
         case BinaryInputError::FILE_ERR: {
             throw SteghideError(
@@ -152,7 +152,7 @@ void AuFile::write() {
         for (unsigned long i = 0; i < Infofield.size(); i++) {
             getBinIO()->write8(Infofield[i]);
         }
-    } catch (BinaryOutputError e) {
+    } catch (BinaryOutputError& e) {
         switch (e.getType()) {
         case BinaryOutputError::FILE_ERR: {
             throw SteghideError(
