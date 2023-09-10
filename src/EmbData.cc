@@ -101,7 +101,7 @@ void EmbData::addBits(BitString addbits) {
                 throw CorruptDataError(
                     _("attempting to read an embedding of version %d but steghide %s "
                       "only supports embeddings of version %d."),
-                    Version, VERSION, CodeVersion);
+                    Version, STEGHIDE_VERSION, CodeVersion);
             }
             NumBitsNeeded = EncryptionAlgorithm::IRep_size + EncryptionMode::IRep_size;
             NumBitsRequested = AUtils::bminus<unsigned long>(NumBitsNeeded, Reservoir.getLength());

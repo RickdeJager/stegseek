@@ -1,7 +1,7 @@
 add_definitions(-DHAVE_DEV_URANDOM)
 add_definitions(-DHAVE_DEV_RANDOM)
 add_definitions(-DHAVE_TERMIOS_H)
-add_definitions(-DVERSION="0.6")
+add_definitions(-DSTEGSEEK_VERSION="0.6")
 add_definitions(-DSTEGHIDE_VERSION="0.5.1")
 
 set (sources

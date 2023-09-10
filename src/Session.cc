@@ -246,7 +246,7 @@ void Session::printEncInfo() {
 }
 
 void Session::printVersion() {
-    fprintf(stderr, "StegSeek %s - https://github.com/RickdeJager/StegSeek\n", VERSION);
+    fprintf(stderr, "StegSeek %s - https://github.com/RickdeJager/StegSeek\n", STEGSEEK_VERSION);
     if (Args.Verbosity.getValue() == VERBOSE) {
         printSteghideVersion();
     }
