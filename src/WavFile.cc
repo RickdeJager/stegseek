@@ -225,7 +225,7 @@ void WavFile::readdata(void) {
         while (!getBinIO()->eof()) {
             UnusedAfterData.push_back(getBinIO()->read8());
         }
-    } catch (BinaryInputError& e) {
+    } catch (BinaryInputError &e) {
         switch (e.getType()) {
         case BinaryInputError::FILE_ERR: {
             throw SteghideError(
@@ -285,7 +285,7 @@ void WavFile::writedata(void) {
              it != UnusedAfterData.end(); it++) {
             getBinIO()->write8(*it);
         }
-    } catch (BinaryOutputError& e) {
+    } catch (BinaryOutputError &e) {
         switch (e.getType()) {
         case BinaryOutputError::FILE_ERR: {
             throw SteghideError(
@@ -330,7 +330,7 @@ void WavFile::readheaders() {
         }
 
         datachhdr = chhdr;
-    } catch (BinaryInputError& e) {
+    } catch (BinaryInputError &e) {
         switch (e.getType()) {
         case BinaryInputError::FILE_ERR: {
             throw SteghideError(
@@ -378,7 +378,7 @@ void WavFile::writeheaders() {
         }
 
         datachhdr->write(getBinIO());
-    } catch (BinaryOutputError& e) {
+    } catch (BinaryOutputError &e) {
         switch (e.getType()) {
         case BinaryOutputError::FILE_ERR: {
             throw SteghideError(

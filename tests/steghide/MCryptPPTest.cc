@@ -36,6 +36,4 @@ bool MCryptPPTest::genericTestEncryption() {
     return true;
 }
 
-bool MCryptPPTest::genericTestDecryption() {
-    return true;
-}
+bool MCryptPPTest::genericTestDecryption() { return true; }
