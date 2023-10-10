@@ -123,7 +123,7 @@ void BmpRGBSampleValue::addNTSVCandidates(std::vector<RGBTriple> &cands, const B
 
 std::string BmpRGBSampleValue::getName() const {
     char buf[128];
-    sprintf(buf, "r%ug%ub%u", getRed(), getGreen(), getBlue());
+    snprintf(buf, sizeof(buf), "r%ug%ub%u", getRed(), getGreen(), getBlue());
     return std::string(buf);
 }
 

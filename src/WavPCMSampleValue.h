@@ -45,7 +45,7 @@ class WavPCMSampleValue : public SampleValue {
     EmbValue calcEValue(int v) const { return (v & 1); }
 };
 
-class WavPCMSmaller : public std::binary_function<WavPCMSampleValue *, WavPCMSampleValue *, bool> {
+class WavPCMSmaller {
   public:
     bool operator()(const WavPCMSampleValue *v, const WavPCMSampleValue *w) {
         return v->getValue() < w->getValue();

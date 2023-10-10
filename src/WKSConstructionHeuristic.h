@@ -69,7 +69,7 @@ class WKSConstructionHeuristic : public MatchingAlgorithm {
      * If both v1 and v2 have degree 0, then the vertex with the greater label
      * is defined to have the "longer shortest edge".
      **/
-    class LongerShortestEdge : public std::binary_function<Vertex *, Vertex *, bool> {
+    class LongerShortestEdge {
       public:
         bool operator()(const Vertex *v1, const Vertex *v2);
     };

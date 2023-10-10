@@ -177,19 +177,19 @@ bool CvrStgFileTest::genericTestEmbeddedValue(const CvrStgFile *f) const {
 
 bool CvrStgFileTest::areEqual(const std::string &fn1, const std::string &fn2) const {
     char command[256];
-    sprintf(command, "%s %s %s", COMPARE, fn1.c_str(), fn2.c_str());
+    snprintf(command, sizeof(command), "%s %s %s", COMPARE, fn1.c_str(), fn2.c_str());
     return (system(command) ? false : true);
 }
 
 void CvrStgFileTest::removeFile(const std::string &fn) const {
     char command[256];
-    sprintf(command, "%s %s", REMOVE, fn.c_str());
+    snprintf(command, sizeof(command), "%s %s", REMOVE, fn.c_str());
     system(command);
 }
 
 void CvrStgFileTest::copyFile(const std::string &src, const std::string &dest) const {
     char command[256];
-    sprintf(command, "%s %s %s", COPY, src.c_str(), dest.c_str());
+    snprintf(command, sizeof(command), "%s %s %s", COPY, src.c_str(), dest.c_str());
     system(command);
 }
 

@@ -2,9 +2,12 @@ cmake_minimum_required(VERSION 3.5)
 
 project(stegseek VERSION 0.6)
 
-if(CMAKE_COMPILER_IS_GNUCC OR CMAKE_COMPILER_IS_GNUCXX)
+if(CMAKE_CXX_COMPILER_ID STREQUAL "GNU")
   # Update if necessary
   set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall -Wno-long-long")
+elseif(CMAKE_CXX_COMPILER_ID STREQUAL "AppleClang")
+  # enforce modern C++, will not compile otherwise
+  set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=gnu++17")
 endif()
 
 add_subdirectory("src")

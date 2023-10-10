@@ -40,12 +40,12 @@ std::string Utils::formatHRSize(unsigned long size) {
     }
 
     char buf[15];
-    sprintf(buf, "%.1f %s", s, unit.c_str());
+    snprintf(buf, sizeof(buf), "%.1f %s", s, unit.c_str());
     return std::string(buf);
 }
 
 std::string Utils::stripDir(std::string s) {
-    unsigned int start = 0;
+    size_t start = 0;
     if ((start = s.find_last_of("/\\")) == std::string::npos) {
         start = 0;
     } else {

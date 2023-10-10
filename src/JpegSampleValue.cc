@@ -83,6 +83,6 @@ UWORD32 JpegSampleValue::calcDistance(const SampleValue *s) const {
 
 std::string JpegSampleValue::getName(void) const {
     char buf[128];
-    sprintf(buf, "%d", DctCoeff);
+    snprintf(buf, sizeof(buf), "%d", DctCoeff);
     return std::string(buf);
 }

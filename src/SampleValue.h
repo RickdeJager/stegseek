@@ -145,15 +145,15 @@ class SampleValue {
     UWORD32 *NumEdges;
 };
 
-struct SampleValuesEqual : public std::binary_function<SampleValue *, SampleValue *, bool> {
+struct SampleValuesEqual {
     bool operator()(const SampleValue *s1, const SampleValue *s2) const { return (*s1 == *s2); }
 };
 
-struct SampleValuesLess : public std::binary_function<SampleValue *, SampleValue *, bool> {
+struct SampleValuesLess {
     bool operator()(const SampleValue *s1, const SampleValue *s2) const { return (*s1 < *s2); }
 };
 
-struct SampleValueHash : public std::unary_function<SampleValue *, size_t> {
+struct SampleValueHash {
     size_t operator()(const SampleValue *s) const {
         std::hash<UWORD32> h;
         return h(s->getKey());

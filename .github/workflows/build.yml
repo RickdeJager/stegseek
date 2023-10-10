@@ -7,12 +7,12 @@ on:
 
 jobs:
   build-linux:
-    runs-on: ubuntu-18.04
+    runs-on: ubuntu-20.04
 
     steps:
     - uses: actions/checkout@v2
     - name: Install build dependencies
-      run: sudo apt install -y libmhash-dev libmcrypt-dev libjpeg62-dev zlib1g-dev build-essential cmake
+      run: sudo apt install -y libmhash-dev libmcrypt-dev libjpeg-dev zlib1g-dev build-essential cmake
     - name: Compile project
       run: |
               mkdir -p build
@@ -24,12 +24,8 @@ jobs:
     - name: Run (legacy) system tests
       run: cd tests/steghide && ./systemtests.pl
 
-      # Get a recent python3 version to run the test script
-    - uses: actions/setup-python@v2
-      with:
-        python-version: '3.8'
     - name: Run cracker tests
-      run: cd tests/stegseek && python test.py
+      run: cd tests/stegseek && python3.8 test.py
 
     - name: Create a .deb package
       run: bash package/package.sh

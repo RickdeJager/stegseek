@@ -46,7 +46,7 @@ RandomSource::RandomSource() {
 #endif
 }
 
-RandomSource::~RandomSource() {
+RandomSource::~RandomSource() noexcept(false) {
     if (RandomInput != NULL) {
         if (fclose(RandomInput) != 0) {
             throw SteghideError(_("could not close random input file."));

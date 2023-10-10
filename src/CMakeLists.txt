@@ -1,7 +1,7 @@
 add_definitions(-DHAVE_DEV_URANDOM)
 add_definitions(-DHAVE_DEV_RANDOM)
 add_definitions(-DHAVE_TERMIOS_H)
-add_definitions(-DVERSION="0.6")
+add_definitions(-DSTEGSEEK_VERSION="0.6")
 add_definitions(-DSTEGHIDE_VERSION="0.5.1")
 
 set (sources
@@ -67,6 +67,8 @@ file(GLOB headers
 )
 
 add_library(stegseek_lib ${sources} ${headers})
+find_path(MCRYPT_INCLUDE_PATH mcrypt.h)
+target_include_directories(stegseek_lib PUBLIC ${MCRYPT_INCLUDE_PATH})
 
 set(CMAKE_CXX_FLAGS_RELEASE "-O2")
 set(CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS_RELEASE} -s")
@@ -75,4 +77,7 @@ add_executable(stegseek main.cc)
 
 install(TARGETS stegseek EXPORT stegseek DESTINATION bin)
 
-target_link_libraries(stegseek PRIVATE stegseek_lib PUBLIC -lpthread -lz -lmcrypt -lmhash -ljpeg)
+find_library(MCRYPT_LIBRARY mcrypt)
+find_library(MHASH_LIBRARY mhash)
+find_library(JPEG_LIBRARY jpeg)
+target_link_libraries(stegseek PRIVATE stegseek_lib PUBLIC -lpthread -lz ${MCRYPT_LIBRARY} ${MHASH_LIBRARY} ${JPEG_LIBRARY})

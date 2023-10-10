@@ -33,7 +33,7 @@ class BitString;
 class RandomSource {
   public:
     RandomSource(void);
-    ~RandomSource(void);
+    ~RandomSource(void) noexcept(false);
 
     /**
      * get a random byte

@@ -36,8 +36,8 @@ class Extractor {
   private:
     std::string StegoFileName;
     std::string Passphrase;
-    bool passphraseSet;
     UWORD32 seed;
+    bool passphraseSet;
 };
 
 #endif // ndef SH_EXTRACTOR_H

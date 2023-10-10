@@ -54,6 +54,6 @@ SampleValue *DummySampleValue::getNearestTargetSampleValue(EmbValue t) const {
 
 std::string DummySampleValue::getName(void) const {
     char buf[128];
-    sprintf(buf, "%d", Value);
+    snprintf(buf, sizeof(buf), "%d", Value);
     return std::string(buf);
 }

@@ -41,6 +41,8 @@ class AudioData : public CvrStgObject {
 
     virtual void read(BinaryIO *io, UWORD32 n = NoLimit) = 0;
     virtual void write(BinaryIO *io, UWORD32 n = NoLimit) = 0;
+
+    virtual ~AudioData(void){};
 };
 
 /**
@@ -52,7 +54,6 @@ template <AUDIOSAMPLETYPE Type, class ValueType,
 class AudioDataImpl : public AudioData {
   public:
     AudioDataImpl(CvrStgFile *f) : TheCvrStgFile(f){};
-    virtual ~AudioDataImpl(void){};
 
     void read(BinaryIO *io, UWORD32 n = AudioData::NoLimit);
     void write(BinaryIO *io, UWORD32 n = AudioData::NoLimit);
@@ -85,7 +86,7 @@ void AudioDataImpl<Type, ValueType, SampleValueType>::read(BinaryIO *io, UWORD32
                 Data[i] = readValue(io);
             }
         }
-    } catch (BinaryInputError e) {
+    } catch (BinaryInputError &e) {
         switch (e.getType()) {
         case BinaryInputError::FILE_ERR: {
             throw SteghideError(
@@ -124,7 +125,7 @@ void AudioDataImpl<Type, ValueType, SampleValueType>::write(BinaryIO *io, UWORD3
         for (UWORD32 i = 0; i < n; i++) {
             writeValue(io, Data[i]);
         }
-    } catch (BinaryOutputError e) {
+    } catch (BinaryOutputError &e) {
         switch (e.getType()) {
         case BinaryOutputError::FILE_ERR: {
             throw SteghideError(
